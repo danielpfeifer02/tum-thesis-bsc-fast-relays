@@ -1,0 +1,44 @@
+
+
+Roughtly how the thesis will likely be structured:
+
+
+(4-5 Pages)
+1) Introduction
+    - Research Question
+    - Scope
+    - Structure of the thesis
+    - Source code repos
+
+(8-10 Pages)
+2) Background, current state of the art, related work
+    - QUIC
+    - eBPF
+    - (Adaptive) media streaming
+
+(8-10 Pages)
+3) Proposed new setup for fast relays
+    - needed QUIC adaptions
+    - eBPF setup
+    - avoiding user space via forwarding
+    - filtering / dropping packets
+    - optimizing for client congestion
+    - subscription and state handling
+    - relay data caching
+    - compatibility with current setups
+
+(5-7 Pages)
+4) Testing setup and results
+    - ...
+
+(2-4 Pages)
+5) Future work
+    - NIC offload for crypto handling
+    - eBPF on NIC
+
+(2-4 Pages)
+6) Conclusion
+    - ...
+
+
+(Overall 29-40 Pages) ???
