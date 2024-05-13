@@ -1,0 +1,24 @@
+\section{eBPF}\label{sec:ebpf_bg}
+In 1992 a technology called `Berkeley Packet Filter' (BPF) was introduced into 
+the Unix kernel.
+By using BPF it is possible to attach a small BPF-program to some pre-defined hook points in 
+the network stack of the kernel and filter packets there in a stateless manner.
+This provided more efficiency since the packets did not need to be copied into 
+userspace anymore but could directly be processed in the kernel.
+One downside to such an approach however is that BPF-programs are limited by the 
+so-called `BPF-verifier' which needs to check every BPF-program for safety e.g. 
+to avoid infinite loops or access to invalid memory from withing kernel space. 
+Today, the initial technology of BPF has evolved into `extended BPF' (eBPF) and 
+allows for more versatile use cases.
+
+\subsection{eBPF Hook Points}
+TODO
+
+\subsection{eBPF Verifier}
+TODO
+
+\subsection{Important eBPF Concepts}
+TODO
+
+\subsection{eBPF and Fast Relays}
+TODO

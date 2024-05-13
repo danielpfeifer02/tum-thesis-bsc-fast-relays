@@ -7,8 +7,8 @@ its need for increasing throughput make it hard for TCP to keep up.
 Limitations in the design and resulting issues like head-of-line blocking
 have raised demand for a newly designed protocol that can keep up with the
 modern internet.
-The `Quick UDP Internet Connections´ protocol, short QUIC protocol, is a 
-transport layer protocol built on top of UDP that is designed to be reliable, \
+The `Quick UDP Internet Connections' protocol, short QUIC protocol, is a 
+transport layer protocol built on top of UDP that is designed to be reliable, 
 cryptographically secure and more performant than TCP\@.
 It was intended to be the successor of TCP and it has its origins at Google before 
 the standardization by the IETF began in 2016.
@@ -17,7 +17,7 @@ more rapid deployment cycle than TCP\@.
 Similar to TCP it is a connection-based protocol that uses TLS for encryption.
 As of beginning of 2024, QUIC already made up 7.7\% of all internet traffic.
 With the main driver being Google's own services, like YouTube, where QUIC is already used by default.
-Together with HTTP/3, which is already implemented in more than 90\% of all web browsers, \
+Together with HTTP/3, which is already implemented in more than 90\% of all web browsers, 
 this number is likely to increase even further.
 
 \subsection{Connections and Streams}
@@ -41,7 +41,7 @@ The implementation of the proposed fast-relay setup will be based on the quic-go
 pure Go implementation of the QUIC protocol as specified in the standards RFC-9000, RFC-9221 as well as some
 others which are not that important in this thesis. Together with a modified version of the quic-go library,
 the fast-relay implementation will also use the moqtransport library.
-This library brings the ´Media over QUIC' (MoQ) protocol to Go and will be used as a media transport protocol 
+This library brings the `Media over QUIC' (MoQ) protocol to Go and will be used as a media transport protocol 
 when looking at the impact of fast-relays on adaptive real-time video streaming.
 The MoQ protocol is being standardized by the IETF since July 2023 and has yet to be finalized. 
 
