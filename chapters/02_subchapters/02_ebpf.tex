@@ -14,6 +14,20 @@ allows for more versatile use cases.
 \subsection{eBPF Hook Points}
 TODO
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/02_background/ebpf-hooks.drawio.pdf}
+    \caption{Abstracted view of Traffic Control (TC) and eXpress Data Path (XDP) hook points
+    in the Linux kernel network stack.
+    The red loop indicates the `short-cut' that is utilized by the fast relay.
+    TC hook allows redirection directly to egress while XDP hook is only available
+    for ingress processing.
+    }\label{fig:ebpf-hooks}
+\end{figure}
+
+\subsection{Traffic Control Queuing Disciplines}
+TODO
+
 \subsection{eBPF Verifier}
 TODO
 
@@ -22,3 +36,13 @@ TODO
 
 \subsection{eBPF and Fast Relays}
 TODO
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/02_background/route-layering.drawio.pdf}
+    \caption{Conventional layers of a network stack for client, server and relay.
+    The red loop indicates again the `short-cut' that is utilized by the fast relay and 
+    based on eBPF packet-forwarding.
+    This avoids the need for the packet to traverse the entire network stack of the relay 
+    up to the userspace.}\label{fig:route-layering}
+\end{figure}
