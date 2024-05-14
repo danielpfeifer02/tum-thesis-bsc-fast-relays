@@ -12,7 +12,19 @@ Today, the initial technology of BPF has evolved into `extended BPF' (eBPF) and
 allows for more versatile use cases.
 
 \subsection{eBPF Hook Points}
-TODO
+The Linux kernel offers several hook points where eBPF-programs can be attached to.
+Two main ones are one to attach eBPF-programs to the Traffic Control (TC) subsystem
+and another one to attach them to the eXpress Data Path (XDP) subsystem.
+The XDP hook, which is directly located in the NIC-driver, lies lower in the network 
+stack than the TC-hook, which is located in the link-layer.
+Despite being higher up in the network stack, the TC-hook has the big advantage that
+it offers ingress and egress processing while the XDP-hook is available for ingress 
+processing only.
+This makes the XDP-hook suboptimal for the implementation of fast-relays since 
+they heavily rely on processing packets at egress, after those were redirected
+from ingress.
+Figure~\ref{fig:ebpf-hooks} illustrates again the relative positions of the TC and
+XDP hook points in the network stack.
 
 \begin{figure}[htbp]
     \centering
@@ -26,7 +38,8 @@ TODO
 \end{figure}
 
 \subsection{Traffic Control Queuing Disciplines}
-TODO
+The Linux Traffic Control Subsystem uses Queuing Disciplines (qdiscs) to define how packets
+are handled. TODO
 
 \subsection{eBPF Verifier}
 TODO
