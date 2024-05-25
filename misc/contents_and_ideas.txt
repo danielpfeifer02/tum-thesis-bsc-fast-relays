@@ -17,7 +17,7 @@ Roughtly how the thesis will likely be structured:
     - (Adaptive) media streaming
 
 (8-10 Pages)
-3) Proposed new setup for fast relays
+3) Proposed new setup for fast-relays
     - needed QUIC adaptions
     - eBPF setup
     - avoiding user space via forwarding

@@ -1,0 +1,12 @@
+\section{Compatibility Expansion}\label{sec:compatibility_expansion}
+This thesis used the QUIC protocol together with media over QUIC (MoQ)
+to demonstrate how fast-relays that circumvent userspace by utilizing
+BPF programs can be designed.
+However, generally speaking the design of fast-relays is not limited to
+any of these protocols and could be expanded given modifications to 
+necessary fields are possible (i.e.~not prevented by encryption) and
+there is a way to encode the priority of a packet in the packet itself.
+The latter point could always be realized by using part of the payload
+which forces a deeper packet inspection within the BPF program but 
+avoids the need to fit the priority into the header of an existing 
+protocol.
