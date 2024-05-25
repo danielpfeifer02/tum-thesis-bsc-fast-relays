@@ -1,0 +1,12 @@
+\section{Hardware Offload}\label{sec:hardware_offload}
+This thesis heavily relies on the fact that the relay can
+access certain fields (e.g.~packet numbers) of the packet, 
+which are generally not accessible without prior decryption.
+In the current setup, this is made possible by turning off 
+encryption alltogether but to be of any use in a real-world
+scenario, the encryption of incoming and the decryption of
+outgoing packets would need to be pushed down below the lowest 
+used BPF hook point in the stack.
+This means that a hardware offload of encryption and decryption
+similar to what is done for TCP/IP checksums would be necessary.
+% TODO: cite    https://de.wikipedia.org/wiki/TCP_Offload_Engine or similar
