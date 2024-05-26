@@ -1,5 +1,16 @@
 \chapter{\abstractname}
-
-%TODO: Abstract
-
-
+In this thesis we propose a new relay setup for multimedia streaming that allows
+for avoidance of userspace processing by utilizing BPF programs in the Linux kernel.
+In a sample implementation we demonstrate the feasibility of this approach by
+designing a relay that is capable of forwarding packets between a server-side 
+and a client-side QUIC connection while still being able to do adaptive bitrate
+streaming based on client congestion.
+\\
+We show that this approach saves processing time and reduces latency compared to
+userspace processing with the relay still adhering to specifications of the QUIC
+standard and the `Media over QUIC' (MoQ) draft.
+One limitation that is not addressed in depth in this thesis is the need for a
+de- and encryption hardware offload onto a SmartNIC to allow the BPF program to access
+the packet payload without any restrictions.
+Since the QUIC standard is still fairly new we are confident that a solution for a
+potential hardware offload will be found in future research.
