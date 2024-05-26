@@ -11,8 +11,13 @@ This means that a hardware offload of encryption and decryption
 similar to what is done for TCP/IP checksums would be necessary.
 % TODO: cite    https://de.wikipedia.org/wiki/TCP_Offload_Engine or similar
 
-Once compatible SmartNIC offloads are available one can, besides 
-en- and decryption, also offload the BPF program itself.
+Once compatible SmartNIC offload implementations are available one can, 
+besides en- and decryption, also offload the BPF program itself.
 This then would provide another way of accelerating performance.
 % TODO: cite    https://storage.corigine.com.cn/UploadFiles/file/2022-01-24/100418388672292.pdf
- 
+
+Some previous work in this direction has already been done since 
+at least 2019~\parencite{quic-nic-offload} but for the purpose of 
+this thesis we did not find any suitable open-source implementation 
+that would allow incorporation into our fast-relay example 
+implementation.
