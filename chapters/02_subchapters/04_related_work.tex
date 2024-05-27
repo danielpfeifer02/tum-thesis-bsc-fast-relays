@@ -1,0 +1,23 @@
+\section{Related Work}\label{sec:related_work}
+
+\subsection{eQUIC Gateway}
+There have been previous publications on making QUIC more efficient by using BPF programs
+such as~\parencite{equic-gateway}, where a BPF program is used together with the Linux
+eXpress Data Path (XDP) to filter packets based on information provided by the userspace.
+This approach provided significant performance improvements with an increase of throughput
+by almost a third and a reduction of CPU time consumption caused by filtering packets by
+more than 25\%.
+This shows that a setup leveraging Linux kernel features such as BPF has a lot of potential
+to improve current infrastructure.
+% TODO: more specific info on how this paper's setup looks like / differs from ours?
+% TODO: mention that XDP is not feasible for our setup because it has no egress hook?
+
+\subsection{Kernel Bypass}
+Another interesting approach which follows a similar idea of speeding up packet processing
+by avoiding the Linux network stack is~\parencite{kernel-bypass-msc-thesis}.
+The difference in this work is that DPDK is used to bypass the network stack to 
+then process packets in userspace instead of using BPF programs like this thesis does.
+This, for example, offers more flexibility as the userspace program is not as limited (e.g.\ 
+by the BPF verifier) as the BPF program but might also lead to slightly more system calls,
+especially in the setup of a system, when user- and kernel-space need to communicate.
+% TODO: clear enough / everything covered and correct?
