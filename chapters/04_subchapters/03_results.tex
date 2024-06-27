@@ -1,0 +1,26 @@
+\section{Results}\label{sec:results}
+TODO 
+
+\subsection{Delay Reduction of BPF Forwarding}
+When looking at the impact of eBPF-Forwarding on the delays of packets, we can see that
+in the namespace environment the delay of a single packet is decreased by around 100\,µs
+when compared to the userspace forwarding. This is shown in Figure~\ref{fig:delay-improvement} and 
+consideres the simplest case of the userspace program where it only forwards directly to one connection
+without the need for much additional computation. Given that the userspace can have arbitrary complex 
+connection management this delay improvement can likely be even bigger in a more sophisticated userspace
+setup.
+\\
+Another thing the figure shows is that the delay has a smaller variance due to the fact that the eBPF program
+path is somewhat similar for each packet whereas, in contrast, the userspace path can have buffers, queues, 
+or similar that lead to a higher difference in processing time between packets. 
+This effect however might be less observable in a real world scenario due to the ubiquitous network jitter which 
+was influencial in the used namespace environment.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/04_testing_and_results/delays_small_packets_simple_userspace.pdf}
+    \caption{By avoiding userspace when processing the 1-RTT packets that contain the payload
+    the delay of a single packet can be reduced. The longer-delay-operations are either handled
+    directly in the eBPF program (e.g.~the case for deciding where to redirect a packet to) or 
+    handled after the packet has already been sent out (e.g.~the case for registering a packet 
+    such that the QUIC library knows about it).}\label{fig:delay-improvement}
+\end{figure}

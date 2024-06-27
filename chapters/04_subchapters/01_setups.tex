@@ -1,0 +1,54 @@
+\section{Setups}\label{sec:setups}
+TODO
+
+\subsection{Namespace Environment for Local Testing and Development}\label{subsec:namespace_environment}
+TODO
+
+\subsection{Physical Server Setup for Real-World Testing}\label{subsec:physical_server_setup}
+TODO
+
+
+
+
+\begin{myverbatim}
+
+Logical setup:
+                                interface: veth1                        interface: veth3
+                                ip: 192.168.1.2/24                      ip: 192.168.1.4/24
+              interface: veth0       \              interface: veth2       \
+              ip: 192.168.1.1/24      \             ip: 192.168.1.3/24      \
+ __________  /                         \  _______  /                         \  __________ 
+|          |/                           \|       |/                           \|          |
+|  Server  |-------> veth0@veth1 ------->| Relay |-------> veth2@veth3 ------->|  Client  |
+|__________|<------- veth1@veth0 <-------|_______|<------- veth3@veth2 <-------|__________|
+
+\end{myverbatim}
+
+
+\begin{myverbatim}
+
+Actual setup (using bridge and namespaces):
+ ______________________         _______________________________________        ______________________
+|   Server namespace   |       |            Relay namespace            |      |   Client namespace   |
+|     ____________     |       |    ______________   ______________    |      |     ____________     |
+|    |192.168.10.1|    |       |   | 192.168.10.2 | | 192.168.11.2 |   |      |    |192.168.11.1|    |
+|____|___veth0____|____|       |___|____veth1_____|_|____veth2_____|___|      |____|____veth3___|____|
+            \                            /                 \                             /
+             \                          /                   \                           /
+              \                        /                     \                         /
+               \                      /                       \                       /
+                \ __________________ /_                      __\ ___________________ /
+                /veth0-br|     |veth1-br\                   /veth2-br|      |veth3-br\
+                |                    ___|                   |___                     |
+                \_____v-net-0_______|NAT/                   \NAT|_________v-net-1____/
+                        /              \                     /                \
+                ip: 192.168.10.10       \                   /         ip: 192.168.11.10
+                net: 192.168.10.0/24     \   ___________   /          net: 192.168.11.0/24
+                                           /             \
+                                          |   enp1s0f0    |
+                                           \ ___________ /
+                                                  |
+                                                  |
+                                              (INTERNET)
+
+\end{myverbatim}

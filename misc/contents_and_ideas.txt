@@ -28,7 +28,8 @@ Roughtly how the thesis will likely be structured:
     - compatibility with current setups
 
 (5-7 Pages)
-4) Testing setup and results
+4) Setups, Testing and Results
+    - Speedup of Omitting Userspace Handling
     - ...
 
 (2-4 Pages)

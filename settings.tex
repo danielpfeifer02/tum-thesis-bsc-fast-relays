@@ -25,6 +25,20 @@
 \usepackage[final]{microtype}
 \usepackage{caption}
 \usepackage[hidelinks]{hyperref} % hidelinks removes colored boxes around references and links
+\usepackage{verbatim}
+\usepackage{adjustbox}
+\usepackage{fancyvrb}
+
+
+\newenvironment{myverbatim}{%
+ \VerbatimEnvironment
+ \begin{adjustbox}{max width=\linewidth}
+ \begin{BVerbatim}
+  }{
+  \end{BVerbatim}
+ \end{adjustbox}
+}
+
 
 \bibliography{bibliography}
 
