@@ -1,2 +1,14 @@
 \section{Research Question}\label{sec:research_question}
-TODO
+
+As already mentioned above the usage of application specific approaches in networking allows for increased packet processing speed.
+In this thesis we will consider a media streaming scenario that runs on top of QUIC by using the `Media over QUIC' (MoQ) transport protocol
+~\parencite{draft-moqtransport}.
+By using eBPF technology together with kernel hook points provided by the Linux-Kernel, we will explore the possibility of having an eBPF 
+program that handles basic relay capabilities, such as packet forwarding and congestion control.
+Since the QUIC protocol settles both in kernel and userspace we propose a setup that delays any userspace processing until \textbf{after} the
+packet has been forwarded to the client.
+This way the raw delay that the packet experiences from the initial media-server to the client is minimized, however, since QUIC is a connection 
+oriented protocol, some additional processing in the eBPF program is needed to ensure that the packets are coherent with the state that the 
+client-side of the QUIC connection expects.
+Besides designing the setup of a relay that supports such an eBPF speedup, we will also provide a basic example implementation and evaluate its
+performance considering packet delay improvement and CPU utilization.
