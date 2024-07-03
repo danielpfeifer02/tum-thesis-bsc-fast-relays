@@ -1,2 +1,36 @@
 \section{Scope}\label{sec:scope}
-TODO
+
+The main improvement this thesis aims to achieve is shortening the critical path a packet takes from a media server to a client.
+This will be done by avoiding the immediate need of a packet traversing up the network stack to the application layer.
+Instead any communication with the application layer will happen in a delayed fashion (after the packet was sent) by utilizing 
+eBPF maps for storing any necessary (meta-)~information.
+\\
+This approach is highly dependent on the used standards and protocols.
+This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and the `Media over QUIC' (MoQ) 
+transport protocol~\parencite{draft-moqtransport}.
+For the application layer the quic-go library~\parencite{quic-go-repo} will provide the implementation and 
+any additional programs will also be written in Go.
+Since the setup is dependent on retreiving data from eBPF maps the QUIC library providing the implementation 
+will need some adaptations.
+We will mainly introduce simple function pointer style additions that allow the adapted library to be run 
+both with and without the eBPF setup.
+The developer of the relay will then also have more freedom to setup the eBPF part of the relay as they see fit
+since the Go code that will interact with eBPF parts will also have be provided by said developer.
+\\
+We will also run a performance analysis on our implementation of the relay to confirm the potential this 
+approach has.
+These performance tests will look at the raw delay speedup as well as the impact on CPU utilization this 
+setup has.
+All the tests will be done in a lab-like environment to isolate the performance changes as best as possible
+form any outside noise.
+The payloads used will only contain dummy data since our approach does not interfer with payload contents 
+and there is no need for creating and using real media stream data.
+\\
+Despite our approach only considering QUIC and MoQ, the general idea of the shown setup is not dependent on 
+any of these protocols and can be changed to fit ones needs.
+The only assumption that was made is that it is possible for the protocol to store meta-information like a packet
+priority in the packet itself.
+In our case we utilized one byte of the QUIC Connection-ID as a proof of conecept but in later implementations 
+this could be changed to using any separately defined header that allows for the storage of such information.
+Since we assume full knowledge over the eBPF setup when the payload is created at the server we can also 
+assume the possibility to add meta-information at some pre-defined location in the packet.

@@ -1,7 +1,7 @@
 \section{Source Code Repositories}\label{sec:source_code_repos}
 For the development of the relay and the eBPF program, we have come up with the following repositories:
 \begin{itemize}
-    
+
     \item \textbf{Fast-Relay}~\parencite{adaptive-moq-repo}:
     This is the main repository providing the eBPF program implementations as well as examples of 
     server, relay and client implementations in Go.
@@ -18,6 +18,7 @@ For the development of the relay and the eBPF program, we have come up with the 
     categorization of payloads into different priorities in order for the eBPF program to be able to 
     deliberalty drop packets in case of congestion.
     Getting these priorities could be as simple as differentiating only between I- and P-frames in a video 
-    stream or more complex based on the needs of the application and the granularity of the congestion control.
+    stream or more complex based on the needs of the application and the wanted granularity of the congestion 
+    control.
     
 \end{itemize}
