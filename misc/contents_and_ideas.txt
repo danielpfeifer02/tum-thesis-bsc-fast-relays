@@ -13,24 +13,45 @@ Roughtly how the thesis will likely be structured:
 (8-10 Pages)
 2) Background, current state of the art, related work
     - QUIC
+        - What is QUIC
+        - Why QUIC? -> what improvements over TCP/UDP
+        - How is QUIC used in this thesis (quic-go)
     - eBPF
+        - What is eBPF
+        - Benefits of eBPF
+        - Limitations of eBPF
+        - How is eBPF used in this thesis 
+        - How does eBPF communicate with userspace / quic-go (i.e. eBPF maps, redirecting, )
     - (Adaptive) media streaming
+        - What is adaptive media streaming 
+        - How does a usual system of ams look like
+        - Benefits of current systems
+        - Limitations of current systems 
 
 (8-10 Pages)
 3) Proposed new setup for fast-relays
     - needed QUIC adaptions
+        - Where are function-pointer additions needed
+        - Where are non-function-pointer additions needed 
+            - Why can't they be function pointer additions
     - eBPF setup
-    - avoiding user space via forwarding
-    - filtering / dropping packets
-    - optimizing for client congestion
-    - subscription and state handling
-    - relay data caching
+        - What modifications to a packet are needed 
+        - avoiding user space via forwarding
+            - What user space communication is happening
+                - subscription and state handling
+                - relay data caching
+        - What types of traffic / packets can we expect and how to handle each type
+        - (together with prev. point) optimizing for client congestion via drop of "low prio packets"
+            - filtering / dropping packets
     - compatibility with current setups
 
 (5-7 Pages)
 4) Setups, Testing and Results
+    - Testing environment
+        - Type of payload for testing 
+        - Variations in number of streams (and clients?) 
     - Speedup of Omitting Userspace Handling
-    - ...
+    - CPU utilization comparison of fast-relays and traditional approach
 
 (2-4 Pages)
 5) Future work
