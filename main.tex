@@ -19,7 +19,58 @@
 \newcommand*{\getSubmissionDate}{15.08.2024}
 \newcommand*{\getSubmissionLocation}{Munich}
 
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+
+\lstdefinestyle{GoStyle}{
+    language=Go,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{mGreen},
+    stringstyle=\color{red},
+    numberstyle=\tiny\color{gray},
+    backgroundcolor=\color{white},
+    frame=single,
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=true,
+    showspaces=false,
+    showstringspaces=false,
+    numbers=left,
+    numbersep=5pt,
+    morekeywords=[2]{ConnectionUpdateBPFHandler, UpdateConnectionId, Bytes, Len}, % Add your method names here
+    keywordstyle=[2]{\color{Sepia}\bfseries}, % Style for method names
+    morekeywords=[3]{struct, interface, func, import, package, defer, go, select, case, chan, map, type, const, var, range, fallthrough, continue, break, default},
+}
+
 \begin{document}
+
 
 % Set page numbering to avoid "destination with the same identifier has been already used" warning for cover page.
 % (see https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Problems_with_Links_and_Pages).

@@ -42,10 +42,28 @@ The Linux Traffic Control Subsystem uses Queuing Disciplines (qdiscs) to define 
 are handled. TODO
 
 \subsection{eBPF Verifier}
-TODO
+Since eBPF programs essentially allow the user to run arbitrary code in the kernel,
+it is crucial to ensure that this code is safe.
+This is achieved by the eBPF verifier, which checks the code for, and disallows,
+insecure sections.
+For example this includes not allowing unbounded loops or those with conditional exits.
+The verifier does find such insecurities by simulating possible program paths as well as 
+looking at a graph representation of the program~\parencite{ebpf-verifier}.
 
 \subsection{Important eBPF Concepts}
-TODO
+One of the most important concepts in eBPF is the `eBPF-map'.
+Such a map boils down to a section in memory that is reserved for the eBPF-program
+and which can be used as a key-value store for arbitrary data.
+This part of memory can then also be accessed from userspace and thus provide the main 
+way of communication between the eBPF-program and our application.
+When we define an eBPF-map we can choose between different types as well as configure
+size, key-type, value-type and the way the map is stored. % TODO: surely there is more one can define
+
+
+\begin{lstlisting}[style=CStyle]
+    // TODO: add example of eBPF map
+\end{lstlisting}
+
 
 \subsection{eBPF and Fast-Relays}
 TODO

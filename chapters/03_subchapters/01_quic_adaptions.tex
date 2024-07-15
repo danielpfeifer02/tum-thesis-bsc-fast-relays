@@ -1,2 +1,64 @@
 \section{QUIC Adaptions}\label{sec:quic_adaptions}
-TODO
+As was already mentioned in the previous chapter, our setup requires some adaptations
+to the quic-go library.
+One initial change that was necessary was to turn off packet en- and decryption, 
+happening within quic-go.
+Given that we operate on the QUIC-header data within the eBPF-program we need access 
+to fields that are encypted using QUICs header-protection.
+For obvoius reasons sending unencrypted packets is not something that would be wanted in 
+a production environment but for our setup it is required since no fitting hardware offload 
+was available at time of writing that would have allowed us to `push down' en- and decryption 
+onto a smartNIC\@.
+Given that such a hardware offload is added in the future, the en- and decryption can be
+turned on again which makes this change more of a temporary solution to show the feasibility
+of our approach.
+\\
+Another type of change that we needed to introduce into the quic-go library is caused by 
+connection state management.
+We essentially added support for communication with the eBPF-program by using an 
+approach similar to C-style function pointers.
+\\
+On multiple locations we added conditional function calls like the one depicted in 
+\autoref{changes:function-pointer}.
+The function that is called here will be defined by the developer of the relay and 
+therefore allow for customizability without the need for changing the library itself.
+\vspace{0.2cm}
+\begin{lstlisting}[style=GoStyle, label=changes:function-pointer, caption=An example of a function-pointer addition to the quic-go library.]
+    /* Function pointer call within actual quic-go code */
+    if packet_setting.ConnectionUpdateBPFHandler != nil /* && potentially other conditions */ {
+	    packet_setting.ConnectionUpdateBPFHandler(connID.Bytes(), uint8(connID.Len()), p.connection)
+	}
+\end{lstlisting}
+\vspace{0.2cm}
+\begin{lstlisting}[style=GoStyle, label=changes:signature-function-pointer, caption=Only the signature will be defined within the library itself.]
+    /* Function pointer signature definition within additional config file */
+	ConnectionUpdateBPFHandler      func(id []byte, l uint8, conn QuicConnection) = nil
+\end{lstlisting}
+
+The definition of the function that the developer of the relay wished to be executed at the specifically
+defined points will be defined locally in the relay code and provided to the configuration of the quic-go library.
+An example of how this could look like is shown in \autoref{changes:definition-function-pointer}.
+\vspace{0.2cm}
+\begin{lstlisting}[style=GoStyle, label=changes:definition-function-pointer, caption=An example of how the addition looks on the relay side.]
+    /* Definition of the function within the local relay code */
+    func UpdateConnectionId(id []byte, l uint8, conn packet_setting.QuicConnection) {
+        /* handle the connection update by interacting with the eBPF-program */
+    }   
+
+    /* Providing the function to the quic-go library */
+    func main() {
+        /* ... */
+        packet_setting.ConnectionUpdateBPFHandler = common.UpdateConnectionId
+        /* ... */
+    }
+\end{lstlisting}
+
+The need for these additions arises since the eBPF-program works with its own copy of the current state of a connection.
+This, for example, includes the connection ID that will be used when changing the packet header before sending it out.
+Since a connection ID can change, i.e.~be updated or retired, during the lifetime of a connection we need a way to inform 
+the eBPF-program to no longer use outdated state-information.
+These function-pointer style additions provide a minimal way of adding such functionality without limiting flexibility 
+or adding too much application specific code to the library itself as it would be the case if the library would access 
+the eBPF-Maps directly.
+
+% TODO: mention changes which are not function-pointer style
