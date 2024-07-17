@@ -24,3 +24,21 @@ was influencial in the used namespace environment.
     handled after the packet has already been sent out (e.g.~the case for registering a packet 
     such that the QUIC library knows about it).}\label{fig:delay-improvement}
 \end{figure}
+
+\begin{figure}[!htb]
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/04_testing_and_results/cpu_usage_server_ns.pdf}
+        \caption{Server namespace CPU usage comparison.}\label{fig:cpu-utilization-server}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/04_testing_and_results/cpu_usage_relay_ns.pdf}
+        \caption{Relay namespace CPU usage comparison.}\label{fig:cpu-utilization-relay}
+    \end{minipage}\hfill
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width=0.48\textwidth]{figures/04_testing_and_results/cpu_usage_client_ns.pdf}
+        \caption{Client namespace CPU usage comparison.}\label{fig:cpu-utilization-client}
+    \end{minipage}
+\end{figure}

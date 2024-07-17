@@ -1,0 +1,19 @@
+General:
+- Normally it's split in Design/Impl/Performance but here Design and Impl are very close
+  so structure it as Design+Impl/Performance? (Could they be seperated?)
+
+Introduction:
+- Add example stating use case e.g. that cable is still seconds faster than streaming
+- Actually state what a relay is doing (maybe do this in Background?)
+
+
+Background:
+- Add separate part for MoQ
+
+Proposed Setup:
+- Whenever there were design decisions with multiple possibilities also say other
+  possibilities and explain why the chose one is used
+
+Testing and Results:
+
+Future Work and Conclusion:
