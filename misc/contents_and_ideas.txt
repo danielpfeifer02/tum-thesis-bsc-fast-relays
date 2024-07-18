@@ -22,6 +22,10 @@ Roughtly how the thesis will likely be structured:
         - Limitations of eBPF
         - How is eBPF used in this thesis 
         - How does eBPF communicate with userspace / quic-go (i.e. eBPF maps, redirecting, )
+    - Media over QUIC (MoQ)
+        - What is MoQ
+        - Solving the scaling vs latency problem
+        
     - (Adaptive) media streaming
         - What is adaptive media streaming 
         - How does a usual system of ams look like
