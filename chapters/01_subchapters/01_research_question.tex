@@ -27,3 +27,12 @@ However, since QUIC is a connection oriented protocol, we need to make sure that
 coherent despite the additional processing steps done by the eBPF program.
 We will investigate which additional processing steps are needed in our case, how they compare to challenges when expanding our approach to other
 protocols and how they can be implemented in an eBPF program.
+
+\vspace{0.5cm}
+\begin{figure}[htbp] % TODO: where to put this?
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/02_background/route-layering.drawio.pdf}
+    \caption[Packet path schematic regarding network stack]{Conventional networking layers a packet passes.
+    The red loop indicates again the ``short-cut'' that is utilized by the fast-relay 
+    (eBPF packet-forwarding {-} no need to go up to userspace).}\label{fig:route-layering}
+\end{figure}

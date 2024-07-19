@@ -41,7 +41,7 @@ XDP hook points in the network stack.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/hook-point-locations.drawio.pdf}
-    \caption{Abstracted view of Traffic Control (TC) and eXpress Data Path (XDP) hook points
+    \caption[Hook points within network stack]{Abstracted view of Traffic Control (TC) and eXpress Data Path (XDP) hook points
     in the Linux kernel network stack.
     The red loop indicates the `short-cut' that is utilized by the fast-relay.
     TC hook allows redirection directly to egress while XDP hook is only available
@@ -49,9 +49,9 @@ XDP hook points in the network stack.
     }\label{fig:ebpf-hooks}
 \end{figure}
 
-\subsection{Traffic Control Queuing Disciplines}
-The Linux Traffic Control Subsystem uses Queuing Disciplines (qdiscs) to define how packets
-are handled. TODO
+% \subsection{Traffic Control Queuing Disciplines} % TODO: needed?
+% The Linux Traffic Control Subsystem uses Queuing Disciplines (qdiscs) to define how packets
+% are handled. TODO
 
 \subsection{eBPF Verifier}
 Since eBPF programs are executed in the kernel it is quite obvious that extensive
@@ -78,9 +78,9 @@ size, key-type, value-type and the way the map is stored. % TODO: surely there i
 An example of two eBPF-map definitions can be seen in~\autoref{lst:ebpf-map}.
 It shows two different types of maps, a hash map and a ring buffer, that are used in
 our fast-relay setup.
-Some relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
+Those and some other relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
 
-
+\vspace{0.5cm}
 \begin{figure}[htbp]
     \begin{lstlisting}[style=CStyle]
         struct {
@@ -97,7 +97,7 @@ Some relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
             __uint(pinning, LIBBPF_PIN_BY_NAME);    // Pin by name to the tc filesystem
         } packet_events SEC(".maps");
     \end{lstlisting}
-    \caption{Examplary eBPF map definitions.}\label{lst:ebpf-map}
+    \caption[Examplary eBPF map definitions]{Examplary eBPF map definitions.}\label{lst:ebpf-map}
 \end{figure}
 
 \FloatBarrier
@@ -110,29 +110,17 @@ Some relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
         \midrule
             BPF\_MAP\_TYPE\_HASH & A hash map where keys and values can be arbitrarily defined. \\
         \midrule
-            BPF\_MAP\_TYPE\_PERCPU\_HASH & A hash map with separate values for each CPU, providing improved performance in multi-core environments. \\
+            BPF\_MAP\_TYPE\_PERCPU\_HASH & A hash map with separate value slots for each CPU, providing improved performance in multi-core environments. \\
         \midrule
             BPF\_MAP\_TYPE\_ARRAY & An array map that allows random access to elements by index. \\
         \midrule
-            BPF\_MAP\_TYPE\_PERCPU\_ARRAY & An array map with separate values for each CPU, useful for per-CPU data storage. \\
+            BPF\_MAP\_TYPE\_PERCPU\_ARRAY & An array map with separate value slots for each CPU, useful for per-CPU data storage. \\
         \midrule
             BPF\_MAP\_TYPE\_RINGBUF & A ring buffer for implementing high-performance data queues. \\
         \bottomrule
     \end{tabular}
-    \caption[TODO: add this to tables and figures for better naming]{Some eBPF map types. (defined in /usr/include/linux/bpf.h)}\label{tab:eBPF-map-types}
+    \caption[Subset of eBPF map types]{Some eBPF map types. (defined in /usr/include/linux/bpf.h)}\label{tab:ebpf-map-types}
 \end{table}
-
-\subsection{eBPF and Fast-Relays}
-TODO
 
 \FloatBarrier
 
-\begin{figure}[htbp] % TODO: where to put this?
-    \centering
-    \includegraphics[width=\textwidth]{figures/02_background/route-layering.drawio.pdf}
-    \caption{Conventional layers of a network stack for client, server and relay.
-    The red loop indicates again the `short-cut' that is utilized by the fast-relay and 
-    based on eBPF packet-forwarding.
-    This avoids the need for the packet to traverse the entire network stack of the relay 
-    up to the userspace.}\label{fig:route-layering}
-\end{figure}

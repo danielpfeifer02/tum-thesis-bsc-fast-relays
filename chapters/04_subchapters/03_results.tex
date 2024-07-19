@@ -18,7 +18,7 @@ was influencial in the used namespace environment.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{figures/04_testing_and_results/delays_small_packets_simple_userspace.pdf}
-    \caption{By avoiding userspace when processing the 1-RTT packets that contain the payload
+    \caption[Delay analysis of eBPF approach]{By avoiding userspace when processing the 1-RTT packets that contain the payload
     the delay of a single packet can be reduced. The longer-delay-operations are either handled
     directly in the eBPF program (e.g.~the case for deciding where to redirect a packet to) or 
     handled after the packet has already been sent out (e.g.~the case for registering a packet 
@@ -29,17 +29,17 @@ was influencial in the used namespace environment.
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{figures/04_testing_and_results/cpu_usage_server_ns.pdf}
-        \caption{Server namespace CPU usage comparison.}\label{fig:cpu-utilization-server}
+        \caption[Server CPU usage comparison]{Server namespace CPU usage comparison.}\label{fig:cpu-utilization-server}
     \end{minipage}\hfill
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{figures/04_testing_and_results/cpu_usage_relay_ns.pdf}
-        \caption{Relay namespace CPU usage comparison.}\label{fig:cpu-utilization-relay}
+        \caption[Relay CPU usage comparison]{Relay namespace CPU usage comparison.}\label{fig:cpu-utilization-relay}
     \end{minipage}\hfill
     \begin{minipage}{\textwidth}
         \centering
         \includegraphics[width=0.48\textwidth]{figures/04_testing_and_results/cpu_usage_client_ns.pdf}
-        \caption{Client namespace CPU usage comparison.}\label{fig:cpu-utilization-client}
+        \caption[Client CPU usage comparison]{Client namespace CPU usage comparison.}\label{fig:cpu-utilization-client}
     \end{minipage}
 \end{figure}
 

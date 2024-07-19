@@ -3,7 +3,7 @@
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=7cm]{figures/03_fast_relays/ebpf-setup.drawio.pdf}
-    \caption{The relay has to be equipped with three BPF programs.}\label{fig:ebpf-programs}
+    \caption[Types of eBPF programs at relay]{The relay has to be equipped with three BPF programs.}\label{fig:ebpf-programs}
 \end{figure}
 
 In order to allow the relay to forward packets independently of the userspace, we
@@ -65,7 +65,7 @@ forwarded packet in order to be able to react to potential congestion events.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{figures/03_fast_relays/forward-registration.drawio.pdf}
-    \caption{Internal setup for registering forwarded packets as well as incorporating forwarding
+    \caption[Packet registration schematic]{Internal setup for registering forwarded packets as well as incorporating forwarding
     limitations for the BPF program.}\label{fig:forward-registration}
 \end{figure}
 
@@ -75,5 +75,5 @@ TODO:~mention
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/03_fast_relays/stream-id-translation.drawio.pdf}
-    \caption{TODO (also mention that the check for previous translation is needed since >1 packets per unistream are possible)}\label{fig:stream-id-translation}
+    \caption[Stream id translation schematic]{TODO (also mention that the check for previous translation is needed since >1 packets per unistream are possible)}\label{fig:stream-id-translation}
 \end{figure}
