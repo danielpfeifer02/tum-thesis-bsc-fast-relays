@@ -116,7 +116,15 @@ In a later section will go into detail on how the eBPF setup actually uses mecha
 priority fields for this and how those meet the standard specifications.
 
 \subsection{moqtransport}
-TODO
+In order to use the MoQ protocol in our setup we will make use of a library that implements 
+the MoQ transport protocol (moqtransport or MoQT) in Go~\parencite{priority-moqtransport-repo}
+The goal of MoQT is to define a media transport protocol that is operating on top
+of QUIC and WebTransport which is providing the concrete designs that the charter of 
+the MoQ working group is aiming for.
+This includes, for example, actual structure of the different message types or error handling in case 
+of a wrong state.
+As of writing this thesis the MoQT draft is in its fifth version~\parencite{draft-moqtransport}.
+
 % Besides that the fast-relay implementation will also make use of the moqtransport library.
 % This library brings the `Media over QUIC' (MoQ) protocol to Go and will be used as a media transport protocol 
 % when looking at the impact of fast-relays on adaptive real-time video streaming.
