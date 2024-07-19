@@ -31,7 +31,7 @@ The MoQ can drop or delay certain media if necessary.
 VoD consumption >> live streaming but live makes up most of peak traffic
 
 MoQ will have great influence on real-time collaboration infrastructure like 
-Zoom, Teams, etc. and live streaming platforms like Twitch, YouTube, etc. 
+Zoom, Teams, etc.~and live streaming platforms like Twitch, YouTube, etc. 
 
 low latency, high fan out, high scalability is pretty much ideal for most apps.
 
@@ -114,3 +114,10 @@ This is because packet dropping is ultimately one of the main use cases of plain
 programs and as such easy to implement.
 In a later section will go into detail on how the eBPF setup actually uses mechanisms like 
 priority fields for this and how those meet the standard specifications.
+
+\subsection{moqtransport}
+TODO
+% Besides that the fast-relay implementation will also make use of the moqtransport library.
+% This library brings the `Media over QUIC' (MoQ) protocol to Go and will be used as a media transport protocol 
+% when looking at the impact of fast-relays on adaptive real-time video streaming.
+% The MoQ protocol is being standardized by the IETF since July 2023 and has yet to be finalized. 

@@ -3,19 +3,23 @@
 % TODO: cite \parencite{facebook-quic-usage} for QUIC usage at Facebook
 % TODO: cite \parencite{google-quic-usage} for QUIC usage at Google
 % TODO: cite \parencite{article-quic-usage} for general QUIC usage
-The Transmission Control Protocol (TCP) has been used as the backbone
+Many fundamental internet protocols still used today have been around for 
+a very long time.
+For example the Transmission Control Protocol (TCP) has been used as the backbone
 of the internet for more than 40 years.
 It has been designed to be reliable and to provide a connection-oriented
 way of transmitting data, but the modern environment of the internet with
-its need for increasing throughput makes it hard for TCP to keep up.
+needs like lower latency, better multiplexing or improved security makes it 
+hard for TCP to keep up.
 Limitations in the design and resulting issues like head-of-line blocking
 have raised demand for a newly designed protocol that can keep up with the
 modern internet. % TODO: head of line blocking citation
-The `Quick UDP Internet Connections' protocol, short QUIC protocol, is a 
+All of these issued paired with the want for a more flexible development cycle
+led to new creations.
+QUIC, which started off as the `Quick UDP Internet Connections' protocol, and has 
+since been standardized by the IETF with QUIC being its own trademark, is a 
 transport layer protocol built on top of UDP that is designed to be reliable, 
 cryptographically secure and more performant than TCP\@.
-It was intended to be the successor of TCP and it has its origins at Google before 
-its standardization by the IETF began in 2016.
 QUIC, partly because it operates both in user- and kernel-space, has been designed to allow for a 
 more rapid deployment cycle than TCP\@.
 Similar to TCP it is a connection-based protocol that uses TLS for encryption~\parencite{quic-explained}.
@@ -24,7 +28,7 @@ at the time, made up 60\% of the web browser market~\parencite{google-quic-usage
 A little over two years later, Facebook, now Meta, was using QUIC for more than 75\% of 
 their internet traffic which led to improvements regarding
 request errors, tail latency and header size~\parencite{facebook-quic-usage}.
-As of May 2024, QUIC already made up 8.0\% of all internet traffic
+As of May 2024, QUIC already made up 8.0\% of all internet traffic % TODO: update number
 with support from pretty much every major browser
 ~\parencite{internet-quic-usage, article-quic-usage}.
 With big players like Google, Meta, Microsoft or YouTube putting emphasis on
@@ -32,35 +36,40 @@ using QUIC to improve their services, this number is likely to increase even fur
 
 \subsection{Connections and Streams}
 Since QUIC is a connection-based protocol, some initial overhead to establish a connection is needed.
-However, the design incorporates some features that aim for a more efficient way of establishing 
+However, the design incorporates some features that aim for an efficient way of establishing 
 connections, e.g.\ by using 0-RTT (zero round-trip-time) handshakes.
 Latency improvements like the 0-RTT handshake however come at the cost of security, since that opens 
 the door for replay attacks.
 Another part where QUIC tries to optimize connection management is the use of streams.
 Streams are designed to be lightweight and can be opened without the need of a handshake.
-This goes as far as a single packet being able to open a new stream, transferring stream data
-as well as the closing the stream agian.
+This goes as far as one single packet being able to open a new stream, transferring stream data
+as well as the closing the stream again.
 This allows for new techniques to improve data transmission and will also be part of the fast-relay 
 setup in this thesis.
 Aside from streams, apparent since QUIC is based on UDP, it is also possible to send data via
 unreliable datagrams.
 This further improves versatility of the protocol and allows for new ways of optimizing data transmission.
 
-\subsection{quic-go and moqtransport}
-The implementation of the proposed fast-relay setup will be based on a modified version of the quic-go library, 
-which provides a pure Go implementation of the QUIC protocol as specified in the standards RFC-9000, RFC-9221 
-as well as some others which are not important for out usecase. 
-Besides that the fast-relay implementation will also make use of the moqtransport library.
-This library brings the `Media over QUIC' (MoQ) protocol to Go and will be used as a media transport protocol 
-when looking at the impact of fast-relays on adaptive real-time video streaming.
-The MoQ protocol is being standardized by the IETF since July 2023 and has yet to be finalized. 
+\subsection{quic-go}
+There are many implementations of the QUIC protocol available providing libraries for a lot of 
+today's most popular programming languages.
+The implementation we settled on for this thesis is the quic-go library which provides a pure Go 
+approach to implementing the standards of RFC-9000, RFC-9221 as well as some others which are not 
+important for out usecase. 
+However, since we need some special behavior of the userspace part of QUIC we will introduce some 
+modifications into quic-go.  
+Those modifications will be explained further in section\nobreakspace\ref{sec:quic_adaptions}.
 
-\subsection{QUIC and Fast-Relays}
+\subsection{QUIC's Importance to Fast-Relays}
 The QUIC protocol will be a fundamental part of the fast-relay setup in this thesis, yet the ideas used 
 to make relays faster is not limited to QUIC and can be extended to other protocols as well.
 QUIC is chosen as an example protocl due to its increasing popularity which offers big potential 
 in early adoption and deployment of fast-relays.
-Besides that, the existing implementations of QUIC related standards provide a good starting point for
-an implementation, despite the difficulties that the heavy encryption of QUIC brings with it.
-To mitigate missing technologies, mainly for offloading QUIC decryption and encryption onto hardware,
-the existing protocol libraries can also be modified easily to simulate any needed behavior.
+Also the easy incorporation of changes into libraries providing RFC implementations makes it a good 
+starting point for experimenting what can and cannot be done regarding our research questions.
+This includes the possibility of neglecting the difficulties that the heavy encryption of QUIC brings with 
+it, by just turning off the related functionality.
+
+% This includes the possibility of mitigating missing technologies, mainly for offloading QUIC % TODO: better wording?
+% decryption and encryption onto hardware.
+% To conquer that the existing protocol libraries can be modified easily to simulate any needed behavior.

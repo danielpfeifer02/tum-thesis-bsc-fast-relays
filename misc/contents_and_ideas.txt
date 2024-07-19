@@ -12,20 +12,23 @@ Roughtly how the thesis will likely be structured:
 
 (8-10 Pages)
 2) Background, current state of the art, related work
+    (~2 Pages)
     - QUIC
         - What is QUIC
         - Why QUIC? -> what improvements over TCP/UDP
         - How is QUIC used in this thesis (quic-go)
+    (~2 Pages)
     - eBPF
         - What is eBPF
         - Benefits of eBPF
         - Limitations of eBPF
         - How is eBPF used in this thesis 
         - How does eBPF communicate with userspace / quic-go (i.e. eBPF maps, redirecting, )
+    (~2 Pages)
     - Media over QUIC (MoQ)
         - What is MoQ
         - Solving the scaling vs latency problem
-        
+    (~2 Pages)
     - (Adaptive) media streaming
         - What is adaptive media streaming 
         - How does a usual system of ams look like

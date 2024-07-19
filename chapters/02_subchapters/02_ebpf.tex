@@ -5,24 +5,45 @@ By using BPF it is possible to attach a small BPF-program to some pre-defined ho
 the network stack of the kernel and filter packets there in a stateless manner.
 This provided more efficiency since the packets did not need to be copied into 
 userspace anymore but could directly be processed in the kernel.
-One downside to such an approach however is that BPF-programs are limited by the 
-so-called `BPF-verifier' which needs to check every BPF-program for safety e.g. 
-to avoid infinite loops or access to invalid memory from withing kernel space. 
-Today, the initial technology of BPF has evolved into `extended BPF' (eBPF) and 
-allows for more versatile use cases.
+A need for better tracing capabilities of the Linux kernel led to the development 
+of an extended version of BPF called ``eBPF'' which was introduced in 2014 and 
+heavily influenced by a tracing tool called ``dtrace''~\parencite{ebpf-intro-tigera}.
+
+% Since eBPF programs are executed in the kernel it is quite obvious that extensive
+% security checks need to be in place to ensure that the kernel does not experience 
+% problems like infinite loops or security violations.
+% One downside to such an approach however is that BPF-programs are limited by the 
+% so-called `BPF-verifier' which needs to check every BPF-program for safety e.g. 
+% to avoid infinite loops or access to invalid memory from withing kernel space. 
+% Today, the initial technology of BPF has evolved into `extended BPF' (eBPF) and 
+% allows for more versatile use cases.
 
 \subsection{eBPF Hook Points}
 The Linux kernel offers several hook points where eBPF-programs can be attached to.
-Two main ones are one to attach eBPF-programs to the Traffic Control (TC) subsystem
-and another one to attach them to the eXpress Data Path (XDP) subsystem.
-The XDP hook, which is directly located in the NIC-driver, lies lower in the network 
-stack than the TC-hook, which is located in the link-layer.
-Despite being higher up in the network stack, the TC-hook has the big advantage that
-it offers ingress and egress processing while the XDP-hook is available for ingress 
-processing only.
-This makes the XDP-hook suboptimal for the implementation of fast-relays since 
-they heavily rely on processing packets at egress, after those were redirected
-from ingress.
+There are two prominent ones that we considered for our suggested setup.
+The first one allows one to access the Traffic Control (TC) subsystem
+while the second one allows one to access the eXpress Data Path (XDP) subsystem.
+
+XDP would generally provide a better performance since it is located 
+lower on the network stack, namely directly after the NIC, than the TC-hook point,
+which is located in the link-layer.
+TC on the other hand offers a more versatile way of packet processing since 
+the used \verb|sk_buff| provides access to metadata that is not available when using 
+XDP and its \verb|xdp_buff|.
+% https://liuhangbin.netlify.app/post/ebpf-and-xdp/ % TODO: is this citable?
+What ultimately led us to choose TC over XDP was however the fact that 
+XDP only allows ingress packet processing while TC allows for both ingress and egress.
+That means that with XDP we would not have been able to redirect packets to be handled 
+at egress which is crucial for the fast-relay setup we are aiming for.
+
+% The XDP hook, which is directly located in the NIC-driver, lies lower in the network 
+% stack than the TC-hook, which is located in the link-layer.
+% Despite being higher up in the network stack, the TC-hook has the big advantage that
+% it offers ingress and egress processing while the XDP-hook is available for ingress 
+% processing only.
+% This makes the XDP-hook suboptimal for the implementation of fast-relays since 
+% they heavily rely on processing packets at egress, after those were redirected
+% from ingress.
 Figure~\autoref{fig:ebpf-hooks} illustrates again the relative positions of the TC and
 XDP hook points in the network stack.
 
