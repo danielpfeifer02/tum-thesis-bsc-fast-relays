@@ -1,8 +1,8 @@
 \section{eBPF Setup}\label{sec:ebpf_setup}
-\subsection{Different BPF Programs}
+\subsection{Different eBPF Programs}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=7cm]{figures/03_fast_relays/ebpf-setup.drawio.pdf}
+    \includegraphics[width=0.3\textwidth]{figures/03_fast_relays/ebpf-setup.drawio.pdf}
     \caption[Types of eBPF programs at relay]{The relay has to be equipped with three BPF programs.}\label{fig:ebpf-programs}
 \end{figure}
 
@@ -118,7 +118,7 @@ Table~\ref{tab:skb-redirection} shows them together with a brief description of 
                                         Internally this executes a neighbor lookup to find the needed L2 information. \\
         \bottomrule
     \end{tabular}
-    \caption[skb redirection helpers]{Helper functions for packet redirection.}\label{tab:skb-redirection}
+    \caption[Redirection helpers for packet buffer]{Helper functions for packet redirection.}\label{tab:skb-redirection}
 \end{table}
 % TODO: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 % TODO: cite this: https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
