@@ -41,7 +41,7 @@ Instead we will emulate this behavior by turning off the encryption in the QUIC 
 % TODO: better spot for this part?
 % The only two assumptions that were made are that it is possible for the protocol to store meta-information like a 
 % packet-priority in the packet itself and that our relay has access header data even if it is part of encrypted areas.
-% For the former point we utilized one byte of the QUIC Connection-ID as a proof of conecept but in later implementations 
+% For the former point we utilized one byte of the QUIC Connection-Id as a proof of conecept but in later implementations 
 % this could be changed to using any separately defined application-header that allows for the storage of such 
 % information.
 % Since we assume full knowledge over the eBPF setup when the payload is created at the server (because server and 

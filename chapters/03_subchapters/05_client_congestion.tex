@@ -1,2 +1,11 @@
 \section{Client Congestion}\label{sec:client_congestion}
-TODO
+
+Already hinted at in figure~\ref{fig:forward-registration} it is shown that once a packet is 
+registered there will also be a map update that will be triggered by the congestion controller.
+This map update will tell the eBPF egress program how much data it is allowed to send out. 
+In figure~\ref{fig:forward-registration} this is visualized exemplary as ``Bytes per Second Limit''
+but the idea is that both the function determining how limits and thresholds are calculated from 
+the information of incoming packets as well as the actual handling within the egress program 
+will be application specific and defined by the relay engineer.
+\\
+TODO: continue

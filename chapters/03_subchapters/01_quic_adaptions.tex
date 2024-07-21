@@ -26,7 +26,7 @@ therefore allow for customizability without the need for changing the library it
 \begin{lstlisting}[style=GoStyle, label=changes:function-pointer, caption=An example of a function-pointer addition to the quic-go library.]
     /* Function pointer call within actual quic-go code */
     if packet_setting.ConnectionUpdateBPFHandler != nil /* && potentially other conditions */ {
-	    packet_setting.ConnectionUpdateBPFHandler(connID.Bytes(), uint8(connID.Len()), p.connection)
+	    packet_setting.ConnectionUpdateBPFHandler(connId.Bytes(), uint8(connId.Len()), p.connection)
 	}
 \end{lstlisting}
 \vspace{0.2cm}
@@ -54,8 +54,8 @@ An example of how this could look like is shown in \autoref{changes:definition-f
 \end{lstlisting}
 
 The need for these additions arises since the eBPF-program works with its own copy of the current state of a connection.
-This, for example, includes the connection ID that will be used when changing the packet header before sending it out.
-Since a connection ID can change, i.e.~be updated or retired, during the lifetime of a connection we need a way to inform 
+This, for example, includes the connection-id that will be used when changing the packet header before sending it out.
+Since a connection-id can change, i.e.~be updated or retired, during the lifetime of a connection we need a way to inform 
 the eBPF-program to no longer use outdated state-information.
 These function-pointer style additions provide a minimal way of adding such functionality without limiting flexibility 
 or adding too much application specific code to the library itself as it would be the case if the library would access 

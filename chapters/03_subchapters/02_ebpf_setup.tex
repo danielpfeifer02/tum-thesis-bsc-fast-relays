@@ -38,7 +38,7 @@ the port matches the listening port the relay application is listening on.
 This means the correct port is to be defined prior such that the eBPF program can associate 
 a single or (multiple) relay instance(s) with the correct port.
 In our case then, since we use QUIC, the program will check for QUIC long header packets that 
-setup an initial connection and saves the transmitted state information such as connection id, 
+setup an initial connection and saves the transmitted state information such as connection-id, 
 stream related states, etc.~in an eBPF map together with information that is not directly known
 by the userspace such as the MAC address of the client.
 Saving data like the MAC address directly once the connection is set up allows to omit any further 
@@ -165,7 +165,7 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
     \item[5.] In case the packet is a redirected media stream data packet the program needs to find out 
             which client is the receiver. 
             This is done by saving the client id in some part of the packet that will be overwritten 
-            at egress (namely the connection id) before redirecting the packet.
+            at egress (namely the connection-id) before redirecting the packet.
             The egress program, knowing where the id is saved in case of a redirected packet, can then
             lookup the correct address data of the client (i.e.~MAC address, IP address, etc.) and
             overwrite the respective fields in the buffer before sending it out.
@@ -217,3 +217,8 @@ Figure~\ref{fig:forward-registration} visualizes the setup for this process.
 
 \subsection{Retransmissions of Forwarded Packets}
 TODO
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/03_fast_relays/retransmission.drawio.pdf}
+    \caption[Packet retransmission schematic]{Internal setup for retransmitting packets forwarded from server connection.}\label{fig:packet-retransmission}
+\end{figure}
