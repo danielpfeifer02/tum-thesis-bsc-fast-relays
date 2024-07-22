@@ -1,7 +1,6 @@
-\section{Results}\label{sec:results}
-TODO 
-
-\subsection{Delay Reduction of BPF Forwarding}
+\section{Testing and Results}\label{sec:testing_and_results}
+TODO
+\subsection{Delay Reduction of eBPF Forwarding}
 When looking at the impact of eBPF-Forwarding on the delays of packets, we can see that
 in the namespace environment the delay of a single packet is decreased by around 100\,µs
 when compared to the userspace forwarding. This is shown in Figure~\ref{fig:delay-improvement} and 
@@ -24,6 +23,10 @@ was influencial in the used namespace environment.
     handled after the packet has already been sent out (e.g.~the case for registering a packet 
     such that the QUIC library knows about it).}\label{fig:delay-improvement}
 \end{figure}
+TODO
+
+\subsection{CPU Utilization Comparison}
+TODO
 
 \begin{figure}[!htb]
     \begin{minipage}{0.48\textwidth}
@@ -45,3 +48,4 @@ was influencial in the used namespace environment.
 
 \input{chapters/04_subchapters/cpu_usage_tables/table_top.tex}
 % \input{chapters/04_subchapters/cpu_usage_tables/table_top_cum.tex} % TODO: this is kinda useless since it only shows the "wrapping" functions. Maybe remove?
+TODO

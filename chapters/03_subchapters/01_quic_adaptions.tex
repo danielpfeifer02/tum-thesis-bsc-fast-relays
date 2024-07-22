@@ -12,7 +12,8 @@ onto a smartNIC\@.
 Given that such a hardware offload is added in the future, the en- and decryption can be
 turned on again which makes this change more of a temporary solution to show the feasibility
 of our approach.
-\\
+
+\subsection{Function-Pointer Style Additions}
 Another type of change that we needed to introduce into the quic-go library is caused by 
 connection state management.
 We essentially added support for communication with the eBPF-program by using an 
@@ -62,3 +63,5 @@ or adding too much application specific code to the library itself as it would b
 the eBPF-Maps directly.
 
 % TODO: mention changes which are not function-pointer style
+\subsection{Direct Changes to the Library}
+TODO
