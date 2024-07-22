@@ -1,5 +1,16 @@
 \section{Testing and Results}\label{sec:testing_and_results}
-TODO
+When testing the performance of our prototype we will focus on showing that the eBPF forwarding
+is capable of reducing the delay of packets.
+Delay in our case is measured again using eBPF programs that save the timestamps of a packet 
+leaving and entering the server and client program respectively.
+Due to the highly deterministic nature of the local environment we know that the difference 
+between the two timestamps will be mainly due to processing at the relay.
+Besides delay analysis we will also show that our approach does not require more CPU resources
+than the plain userspace forwarding.
+For that we will look at profiling data from programs like ``pprof'' % TODO: an extra obe for eBPF programs?
+as well as the Linux ``process status'' (\verb|ps|) command which can be used to 
+show the CPU usage of a process. % TODO: mention the "ax" parameter?
+
 \subsection{Delay Reduction of eBPF Forwarding}
 When looking at the impact of eBPF-Forwarding on the delays of packets, we can see that
 in the namespace environment the delay of a single packet is decreased by around 100\,µs

@@ -1,33 +1,52 @@
 \section{Setups}\label{sec:setups}
-TODO
 
-\subsection{Namespace Environment for Local Testing and Development}\label{subsec:namespace_environment}
-TODO
+We test the performance of our prototype in a lab-like environment that 
+allows us to maintain a stable network state.
+We do this by using Linux network namespaces where each namespace represents
+a different participant in the communication, i.e.~the server, the relay and the client.
+A schematic overview of the setup is shown in \autoref{fig:logical_setup}.
 
-\subsection{Physical Server Setup for Real-World Testing}\label{subsec:physical_server_setup}
-TODO
-
-
-
-
+\vspace{0.5cm}
+\begin{figure}[H]
+\centering
 \begin{myverbatim}
-
-Logical setup:
-                                interface: veth1                        interface: veth3
-                                ip: 192.168.1.2/24                      ip: 192.168.1.4/24
+        
+                                    interface: veth1                      interface: veth3
+                                    ip: 192.168.1.2/24                    ip: 192.168.1.4/24
               interface: veth0       \              interface: veth2       \
               ip: 192.168.1.1/24      \             ip: 192.168.1.3/24      \
  __________  /                         \  _______  /                         \  __________ 
 |          |/                           \|       |/                           \|          |
 |  Server  |-------> veth0@veth1 ------->| Relay |-------> veth2@veth3 ------->|  Client  |
 |__________|<------- veth1@veth0 <-------|_______|<------- veth3@veth2 <-------|__________|
-
+        
 \end{myverbatim}
+\caption{Logical setup including interfaces and IPs}\label{fig:logical_setup}
+\end{figure}
+\vspace{0.5cm}
 
+\subsection{Local Environment for Testing and Development}\label{subsec:namespace_environment}
+The local environment we use for testing and developing allows us to setup the network in a way 
+that fits the current needs of the prototype.
+One example for such needs would be that we need a slight delay between sending a packet and 
+receiving its acknowledgment since the registering of a sent packet takes place after a packet 
+is sent out. 
+In a real-world scenario this would obviously also be the case, if the distances covered 
+are large enough.
+\\
+However, where a local setup turns out better for testing is its deterministic nature.
+The fact that the delay of a bridge can be set to a fixed value allows us to better 
+analyse and understand the impact of the different setups for example on packet jitter.
+Also we can be sure that delays, and potential improvements thereof, are not caused by external
+network state but rather by the immediate forwarding our approach introduces.
 
+\subsection{Physical Server Setup for Real-World Testing}\label{subsec:physical_server_setup}
+TODO: mention that the physical server posed problems because of an old kernel?
+
+\vspace{0.5cm}
+\begin{figure}[H]
+\centering
 \begin{myverbatim}
-
-Actual setup (using bridge and namespaces):
  ______________________         _______________________________________        ______________________
 |   Server namespace   |       |            Relay namespace            |      |   Client namespace   |
 |     ____________     |       |    ______________   ______________    |      |     ____________     |
@@ -42,8 +61,8 @@ Actual setup (using bridge and namespaces):
                 |                    ___|                   |___                     |
                 \_____v-net-0_______|NAT/                   \NAT|_________v-net-1____/
                         /              \                     /                \
-                ip: 192.168.10.10       \                   /         ip: 192.168.11.10
-                net: 192.168.10.0/24     \   ___________   /          net: 192.168.11.0/24
+               ip: 192.168.10.10        \                   /         ip: 192.168.11.10
+               net: 192.168.10.0/24      \   ___________   /          net: 192.168.11.0/24
                                            /             \
                                           |   enp1s0f0    |
                                            \ ___________ /
@@ -52,3 +71,6 @@ Actual setup (using bridge and namespaces):
                                               (INTERNET)
 
 \end{myverbatim}
+\caption{Local setup including bridges and namespaces}\label{fig:namespace_setup}
+\end{figure}
+\vspace{0.5cm}
