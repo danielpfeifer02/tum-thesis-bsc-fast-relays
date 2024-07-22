@@ -1,8 +1,23 @@
 \section{Integration and Prototype}\label{sec:integration_and_prototype}
-TODO
+
+In order to show the feasibility of our approach, we have built a prototype 
+that implements the suggested setup.
+It is capable of streaming an example video as well as mock-payload data from 
+a server to a client via a relay.
+This setup will be open source and available on GitHub.
+Some of the mentioned functionalities like retransmission, caching and adaptive
+bitrate streaming are not fully implemented yet but should not require major
+additions since the infrastructure already considers them.
+The absence of these functionalities will not have a drastic impact on further 
+testing however since the retransmission and the adaptive bitrate streaming will not
+be needed in out lab-environment and the caching is not expected to have a big impact
+either.
 
 \subsection{Compatibility}
-TODO
+The application layer of the prototype is written in Go but this is not a requirement
+itself.
+The eBPF program expects QUIC but could also be changed without too much effort to
+support any other underlying transport protocol.
 
 \subsection{Source Code Repositories}\label{sec:source_code_repos}
 For the development of the relay and the eBPF programs, we have come up with the following repositories:
