@@ -216,9 +216,26 @@ Figure~\ref{fig:forward-registration} visualizes the setup for this process.
 \end{figure}
 
 \subsection{Retransmissions of Forwarded Packets}
-TODO
+The fact that the relay only knows about the packets after a separate registration call causes 
+another issue when it comes to retransmissions.
+Retransmissions happen at a stream level, which means that the relay needs to know about the 
+stream in the first place if it wants to retransmit a packet.
+Given that we actually never create the streams that contain the frames of the payload data 
+at the relay this is a problem.
+Our proposed system handles this by manually creating a stream with the correct id the first
+time a packet goes missing for that stream.
+This can be imagined as a ``just-in-time'' stream creation before the retransmission is sent.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/03_fast_relays/retransmission.drawio.pdf}
     \caption[Packet retransmission schematic]{Internal setup for retransmitting packets forwarded from server connection.}\label{fig:packet-retransmission}
 \end{figure}
+
+It is not necessary to create the stream before that because our approach is only working with 
+unidirectional streams so the relay does not get any data back from the client.
+The only case where it matters that the relay state ``knows'' about the stream is when a packet
+gets lost and the \verb|OnLost()| function of the QUIC library is called.
+This is also the latest point in time where the relay can create the stream with the needed stream id.
+Figure~\ref{fig:packet-retransmission} visualizes the setup for retransmitting a packet that 
+got lost on its way to the client. 
