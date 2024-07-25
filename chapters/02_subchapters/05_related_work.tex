@@ -8,12 +8,12 @@ This approach provided significant performance improvements with an increase of 
 by almost a third and a reduction of CPU time consumption caused by filtering packets by
 more than 25\%.
 This shows that a setup leveraging Linux kernel features such as BPF has a lot of potential
-to improve current infrastructure.
+to improve the current infrastructure.
 % TODO: more specific info on how this paper's setup looks like / differs from ours?
 % TODO: mention that XDP is not feasible for our setup because it has no egress hook?
 
 \subsection{Kernel Bypass}
-Another interesting approach which follows a similar idea of speeding up packet processing
+Another interesting approach that follows a similar idea of speeding up packet processing
 by avoiding the Linux network stack is~\parencite{kernel-bypass-msc-thesis}.
 The difference in this work is that DPDK is used to bypass the network stack to 
 then process packets in userspace instead of using BPF programs like this thesis does.
@@ -32,8 +32,8 @@ randomized, frame dropping are discussed.
 This thesis, similar to~\parencite{media-streaming-prio-drop}, will not focus
 on how the priority for packets is determined but rather on how those marked
 packets are handled.
-For this it is assumed that a higher level protocol has corectly determined 
+For this, it is assumed that a higher level protocol has correctly determined 
 the packet priorities and can handle the drop of packets with lower priority
 in case of limited bandwidth.
-% TODO: explain more on different ways of encoding priorities e.g. like I- and 
+% TODO: explain more on different ways of encoding priorities e.g. I- and 
 % TODO: P-frames in video streaming?
