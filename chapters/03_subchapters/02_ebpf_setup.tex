@@ -130,7 +130,7 @@ Also, the redirection to another namespace or another net device, as provided by
 \verb|bpf_redirect_neigh|, respectively, is not needed in our case since we operate in the same relay-namespace
 throughout the whole process.
 
-\subsubsection{Client Egress}
+\subsubsection{Client Egress}\label{sec:client-egress}
 The central part of the eBPF setup where everything, from state-management to packet forwarding, 
 comes together is the program that handles the outgoing traffic towards the clients.
 The client egress program sees every packet that leaves the relay, which includes packets that have 
