@@ -36,7 +36,7 @@ will be used to manually create a stream with the correct id.
 It is important to manually set the correct id since the relay might not use the same id for the 
 next unidirectional stream it opens.
 Also, the client expects the retransmission to be sent on the same stream id as the original packet
-since retransmission happen within the same stream-context.
+since a retransmission happens within the same stream-context.
 
 \subsection{Relay Caching}
 Regarding the caching of data within a relay, which is required by the MoQ standard, we handled this 
