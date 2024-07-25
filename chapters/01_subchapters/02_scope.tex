@@ -1,51 +1,50 @@
 \section{Scope}\label{sec:scope}
 
-The main improvement this thesis aims to achieve is shortening the critical path a packet takes from a media server to a client.
-This will be done by avoiding the immediate need of a packet traversal up the network stack to the application layer.
-Instead, any communication with the application layer will happen in a delayed fashion (after the packet was sent) by utilizing 
+The main improvement this thesis aims to achieve is shortening a packet's critical path from a media server to a client.
+This will be done by avoiding the immediate need for a packet traversal up the network stack to the application layer.
+Instead, any communication with the application layer will happen in a delayed fashion (after the packet is sent) by utilizing 
 eBPF-Maps for storing any necessary (meta-)~information.
-The main reason this communication between userspace and eBPF-program is required lies in the fact that relays in MoQ are an application layer concept.
-That means the QUIC connections to from relay to server and from relay to client will be different and the packets that have been eBPF-forwarded to 
-egress directly will need changes in their header data in order to match the state of the outgoing client connection.  
+The main reason this communication between userspace and eBPF-program is required is that relays in MoQ are an application layer concept.
+That means the QUIC connections from relay to server and from relay to client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
 \\
 This approach is highly dependent on the used standards and protocols.
 This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and the ``Media over QUIC'' (MoQ) 
 transport protocol~\parencite{draft-moqtransport}.
-For the application layer the quic-go library~\parencite{quic-go-repo} will provide the implementation and 
+For the application layer, the quic-go library~\parencite{quic-go-repo} will provide the implementation and 
 any additional (non-eBPF) program will also be written in Go.
-Since the setup is dependent on retreiving data from eBPF-Maps the QUIC library providing the implementation 
+Since the setup is dependent on retrieving data from eBPF-Maps, the QUIC library providing the implementation 
 will need some adaptations.
 We will mainly introduce simple function pointer style additions that allow the adapted library to be run 
 both with and without the eBPF setup.
-The developer of the relay will then also have more freedom to setup the eBPF part of the relay as they see fit
+The developer of the relay will then also have more freedom to set up the eBPF part of the relay as they see fit
 since the Go code that will interact with eBPF parts will also have to be provided by said developer.
 \\
-Additionally we will run a performance analysis on our implementation of the relay to confirm the potential this 
+Additionally, we will run a performance analysis on our implementation of the relay to confirm the potential this 
 approach has.
 These performance tests will look at the raw delay speedup as well as the impact on CPU utilization this 
 setup has.
 All the tests will be done in a lab-like environment to isolate the performance changes as best as possible
 from any outside noise.
-The payloads used will only contain dummy data since our approach does not interfer with payload contents 
-and there is no need for creating and using real media stream data.
+The payloads used will only contain dummy data since our approach does not interfere with payload contents 
+and there is no need for creating and using actual media stream data.
 \\
 Despite our approach only considering QUIC and MoQ, we will argue that the general idea of our setup will be independent of
-any of these protocols and can be changed to fit ones needs.
+any of these protocols and can be changed to fit one's needs.
 \\
-With this we will provide answers to the research questions regarding packet-redirection, communication between userspace and eBPF
+With this, we will provide answers to the research questions regarding packet-redirection, communication between userspace and eBPF
 as well as setup-generalization.
 Regarding the question on how to handle the encryption of the packets, we will not focus on this since we did not find a suitable
-hardware offload that would have allow for en- and decryption after and before the used eBPF hook points respectively.
-Instead we will emulate this behavior by turning off the encryption in the QUIC library itself which will provide a similar result.
+hardware offload that would have allowed for en- and decryption after and before the used eBPF hook points, respectively.
+Instead, we will emulate this behavior by turning off the encryption in the QUIC library itself, which will provide a similar result.
 
 % TODO: better spot for this part?
 % The only two assumptions that were made are that it is possible for the protocol to store meta-information like a 
 % packet-priority in the packet itself and that our relay has access header data even if it is part of encrypted areas.
-% For the former point we utilized one byte of the QUIC Connection-Id as a proof of conecept but in later implementations 
-% this could be changed to using any separately defined application-header that allows for the storage of such 
+% For the former point, we utilized one byte of the QUIC Connection-Id as a proof of concept, but in later implementations 
+% this could be changed to using any separately defined application header that allows storing such 
 % information.
 % Since we assume full knowledge over the eBPF setup when the payload is created at the server (because server and 
-% relay are generally both part of the same CDN) this assumption is not a big stretch.
+% relay are generally both part of the same CDN), this assumption is not a big stretch.
 % The latter point can be achieved by having a hardware offload of en- and decryption onto a smartNIC\@.
-% Since such an offload was not yet available to us we turned of en- and decryption directly within the 
-% QUIC library itself which provides a similar result.
+% Since such an offload was not yet available to us, we turned off en- and decryption directly within the 
+% QUIC library itself, which provides a similar result.
