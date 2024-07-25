@@ -9,7 +9,16 @@ The central question we will try to answer in this thesis will then be:
     \textit{How can we improve the performance of a relay in a media streaming scenario by using eBPF technology?}
 \end{center}
 \vspace{0.5cm}
-with more specific sub-questions being:
+By using eBPF technology together with kernel hook points provided by the Linux-Kernel, we will try to find a setup that improves relay 
+performance using eBPF programs that handle basic relay capabilities, such as packet forwarding and congestion control.
+Since the QUIC protocol is designed to handle a significant portion of its workload in userspace, we look into possibilities of delaying any 
+userspace processing until \textbf{after} the packet has been forwarded to the client.
+This way, the raw delay that the packet experiences from the initial media server to the client could be reduced. 
+However, since QUIC is a connection-oriented protocol, we need to make sure that the QUIC connection state stays 
+coherent despite the additional processing steps done by the eBPF program.
+We will investigate which additional processing steps are needed in our case, how they compare to challenges when expanding our approach to other protocols, 
+and how they can be implemented in an eBPF program.
+Therefore, more specific sub-questions we try to answer are:
 \vspace{0.5cm}
 \begin{enumerate}
     \item \textit{How can we avoid the need to direct a packet through userspace?}
@@ -18,11 +27,3 @@ with more specific sub-questions being:
     \item \textit{How can our approach be generalized to other protocols?}
 \end{enumerate}
 \vspace{0.5cm}
-By using eBPF technology together with kernel hook points provided by the Linux-Kernel, we will try to find a setup that improves relay 
-performance using eBPF programs that handle basic relay capabilities, such as packet forwarding and congestion control.
-Since the QUIC protocol is designed to handle a significant portion of its workload in userspace, we look into possibilities of delaying any 
-userspace processing until \textbf{after} the packet has been forwarded to the client.
-This way, the raw delay that the packet experiences from the initial media server to the client could be reduced. 
-However, since QUIC is a connection-oriented protocol, we need to make sure that the QUIC connection state stays 
-coherent despite the additional processing steps done by the eBPF program.
-We will investigate which additional processing steps are needed in our case, how they compare to challenges when expanding our approach to other protocols, and how they can be implemented in an eBPF program.
