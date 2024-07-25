@@ -3,7 +3,7 @@
 Since one of the main ideas we propose is to avoid passing a packet all the way
 through the network stack up to userspace at the relay, we create the problem
 that the application itself is not aware of packets that are being sent.
-In order to conquer this issue, we suggest a setup that establishes communication
+To conquer this issue, we suggest a setup that establishes communication
 between the application- and the eBPF-program.
 To keep the improvement we gained by not passing packets to userspace during the 
 critical path, this communication will happen in a delayed fashion, that is 
@@ -19,13 +19,13 @@ and stream id the old and the new, i.e.~tranlsated, values will be stored).
 % TODO 
 
 \subsection{Subscription and State Management}
-As already mentioned in setion~\ref{sec:ebpf_setup}, an eBPF program handling incoming
+As already mentioned in section~\ref{sec:ebpf_setup}, an eBPF program handling incoming
 traffic from the client will save client connection information like MAC address, IP 
-address, and so on in a map for later access.
+address, etc.~in a map for later access.
 Also, an internal counter will give each client a unique identifier. % TODO: mention somewhere that this identifier has to be sequential and therefore does not support "unsubscribing" yet
 With that, the only thing that happens in terms of communication between the application 
-and the relay in case of a new subscription is that the application will update the number 
-of clients counter that is accessed by the eBPF program and used for packet duplication purposes.
+and the relay in case of a new subscription is that the application will update the ``number 
+of clients'' counter that is accessed by the eBPF program and used for packet duplication purposes.
 \\
 Regarding stream state management, there is also little need for communication since the 
 server is expected to use QUIC's unidirectional streams for sending the media data. 
@@ -39,17 +39,17 @@ Also, the client expects the retransmission to be sent on the same stream id as 
 since a retransmission happens within the same stream-context.
 
 \subsection{Relay Caching}
-Regarding the caching of data within a relay, which is required by the MoQ standard, we handled this 
-by passing on an unaltered copy of any incoming packet from the server to the application at the same 
-time we forward all the other packet copies to egress.
+Regarding the caching of data within a relay, which is required by the MoQ standard, we can easily
+handle this since we are passing on an unaltered copy of any incoming packet from the server to the 
+application at the same time we forward all the other packet copies to egress.
 Now the application is able to receive any data from the server as if this was a normal connection and 
-store, e.g.~the last second(s) worth of data in a cache.
+store, e.g.~the last \verb|n| second(s) worth of data in a cache.
 Then the relay could, once a new connection is established, parallel to incrementing the kernel counter 
 representing the number of clients also send out cached data already so that the client receives it
 as early as possible.
 \\
-One aspect of such a setup that we still left open is the point in time where the relay should stop 
+One aspect that we still left open is the point in time when the relay should stop 
 sending cached data since the forwarded data is up-to-date.
 This also includes the question of how the client can handle potentially duplicate media data if the 
 cached- and the forwarded data happen to overlap.
-Such questions would likely require some further experimenting and testing to find a good solution.
+Such questions would likely require further experimenting and testing to find a good solution.

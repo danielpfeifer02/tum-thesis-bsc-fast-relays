@@ -22,7 +22,7 @@ will be application-specific and defined by the relay engineer.
 We experimented with approaches that use the QUIC internal measurements like the RTT, 
 introduce new measurements like exponential-weighted moving averages, or even use an 
 out-of-band connection where the relay expects direct feedback from the client.
-All these possibilities show that there is a lot of room for experimentation and optimization
+All these possibilities showed us that there is a lot of room for experimentation and optimization
 in this area.
 This, however, will not be explored further in this thesis and is left for future work.
 \\
@@ -31,29 +31,29 @@ This, however, will not be explored further in this thesis and is left for futur
 Assuming that the network congestion state is known and communicated to the relay, one can 
 use the priority-information within a packet (that is expected to be set by the server) to
 decide which packets should be forwarded and which ones should be dropped.
-One difficulty in this approach is that the dropping mechanism essentially works as an online-
-algorithm, meaning that it does not have full knowledge of the traffic, especially not of 
+One difficulty in this approach is that the dropping mechanism essentially works as an 
+online-algorithm, meaning that it does not have full knowledge of the traffic, especially not of 
 future packets.
 This means that a case like the following could happen:
 \begin{itemize}
     \item The traffic contains packets within the priority range of 1 to 5 (5 being the highest priority).
     \item Given the current network congestion to the client, the relay decides to drop 
-            all packets below priority 3 as well as 50\% of the packets with priority 3.
+            all packets below priority 3 and 50\% of the packets with priority 3.
     \item The remaining byte limit to be sent out is running low, and a packet with priority 3 
-            comes in which is sent since the relay already dropped a lot of previous priority 3 packets.
+            comes in, which is sent, since the relay already dropped a lot of previous priority 3 packets.
     \item The next packet turns out to be a priority 5 packet which would overshoot the byte limit if sent.
 \end{itemize}
 In this example, one could use many different heuristics to handle the situation.
 One could always keep enough byte limit left so that a high-priority packet can always be sent.
 This, however, essentially just lowers the byte limit for all other packets while making it higher 
 for high-priority packets.
-Therefore an individual byte limit per priority could also be used right away.
+Therefore, an individual byte limit per priority could also be used right away.
 Also, this approach might cause problems if a lot of high-priority packets come in at once, 
 e.g.~in case of very ``bursty'' traffic.
 Another way that could be used to handle this uncertain situation is to allow for temporary 
 overflows of the byte limit.
-This would make the limit more of a soft limit that can be exceeded for a short time.
+This would make the limit more of a soft limit that can be exceeded for a period of short time.
 However, this is another heuristic highly dependent on the specific use case and
-traffic patterns, which is why we did not implement it in our prototype.
+traffic patterns, so we did not implement it in our prototype.
 Overall we can say that implementation-wise, it is not hard to drop packets, but the actual
 difficulty lies in finding a reasonable way of deciding which packets to drop.
