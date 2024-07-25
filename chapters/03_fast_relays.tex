@@ -3,6 +3,23 @@
 
 \chapter{Fast-Relays}\label{chap:fast_relays}
 
+In this chapter we will dive into the specifics of our proposed fast-relay setup.
+We will cover necessary adaptations as well as setup specifics like eBPF programs 
+and userspace synchronization.
+Figure~\ref{fig:route-layering} already shows a high level overview of a basic 
+server-relay-client setup with its respective networking layers.
+A conventional setup would have the packet travel into userspace at the relay
+while our setup aims to reduce the critical path, as is indicated using the red arrows.
+
+\vspace{0.5cm}
+\begin{figure}[htbp] % TODO: where to put this?
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/02_background/route-layering.drawio.pdf}
+    \caption[Packet path schematic regarding network stack]{Conventional networking layers a packet passes.
+    The red loop indicates again the ``short-cut'' that is utilized by the fast-relay 
+    (eBPF packet-forwarding {-} no need to go up to userspace).}\label{fig:route-layering}
+\end{figure}
+
 \input{chapters/03_subchapters/01_quic_adaptions}
 \input{chapters/03_subchapters/02_ebpf_setup}
 

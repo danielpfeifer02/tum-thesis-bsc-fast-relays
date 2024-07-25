@@ -3,14 +3,9 @@ Multimedia streaming is a big part of the internet and many optimizations have
 been developed to improve the quality of service for the end-users.
 This includes considering (in real-time) parts of the clients connection state, 
 such as available bandwith, and adapting the rate at which a server sends data.
-Such a process is called `Adaptive Bitrate Streaming' and is employed in many 
+Such a process is called `Adaptive Bitrate Streaming' (ABS) and is employed in many 
 of todays streaming setups.
-An example setup can be seen in~\autoref{fig:adaptive-bitrate-streaming} where
-the an encoder creates streams with different resolutions and edge server that 
-manages the connections to the clients can switch between those streams based 
-the connection state of a specific client.
-Youtube and Netflix are examples where, although more complex, similar setups
-are used to provide a better user experience. 
+
 % TODO: cite    https://netflixtechblog.com/optimizing-the-netflix-streaming-experience-with-data-science-725f04c3e834
 % TODO:         https://www.cloudflare.com/de-de/learning/video/what-is-adaptive-bitrate-streaming/
 % TODO:         https://docs.imagekit.io/features/video-transformation/adaptive-bitrate-streaming
@@ -27,14 +22,32 @@ are used to provide a better user experience.
 % The relay then can decide not to forward certain packets to a client if
 % the client is experiencing congestion.
 \vspace{1cm}
-\\
-TODO: more info (what to explain?)
 
 \subsection{Mechanisms and Ideas}
-TODO: actually needed or only to have 3 subsections everywhere?
+ABS implements the simple idea of chaning the amount of data sent to a client 
+based on the clients connection quality.
+This means a client with a good connection gets a higher quality stream than 
+one with a bad connection.
+For this the internal setup needs to be able to provide multiple streams with
+different resolutions and bitrates.
+An example setup can be seen in~\autoref{fig:adaptive-bitrate-streaming} where
+an encoder creates streams with different resolutions and edge server, that 
+manages the connections to the clients, can switch between those streams based 
+the connection state of a specific client.
+Youtube and Netflix are examples where, although more complex, similar setups
+are used to provide a better user experience.
+The premise of such a setup is that in case of a bad connection it is still 
+preferable to be able to watch a stream contiuously, even if that means
+cutting down on quality.
 
-\subsection{Implications for Servers and Relays}
-TODO
-
-\subsection{Impact on Media Streaming}
-TODO
+\subsection{Implications on Streaming Setup}
+ABS forces a few changes to the way servers and relays are set up.
+First, as figure~\autoref{fig:adaptive-bitrate-streaming} shows, there needs to 
+be an ``encoding'' component that turns the single, high quality stream that is 
+received from the streaming source into multiple streams with different resolutions.
+Besides that the relay needs to keep track of the clients connection quality, e.g.~using 
+measurements like RTT, packet loss, etc., and decide which stream to forward to the client.
+Since the connection quality can change dynamically the relay also needs to continuously
+monitor each connection and potentially change the used stream.
+Besides encoding and monitoring aspects the system also has increased storage requirements
+since stream data will essentially be duplicated.
