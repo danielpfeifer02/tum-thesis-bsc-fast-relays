@@ -59,15 +59,34 @@ It is observable that none of the utilizations significantly differs between the
     \end{minipage}
 \end{figure}
 
-We also looked more closely which parts of our system take up the most CPU time and compared them
-to the most CPU-intensive parts of the initial userspace forwarding.
-Table~\ref{tab:cpu-usage-top} shows the top 10 functions that take up the most CPU time in our newly
-developed setup while table~\ref{tab:non-ebpf-cpu-usage-top} shows the same for the old userspace 
-forwarding setup without any eBPF interference. % TODO: make sure reference labels are correct
-We can clearly see that our setup is executing a lot of system calls which is to be expected
-due to the ongoing communication between the userspace and the kernel (i.e.~eBPF maps).
-TODO: measure non ebpf table and compare specific differences 
+% TODO: remove?
+% We also looked more closely which parts of our system take up the most CPU time and compared them
+% to the most CPU-intensive parts of the initial userspace forwarding.
+% Table~\ref{tab:cpu-usage-top} shows the top 10 functions that take up the most CPU time in our newly
+% developed setup while table~\ref{tab:non-ebpf-cpu-usage-top} shows the same for the old userspace 
+% forwarding setup without any eBPF interference. % TODO: make sure reference labels are correct
+% We can clearly see that our setup is executing a lot of system calls which is to be expected
+% due to the ongoing communication between the userspace and the kernel (i.e.~eBPF maps).
+% TODO: measure non ebpf table and compare specific differences 
 
-\input{chapters/04_subchapters/cpu_usage_tables/table_top.tex} % TODO: also include table for "normal" relay and compare difference in what functions use most CPU 
-% \input{chapters/04_subchapters/cpu_usage_tables/table_top_cum.tex} % TODO: this is kinda useless since it only shows the "wrapping" functions. Maybe remove?
-\input{chapters/04_subchapters/cpu_usage_tables/non_ebpf_table_top.tex} % TODO: actually measure
+% \input{chapters/04_subchapters/cpu_usage_tables/table_top.tex} % TODO: also include table for "normal" relay and compare difference in what functions use most CPU 
+% % \input{chapters/04_subchapters/cpu_usage_tables/table_top_cum.tex} % TODO: this is kinda useless since it only shows the "wrapping" functions. Maybe remove?
+% \input{chapters/04_subchapters/cpu_usage_tables/non_ebpf_table_top.tex} % TODO: actually measure
+
+Appendix~\ref{chap:appendix-fast-relay} and~\ref{chap:appendix-plain-relay} show the full syscall 
+usage of a 30 second video streaming example considering a setup with and without eBPF forwarding,
+respectively.
+We traces this using ``strace'' while considering the main process as well as all child processes
+it creates and interacts with.
+When comparing the two tables one can see that our approach actually uses significantly less system-calls, 
+which is likely caused by the big amount of \verb|futex| calls we can save since the relay userspace is not 
+responsible for any packet forwarding.
+This causes less need for synchronization within userspace.
+Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less since all the 
+packet handling happens in kernel space.
+\\
+Another observation we made was that the eBPF setup uses less \verb|bpf| syscalls than we would have assumed for 
+the amount of traffic that happened in the test.
+Despite this being less than expected we still think that the number of \verb|bpf| syscalls needed can be 
+further reduced by optimizing map reads in such a way that one read contains information on multiple packets.
+We did, however, not investigate further into this direction.

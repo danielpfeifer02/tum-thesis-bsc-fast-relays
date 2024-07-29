@@ -1,0 +1,92 @@
+\begin{myverbatim}
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ------------------
+ 59,95   17,114866         789     21666      1663 futex
+ 11,06    3,156126       52602        60           wait4
+  7,58    2,163202         151     14293        18 nanosleep
+  5,66    1,616939         143     11289         6 epoll_pwait
+  3,53    1,006913          33     30236       107 read
+  3,28    0,937777          29     32194           fcntl
+  1,56    0,444417          22     19860      1005 newfstatat
+  1,32    0,376735          33     11354       253 openat
+  1,02    0,289889          25     11417           close
+  0,90    0,256689          46      5580      5239 epoll_ctl
+  0,81    0,230937        4528        51         5 waitid
+  0,37    0,104574          21      4898      1812 recvmmsg
+  0,36    0,103789          52      1990           sched_yield
+  0,32    0,090941           2     32329           lseek
+  0,28    0,081038         413       196           clone
+  0,25    0,072563          62      1160           getpid
+  0,25    0,072532          64      1133           sendmsg
+  0,18    0,051164          37      1381        40 rt_sigreturn
+  0,18    0,050788         276       184           copy_file_range
+  0,17    0,049578          13      3697           getrandom
+  0,15    0,043913          39      1114           tgkill
+  0,12    0,035065          56       622           fstat
+  0,12    0,033083          79       416           getdents64
+  0,11    0,031193          14      2178           mmap
+  0,06    0,018254          13      1314        22 bpf
+  0,05    0,015350          17       875           pread64
+  0,05    0,012890        1171        11           restart_syscall
+  0,04    0,011800          15       782           rt_sigprocmask
+  0,04    0,011269          54       206        12 unlinkat
+  0,03    0,009583           7      1262           write
+  0,03    0,009384          32       285           madvise
+  0,03    0,007470           3      2481      2456 readlink
+  0,02    0,007114          48       146           pipe2
+  0,02    0,005518          45       120           flock
+  0,02    0,005466          14       388           sigaltstack
+  0,01    0,004037          11       344           gettid
+  0,01    0,002415          34        71           munmap
+\end{myverbatim}
+\newpage
+\begin{myverbatim}
+  0,01    0,002413           0      6121           rt_sigaction
+  0,01    0,002120           5       354           mprotect
+  0,00    0,001381           3       394           brk
+  0,00    0,001333          19        70         9 execve
+  0,00    0,001316          94        14           clone3
+  0,00    0,000767          36        21           unlink
+  0,00    0,000614           2       252       153 access
+  0,00    0,000448          32        14           vfork
+  0,00    0,000276           6        46           rseq
+  0,00    0,000258           8        30           getrlimit
+  0,00    0,000206           4        46           set_robust_list
+  0,00    0,000165           1        87        87 ioctl
+  0,00    0,000154           2        76           setrlimit
+  0,00    0,000145           2        50           getcwd
+  0,00    0,000140          46         3           ftruncate
+  0,00    0,000135          10        13           timer_settime
+  0,00    0,000132           1        67           prlimit64
+  0,00    0,000130          10        13           timer_create
+  0,00    0,000092          23         4           mkdirat
+  0,00    0,000091           3        23           faccessat2
+  0,00    0,000077           3        23         2 setsockopt
+  0,00    0,000061           4        13           sysinfo
+  0,00    0,000059          14         4           epoll_create1
+  0,00    0,000058           4        14           getsockopt
+  0,00    0,000053           0        93        32 arch_prctl
+  0,00    0,000040          40         1           eventfd2
+  0,00    0,000036           7         5           socket
+  0,00    0,000031          31         1           epoll_wait
+  0,00    0,000028           0        32           sched_getaffinity
+  0,00    0,000024           0        32           set_tid_address
+  0,00    0,000022           5         4           bind
+  0,00    0,000017           5         3           timer_delete
+  0,00    0,000016           8         2         2 statfs
+  0,00    0,000015           2         7           getrusage
+  0,00    0,000015           7         2           fallocate
+  0,00    0,000013           6         2           getsockname
+  0,00    0,000009           0       137           dup3
+  0,00    0,000007           3         2           setitimer
+  0,00    0,000006           1         4           chmod
+  0,00    0,000006           6         1           utimensat
+  0,00    0,000004           0         8           umask
+  0,00    0,000003           1         2           uname
+\end{myverbatim}
+\newpage
+\begin{myverbatim}
+  0,00    0,000000           0         1           readlinkat
+------ ----------- ----------- --------- --------- ------------------
+100,00   28,548177         126    225674     12923 total
+\end{myverbatim}
