@@ -81,8 +81,8 @@ our fast-relay setup.
 Those and some other relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
 
 \vspace{0.5cm}
-\begin{figure}[htbp]
-    \begin{lstlisting}[style=CStyle]
+% \begin{figure}[H]
+    \begin{lstlisting}[style=CStyle,caption={Examplary eBPF map definitions.}, label={lst:ebpf-map}]
         struct {
             __uint(type, BPF_MAP_TYPE_HASH);        // Hash map
             __type(key, struct client_info_key_t);  // Specific client key
@@ -97,8 +97,8 @@ Those and some other relevant map types are listed in table~\autoref{tab:ebpf-ma
             __uint(pinning, LIBBPF_PIN_BY_NAME);    // Pin by name to the tc filesystem
         } packet_events SEC(".maps");
     \end{lstlisting}
-    \caption[Examplary eBPF map definitions]{Examplary eBPF map definitions.}\label{lst:ebpf-map}
-\end{figure}
+    % \caption[Examplary eBPF map definitions]{Examplary eBPF map definitions.}\label{lst:ebpf-map}
+% \end{figure}
 
 \FloatBarrier
 
