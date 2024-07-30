@@ -44,8 +44,8 @@ https://blog.webex.com/hybrid-work/how-latency-harms-collaboration/
 % \subsection{What is Media over QUIC (MoQ)?} % TODO: maybe not needed
 On the application layer, we will use the Media over QUIC (MoQ) protocol which 
 is, as of summer 2024, still in the process of standardization by the IETF~\parencite{moq-charter}.
-MoQ targets live-streaming and real-time collaboration applications like Zoom, 
-Microsoft Teams, or Google Meet.
+MoQ targets live-streaming applications like Twitch or YouTube-Live and real-time collaboration 
+applications like Zoom, Microsoft Teams, or Google Meet.
 It is built on top of the QUIC protocol with the possibility of using WebTransport
 for browser support.
 A general publisher/subscriber model is used, and the draft tries to combine
@@ -76,7 +76,7 @@ as well as cache-friendly mechanisms.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/moq-relay.drawio.pdf}
-    \caption[Rough MoQ relay architecture]{Rough MoQ relay architecture.}\label{fig:moq_relay_architecture}
+    \caption[MoQ relay architecture]{MoQ relay architecture.}\label{fig:moq_relay_architecture}
 \end{figure}
 
 Figure~\ref{fig:moq_relay_architecture} gives a visualization of the rough architecture
@@ -85,24 +85,16 @@ It hints at key components like the relay level cache and the congestion handlin
 mechanism.
 What one can also infer is the place of MoQ in the OSI-model namely at the application
 layer, which itself builds on top of lower-level protocols like QUIC, UDP, IP, and Ethernet.
-In figure~\ref{fig:non_caching_relay_data_request} and figure~\ref{fig:moq_relay_data_request} 
-one can see a comparison between the delayed fan-out of the media content caused by the MoQ 
-relay and a more traditional setup.
-The former can reduce the traffic through a network by making multiple transmissions
-of the same data between server and relay obsolete.
+In figure~\ref{fig:relay_caching} one can see a comparison between a traditional non-caching
+relay and a caching MoQ-relay.
+The latter lowers the traffic between server and relay in case the same data is requested
+by multiple clients.
 
 \vspace{0.5cm}
 \begin{figure}[H]
-    \begin{minipage}{0.45\textwidth}
-        \centering
-        \includegraphics[width=1\linewidth]{figures/02_background/non-caching-relay-data-request.drawio.pdf}
-        \caption[Non-caching relay traffic]{Multiple data transmissions for different clients.}\label{fig:non_caching_relay_data_request}
-    \end{minipage}\hfill
-    \begin{minipage}{0.45\textwidth}
-        \centering
-        \includegraphics[width=1\linewidth]{figures/02_background/moq-relay-data-request.drawio.pdf}
-        \caption[MoQ relay traffic]{Only single data transmission towards the relay.}\label{fig:moq_relay_data_request}
-    \end{minipage}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/02_background/relay-caching.drawio.pdf}
+    \caption[Cache related relay traffic]{Multiple clients requesting data for caching and non-caching relay.}\label{fig:relay_caching}
 \end{figure}
 
 This caching mechanism fits quite naturally into our proposed eBPF setup since we will need to 

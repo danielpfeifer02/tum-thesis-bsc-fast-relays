@@ -7,7 +7,9 @@ This provided more efficiency since the packets did not need to be copied into
 userspace anymore but could be processed directly in the kernel.
 A need for better tracing capabilities of the Linux kernel then led to the development 
 of an extended version of BPF called ``eBPF'' which was introduced in 2014 and 
-heavily influenced by a tracing tool called ``dtrace''~\parencite{ebpf-intro-tigera}.
+heavily influenced by a tracing tool called ``dtrace'', which allows for 
+real-time inspection of running processes, memory- and cpu-usages, network-ressources 
+and more~\parencite{ebpf-intro-tigera}.
 
 \subsection{eBPF Hook Points}
 The Linux kernel offers several hook points to which eBPF-programs can be attached.
