@@ -35,11 +35,16 @@ An example setup can be seen in~\autoref{fig:adaptive-bitrate-streaming} where
 an encoder creates streams with different resolutions and an edge server, that 
 manages the connections to the clients, can switch between those streams based on
 the connection state of a specific client.
-YouTube and Netflix are examples where, although more complex, similar setups
+Twitch and YouTube-Live are examples where, although more complex, similar setups
 are used to provide a better user experience.
 The premise of such a setup is that in case of a bad connection, it is still 
 preferable to be able to watch a stream continuously, even if that means
 cutting down on quality.
+When looking at such real world examples, however, it is important that one keeps 
+the differences between Video-on-Demand (VoD) and live-streaming in mind.
+The latter might require more computation before a video is sent since the media 
+has to be processed on the fly since it is created in real-time.
+For VoD on the other hand the media already exists in its final form. 
 
 \subsection{Implications on Streaming Setup}
 ABS forces a few changes to the way servers and relays are set up.

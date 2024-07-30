@@ -6,7 +6,7 @@
 In this chapter, we will dive into the specifics of our proposed fast-relay setup.
 We will cover necessary library adaptations as well as setup specifics like eBPF programs 
 and userspace synchronization.
-Figure~\ref{fig:route-layering} already shows a high-level overview of a basic 
+Figure~\ref{fig:route-layering} shows a high-level overview of a basic 
 server-relay-client setup with its respective networking layers.
 A conventional setup would have the packet travel into userspace at the relay, 
 while our setup aims to reduce the critical path, as indicated by the red arrows.
@@ -26,3 +26,4 @@ while our setup aims to reduce the critical path, as indicated by the red arrows
 \input{chapters/03_subchapters/03_userspace_syncronization}
 \input{chapters/03_subchapters/04_congestion_considerations}
 \input{chapters/03_subchapters/05_integration_and_prototype}
+\input{chapters/03_subchapters/06_summary}

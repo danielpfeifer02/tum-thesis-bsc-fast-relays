@@ -1,8 +1,7 @@
 \section{Congestion Considerations}\label{sec:congestion_considerations}
 QUIC, like many other modern transport protocols, contains congestion 
 control mechanisms regulating the rate at which data is sent to a client.
-This is primarily done to avoid the network becoming congested, but it also
-has the secondary effect of circumventing the problem of overwhelming the client.
+This is done to avoid the network becoming congested.
 Simply forwarding all packets the relay receives from the server would cause 
 the relay-client connection to no longer have its own congestion control.
 Rather the rate at which the relay sends/forwards to the client would be determined

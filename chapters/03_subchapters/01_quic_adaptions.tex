@@ -117,11 +117,13 @@ This means a single stream frame is likely already using up a whole packet, and 
 not be happening.
 
 \subsubsection*{Stream Priorities}
-The first change, which is not only for simplification of our prototype implementation but is actually needed for 
+Our approach relies on the fact that every packet has a priority value assigned to it.
+In our case this priority value is stored within the connection-id.
+Based on this, the first change, which is not only for simplification of our prototype implementation but is actually needed for 
 our approach to work, is the addition of opening a stream with a specific priority.
 Our assumptions define that the server is the one marking the packets with the correct priority, which in 
-our case means sending them via the correct stream.
-Such a stream is bound to a specific priority, and our code changes will make sure that the connection-id
+our case is realized by sending them over a specific stream.
+Every stream is bound to a specific priority value, and our code changes will make sure that the connection-id
 that is used for any packet sent on this stream will contain the correct priority value.
 Figure~\ref{fig:priority-stream} visualizes the setup as well as our rudimentary approach of saving the 
 priority value as the first byte of the connection-id.
@@ -150,11 +152,15 @@ have been forwarded by the eBPF-program.
 Since the relay state is not necessarily aligned with the server state, and the relay does not know
 about the stream a packet was sent on, it is not possible to reuse the plain \verb|OnLost| function
 of the quic-go library.
+This is because the plain \verb|OnLost| function would lookup the stream corresponding to the provided stream-id and 
+retransmit the packet on there, but the stream for the given id might not exist within the relay stream-pool.
 Instead, our new function needs to look up the stream-id of the lost packet and open a new stream with
-that same id to ensure that the client correctly receives the retransmission.
-The relay also needs to tell the underlying eBPF-program that a packet is part of a retransmission and 
-that, even if a stream was actually created by the relay, the egress program should treat it like it was
-created by the server.
+the same stream id, ensuring that the client correctly receives the retransmission.
+Besides the stream-id, the created stream-object should also have the same remaining stream-state
+as the original stream (e.g.~offset-information).  
+When a retransmission happens, the relay also needs to tell the underlying eBPF-program that a packet is part of a 
+retransmission and that, even if a stream was actually created by the relay, the egress program should treat it like 
+it was created by the server.
 That last part is necessary for the stream-id translation part of the egress program, which is explained further
 in section\nobreakspace\ref{sec:client-egress}, to work correctly.
 This functionality of informing the eBPF program about the retransmission, however, is again realized by a 

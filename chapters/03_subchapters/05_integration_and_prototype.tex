@@ -16,8 +16,12 @@ either.
 \subsection{Compatibility}
 The application layer of the prototype is written in Go, but this is not a requirement
 itself.
-The eBPF program expects QUIC, but this could also be changed without too much effort to
-support any other underlying transport protocol.
+The eBPF program expects QUIC, but this could also be changed to support other underlying 
+transport protocols.
+In order to keep the needed changes minimal we would, however, suggest, that a protocol
+with similar properties to QUIC is chosen.
+TCP, for example, might not be the best choice as its reliability assurances would not 
+allow for a simple priority drop.
 
 \subsection{Source Code Repositories}\label{sec:source_code_repos}
 For the development of the relay and the eBPF programs, we have come up with the following repositories:

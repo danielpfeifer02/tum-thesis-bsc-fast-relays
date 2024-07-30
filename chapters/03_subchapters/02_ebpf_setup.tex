@@ -70,7 +70,7 @@ These are:
     \begin{enumerate}
         \item   This is fairly easy to achieve by doing some header inspection of the QUIC header,
                 which contains the packet type. Also, since the payload is generally sent using 
-                0-RTT- (i.e.~short-) headers, there is no need to consider long-header packets.
+                short-headers, there is no need to consider long-header packets.
     \end{enumerate}
 
     \item   The program should pass an unaltered copy up to userspace to allow the QUIC library to
@@ -166,11 +166,16 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
                         Figure~\ref{fig:stream-id-translation} shows a flow diagram of the stream id translation
                         process.
                         Important steps include checking if the stream id translation already exists as well
-                        as checking if the packet is a retransmission.
+                        as figuring out where a stream was created.
                         The former is necessary in case a payload is split into multiple packets, and the latter is 
-                        necessary since the retransmission physically comes from the relay but should be treated as 
+                        necessary since the relay essentially has a fan in of two (relay originated packets and 
+                        server originated packets).
+                        This fan in might cause a situation where both the relay and the server open a stream which 
+                        initially has the same id (since the server and relay states are not synchronized).
+                        In such a case the two streams must not be mapped to the same outgoing stream id.  
+                        This is also why a retransmission coming from the relay might need to be treated as 
                         if it came from the server. For that the eBPF program will be notified by the userspace 
-                        regarding which packets are retransmissions.
+                        regarding which packets are such retransmissions.
     \item[4.] Again, if the packet is QUIC and for the right connection, the program needs 
                         to read the packet's priority and decide via a map-lookup if the connection 
                         state allows sending packets with the given priority.
