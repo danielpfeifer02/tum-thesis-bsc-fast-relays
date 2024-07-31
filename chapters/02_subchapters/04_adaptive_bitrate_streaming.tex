@@ -1,4 +1,4 @@
-\section{Real Time and Adaptive Bitrate Streaming}\label{sec:rt_and_adaptive_bitrate_streaming}
+\section{Real Time Communication and Adaptive Bitrate Streaming}\label{sec:rt_and_adaptive_bitrate_streaming}
 
 Whenever we look at different types of streaming it is important to consider the 
 different requirements that come with them.
@@ -9,21 +9,21 @@ The former allows for more complex setups like the one considered in subsection
 \nobreakspace\ref{subsec:adaptive_bitrate_streaming} while the latter requires
 a more direct approach which will be discussed in the following subsection.
 
-\subsection{Real Time Streaming}
+\subsection{Real Time Communication}
 When looking at streaming setups that consider real-time constraints, such as conferencing 
 where interhuman communication is involved, the objectives of the connection tend towards
 low latency.
 In order to provide natural feeling human communication, the delay between the sender 
 and the receiver has to be minimal.
-These setups are often referred to as ``Real-Time Streaming'' and are used in many 
-applications, such as Zoom, Skype, or Discord.
+This type of communication between devices is often referred to as ``Real-Time Communication'' 
+(RTC) and used in many applications, such as Zoom, Skype, or Discord.
 
 \subsubsection{Mechanisms and Ideas}
-The main goal of such systems is to minimize the delay between the sender and the receiver.
-A lot of design decisions are made with this goal in mind.
-Such decisions are often dependent on the specific use case of a system.
-An exemplary design decision for a large conferencing system like Zoom
-would consider the usage of peer-to-peer (P2P) connections versus a server-based
+The main goal of such systems is to minimize the delay between the sender and the receiver
+while additionally allowing all parties to communicate with each other.
+A lot of design decisions are made with this in mind.
+One design decision for a large conferencing system like Zoom
+might consider the usage of peer-to-peer (P2P) connections versus a server-based
 approach.
 While P2P might allow for lower latencies in case of a small number of participants,
 a server-based approach scales a lot better and can therefore provide a better
@@ -32,20 +32,20 @@ ressource utilization.
 \subsubsection{Implications on Streaming Setup}
 The need for low latency also has implications of the specific setup at hand.
 An example of such an implication is the design of the connection between the 
-content delivery network (CDN) and a client.
+real-time connection network (RTCN) and a client.
 Since retransmissions are expensive in terms of latency, a setup should strive to minimize 
 the distance a packet has to travel through an unreliable network.
-This could be achived by having multiple CDN servers around the world and using a, compared 
-to the internet, more reliable connection, for intercontinental connections.
-This way packet loss occuring during the client-CDN connection would not have a big 
+This could be achived by having multiple, strategically placed, eddge-servers, which internally use 
+a, compared to the internet, more reliable connection, for longer (e.g.~intercontinental) connections.
+This way packet loss occuring during the client-to-edge-server connection would not have a big 
 impact on the overall latency of the connection.
 A visualization of such an appraoch can be seen in~\autoref{fig:real-time-streaming-connections}.
 
 \vspace{0.5cm}
-\begin{figure}[htbp] % TODO: why[H] not working?
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/02_background/real-time-streaming-connections.drawio.pdf}
-    \caption[Real-time streaming connections]{A setup with multiple CDN servers around the world
+    \caption[Real-time streaming connections]{A setup with multiple edge-servers around the world
     can help to minimize the latency of a connection.}\label{fig:real-time-streaming-connections}
 \end{figure}
 
@@ -61,7 +61,7 @@ of today's streaming setups.
 % TODO:         https://www.cloudflare.com/de-de/learning/video/what-is-adaptive-bitrate-streaming/
 % TODO:         https://docs.imagekit.io/features/video-transformation/adaptive-bitrate-streaming
 \vspace{0.5cm}
-\begin{figure}[htbp] % TODO: why[H] not working?
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/02_background/adaptive-bitrate-streaming.drawio.pdf}
     \caption[Adaptive streaming schematic]{Behind the scenes multiple streams with different

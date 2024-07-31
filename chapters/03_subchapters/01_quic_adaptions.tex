@@ -7,7 +7,7 @@ Given that we operate on the QUIC-header data within the eBPF-program, we need a
 to fields that are encrypted using QUIC header-protection.
 For obvious reasons sending unencrypted packets is not something that would be wanted in 
 a production environment, but for our exemplary setup, it is unproblematic. 
-An alternative would be to `push down' en- and decryption onto a smartNIC using a 
+An alternative would be to ``push down'' en- and decryption onto a smartNIC using a 
 hardware offload, but at the time of writing, there was no such offload available for QUIC\@. 
 Given that such a hardware offload is added in the future, the en- and decryption can be
 turned on again, which makes this change more of a temporary solution to show the feasibility

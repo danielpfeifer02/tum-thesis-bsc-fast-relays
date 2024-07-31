@@ -1,5 +1,5 @@
 \section{eBPF}\label{sec:ebpf_bg}
-In 1992 a technology called `Berkeley Packet Filter' (BPF) was introduced into 
+In 1992 a technology called ``Berkeley Packet Filter'' (BPF) was introduced into 
 the Unix kernel.
 By using BPF, it is possible to attach a small BPF-program to some pre-defined hook points in 
 the network stack of the kernel and filter packets there in a stateless manner.
@@ -25,7 +25,8 @@ the used \verb|sk_buff| buffer object that contains the packet data provides acc
 metadata that is unavailable when using XDP and its \verb|xdp_buff| buffer object.
 % https://liuhangbin.netlify.app/post/ebpf-and-xdp/ % TODO: is this citable?
 What ultimately led us to choose TC over XDP was, however, the fact that 
-XDP only allows ingress packet processing, while TC allows both ingress and egress.
+XDP only allows ingress packet processing, while TC allows processing both
+at ingress and egress.
 That means that with XDP, we would not have been able to redirect packets to be handled 
 at egress, which is crucial for the fast-relay setup we aim for. % TODO: cannot redirect from XDP to TC?
 
@@ -40,14 +41,12 @@ at egress, which is crucial for the fast-relay setup we aim for. % TODO: cannot 
 Figure~\autoref{fig:ebpf-hooks} illustrates again the relative positions of the TC and
 XDP hook points in the network stack.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/hook-point-locations.drawio.pdf}
-    \caption[Hook points within network stack]{Abstracted view of Traffic Control (TC) and eXpress Data Path (XDP) hook points
-    in the Linux kernel network stack.
+    \caption[Hook points within network stack]{Traffic Control (TC) and eXpress Data Path (XDP) hook points
+    in the Linux kernel.
     The red loop indicates the ``short-cut'' that is utilized by the fast-relay.
-    TC hook allows redirection directly to egress, while XDP hook is only available
-    for ingress processing.
     }\label{fig:ebpf-hooks}
 \end{figure}
 
@@ -60,7 +59,7 @@ Since eBPF programs are executed in the kernel, it is quite obvious that extensi
 security checks need to be in place to ensure that the kernel does not experience 
 problems like infinite loops, accesses to invalid memory locations, or other security 
 related issues.
-This explains the existence of the so-called `BPF-verifier' which inspects 
+This explains the existence of the so-called ``BPF-verifier'' which inspects 
 every BPF-program for its safety by simulating possible program paths, 
 looking at the graph representation of the program and more~\parencite{ebpf-verifier}.
 This imposes some restrictions on the complexity of the programs that can be 
@@ -75,15 +74,10 @@ Such a map boils down to a section in memory that is reserved for the eBPF-progr
 and which can be used as a key-value store for arbitrary data.
 This part of memory can then also be accessed from userspace and thus provides the main 
 way of communication between the eBPF-program and our application.
-When we define an eBPF-map, we can choose between different types and configure
-size, key-type, value-type, and the way the map is stored. % TODO: surely there is more one can define
-An example of two eBPF-map definitions can be seen in~\autoref{lst:ebpf-map}.
-It shows two different types of maps, a hash map, and a ring buffer, that are used in
-our fast-relay setup.
-Those and some other relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
+
 
 \vspace{0.5cm}
-% \begin{figure}[H]
+\noindent\begin{minipage}{\textwidth}
     \begin{lstlisting}[style=CStyle,caption={Examplary eBPF map definitions.}, label={lst:ebpf-map}]
         struct {
             __uint(type, BPF_MAP_TYPE_HASH);        // Hash map
@@ -99,12 +93,20 @@ Those and some other relevant map types are listed in table~\autoref{tab:ebpf-ma
             __uint(pinning, LIBBPF_PIN_BY_NAME);    // Pin by name to the tc filesystem
         } packet_events SEC(".maps");
     \end{lstlisting}
-    % \caption[Examplary eBPF map definitions]{Examplary eBPF map definitions.}\label{lst:ebpf-map}
-% \end{figure}
+\end{minipage}
+\vspace{0.5cm}
 
-\FloatBarrier
+When we define an eBPF-map, we can choose between different types and configure
+size, key-type, value-type, and the way the map is stored. % TODO: surely there is more one can define
+An example of two eBPF-map definitions can be seen in~\autoref{lst:ebpf-map}.
+It shows two different types of maps, a hash map, and a ring buffer, that are used in
+our fast-relay setup.
+Those and some other relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
 
-\begin{table}[htbp]
+
+\vspace{0.5cm}
+
+\begin{table}[H]
     \centering
     \begin{tabular}{L{7cm}L{7cm}}
         \toprule
@@ -123,6 +125,4 @@ Those and some other relevant map types are listed in table~\autoref{tab:ebpf-ma
     \end{tabular}
     \caption[Subset of eBPF map types]{Some eBPF map types. (defined in /usr/include/linux/bpf.h)}\label{tab:ebpf-map-types}
 \end{table}
-
-\FloatBarrier
 
