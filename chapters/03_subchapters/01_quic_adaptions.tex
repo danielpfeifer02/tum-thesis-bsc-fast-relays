@@ -3,7 +3,7 @@ As was already mentioned in the previous chapter, our setup requires some adapta
 to the quic-go library.
 One initial change necessary was to turn off packet en- and decryption, 
 that is happening within quic-go.
-Given that we operate on the QUIC-header data within the eBPF-program, we need access 
+Given that we operate on the QUIC-header data within the eBPF program, we need access 
 to fields that are encrypted using QUIC header-protection.
 For obvious reasons sending unencrypted packets is not something that would be wanted in 
 a production environment, but for our exemplary setup, it is unproblematic. 
@@ -16,7 +16,7 @@ of our approach.
 \subsection{Function-Pointer Style Additions}
 Another type of change that we needed to introduce into the quic-go library is caused by 
 connection state management.
-We essentially added support for communication with the eBPF-program by using an 
+We essentially added support for communication with the eBPF program by using an 
 approach similar to C-style function pointers.
 \\
 On multiple locations, we added conditional function calls like the one depicted in 
@@ -51,7 +51,7 @@ An example of how this could look like is shown in \autoref{changes:definition-f
 \begin{lstlisting}[style=GoStyle, label=changes:definition-function-pointer, caption=An example of how the addition looks on the relay side.]
     /* Definition of the function within the local relay code */
     func localUpdateConnectionId(id []byte, l uint8, conn packet_setting.QuicConnection) {
-        /* handle the connection update by interacting with the eBPF-program */
+        /* handle the connection update by interacting with the eBPF program */
     }   
 
     /* Providing the function to the quic-go library */
@@ -63,10 +63,10 @@ An example of how this could look like is shown in \autoref{changes:definition-f
 \end{lstlisting}
 \end{minipage}
 
-The need for these additions arises since the eBPF-program works with its own copy of the current state of a connection.
+The need for these additions arises since the eBPF program works with its own copy of the current state of a connection.
 This, for example, includes the connection-id that will be used when changing the packet header before sending it out.
 Since a connection-id can change, i.e.~be updated or retired, during the lifetime of a connection, we need a way to inform 
-the eBPF-program to no longer use outdated state-information.
+the eBPF program to no longer use outdated state-information.
 These function-pointer style additions provide a minimal way of adding such functionality without limiting flexibility 
 or adding too much application-specific code to the library itself, as would be the case if the library would access 
 the eBPF-Maps directly.
@@ -79,9 +79,9 @@ the eBPF-Maps directly.
 
 % turn off crypto (reaction to CRYPTO_TURNED_OFF flag)
 
-% connection id retirement specific stuff (switch to priority id)
+% connection-id retirement specific stuff (switch to priority id)
 
-% fixed sizes for fields e.g. conn id, stream id, etc.(just for ease of development)
+% fixed sizes for fields e.g. conn id, stream-id, etc.(just for ease of development)
 
 % e.g. only single stream frame inside packet (for ease of development) since general approach too complex for verifier?
 
@@ -104,12 +104,12 @@ and not a focus of this chapter.
 \subsubsection*{Simplifications of Packet Structure}
 We added some changes to the quic-go library to make a prototype implementation easier.
 The first one is that we fixed the sizes of some variable length fields like the connection-id or the stream-id.
-This was mainly to avoid the need to figure out the correct sizes within the eBPF-program as this would have 
+This was mainly to avoid the need to figure out the correct sizes within the eBPF program as this would have 
 resulted in approaches that would have to be very carefully turned into eBPF-compatible code due to verifier
 restrictions.
 Besides fixing the length of some fields, we also limit the number of frames per packet to one.
 Normally a QUIC packet can contain multiple frames, especially stream-frames, but this would have required 
-a packet traversal within the eBPF-program that, again, would have been harder to implement considering all
+a packet traversal within the eBPF program that, again, would have been harder to implement considering all
 verification constrictions.
 Besides this additional complexity, for our usecase the ``singe-stream-frame-per-packet'' approach is not changing
 a lot since the payload of one media packet will be split into multiple packets due to its size.
@@ -148,17 +148,17 @@ This solves the problem of not being able to mark a packet with the correct prio
 
 \subsubsection*{Retransmission}
 Another direct change that is needed is that of a specific \verb|OnLost| function for packets that 
-have been forwarded by the eBPF-program.
+have been forwarded by the eBPF program.
 Since the relay state is not necessarily aligned with the server state, and the relay does not know
 about the stream a packet was sent on, it is not possible to reuse the plain \verb|OnLost| function
 of the quic-go library.
 This is because the plain \verb|OnLost| function would lookup the stream corresponding to the provided stream-id and 
 retransmit the packet on there, but the stream for the given id might not exist within the relay stream-pool.
 Instead, our new function needs to look up the stream-id of the lost packet and open a new stream with
-the same stream id, ensuring that the client correctly receives the retransmission.
+the same stream-id, ensuring that the client correctly receives the retransmission.
 Besides the stream-id, the created stream-object should also have the same remaining stream-state
 as the original stream (e.g.~offset-information).  
-When a retransmission happens, the relay also needs to tell the underlying eBPF-program that a packet is part of a 
+When a retransmission happens, the relay also needs to tell the underlying eBPF program that a packet is part of a 
 retransmission and that, even if a stream was actually created by the relay, the egress program should treat it like 
 it was created by the server.
 That last part is necessary for the stream-id translation part of the egress program, which is explained further

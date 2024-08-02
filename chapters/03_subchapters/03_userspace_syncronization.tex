@@ -4,22 +4,22 @@ Since one of the main ideas we propose is to avoid passing a packet all the way
 through the network stack up to userspace at the relay, we create the problem
 that the application itself is not aware of packets that are being sent.
 To conquer this issue, we suggest a setup that establishes communication
-between the application- and the eBPF-program.
+between the application- and the eBPF program.
 To keep the improvement we gained by not passing packets to userspace during the 
 critical path, this communication will happen in a delayed fashion, that is 
 decoupled from the actual sending of media data.
 \\
 The main resource we use for this communication will again be eBPF maps that
 will contain information on the time a packet was sent together with protocol-specific 
-data like packet numbers or stream identifiers (for both packet number 
-and stream id the old and the new, i.e.~tranlsated, values will be stored).
+data like packet-numbers or stream-identifiers (for both packet-number 
+and stream-id the old and the new, i.e.~tranlsated, values will be stored).
 
 
 % \subsection{User Space Avoidance}
 % TODO 
 
 \subsection{Subscription and State Management}
-As already mentioned in section~\ref{sec:ebpf_setup}, an eBPF program handling incoming
+As already mentioned in section\nobreakspace\ref{sec:ebpf_setup}, an eBPF program handling incoming
 traffic from the client will save client connection information like MAC address, IP 
 address, etc.~in a map for later access.
 Also, an internal counter will give each client a unique identifier. % TODO: mention somewhere that this identifier has to be sequential and therefore does not support "unsubscribing" yet
@@ -31,11 +31,11 @@ Regarding stream state management, there is also little need for communication s
 server is expected to use QUIC's unidirectional streams for sending the media data. 
 That means the relay does not really need to know about the stream details except in case it 
 has to trigger a retransmission.
-If that is the case, the stream id contained in the packet (meta-)data that was read from the eBPF map 
+If that is the case, the stream-id contained in the packet (meta-)data that was read from the eBPF map 
 will be used to manually create a stream with the correct id.
 It is important to manually set the correct id since the relay might not use the same id for the 
 next unidirectional stream it opens.
-Also, the client expects the retransmission to be sent on the same stream id as the original packet
+Also, the client expects the retransmission to be sent on the same stream-id as the original packet
 since a retransmission happens within the same stream-context.
 
 \subsection{Relay Caching}

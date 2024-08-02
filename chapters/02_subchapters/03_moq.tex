@@ -76,16 +76,16 @@ as well as cache-friendly mechanisms.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/moq-relay.drawio.pdf}
-    \caption[MoQ relay architecture]{MoQ relay architecture.}\label{fig:moq_relay_architecture}
+    \caption[MoQ relay architecture]{MoQ relay architecture.}\label{fig:moq-relay-architecture}
 \end{figure}
 
-Figure~\ref{fig:moq_relay_architecture} gives a visualization of the rough architecture
+Figure~\ref{fig:moq-relay-architecture} gives a visualization of the rough architecture
 of a MoQ relay.
 It hints at key components like the relay level cache and the congestion handling
 mechanism.
 What one can also infer is the place of MoQ in the OSI-model namely at the application
 layer, which itself builds on top of lower-level protocols like QUIC, UDP, IP, and Ethernet.
-In figure~\ref{fig:relay_caching} one can see a comparison between a traditional non-caching
+In figure~\ref{fig:relay-caching} one can see a comparison between a traditional non-caching
 relay and a caching MoQ-relay.
 The latter lowers the traffic between server and relay in case the same data is requested
 by multiple clients.
@@ -94,7 +94,7 @@ by multiple clients.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figures/02_background/relay-caching.drawio.pdf}
-    \caption[Cache related relay traffic]{Multiple clients requesting data for caching and non-caching relay.}\label{fig:relay_caching}
+    \caption[Cache related relay traffic]{Multiple clients requesting data for caching and non-caching relay.}\label{fig:relay-caching}
 \end{figure}
 
 This caching mechanism fits quite naturally into our proposed eBPF setup since we will need to 

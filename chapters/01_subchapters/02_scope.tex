@@ -5,12 +5,12 @@ A relay is a special type of server that has individual
 connections to the previous and the next hop in the network path.
 In our case the previous and next hop will already be the media-server and 
 the client, respectively.
-This is visualized in figure~\ref{fig:relay_setup}.
+This is visualized in figure~\ref{fig:relay-setup}.
 \vspace{0.5cm}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/02_background/general-relay.drawio.pdf}
-    \caption[Server-Relay-Client-Setup]{Relay setup.}\label{fig:relay_setup}
+    \caption[Server-Relay-Client-Setup]{Relay setup.}\label{fig:relay-setup}
 \end{figure}
 The task of a relay is to pass on the traffic it recieves from its predecessor
 to one or more successors.
@@ -23,7 +23,7 @@ The main improvement this thesis aims to achieve is shortening a packet's critic
 This will be done by avoiding the immediate need for a packet traversal up the network stack to the application layer.
 Instead, any communication with the application layer will happen in a delayed fashion (after the packet is sent) by utilizing 
 eBPF-Maps for storing any necessary (meta-)~information.
-The main reason this communication between userspace and eBPF-program is required is that relays in MoQ are an application layer concept.
+The main reason this communication between userspace and eBPF program is required is that relays in MoQ are an application layer concept.
 That means the QUIC connections from relay to server and from relay to client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
 \\
 This approach is highly dependent on the used standards and protocols.

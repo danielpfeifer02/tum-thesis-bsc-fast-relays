@@ -12,7 +12,7 @@ real-time inspection of running processes, memory- and cpu-usages, network-resso
 and more~\parencite{ebpf-intro-tigera}.
 
 \subsection{eBPF Hook Points}
-The Linux kernel offers several hook points to which eBPF-programs can be attached.
+The Linux kernel offers several hook points to which eBPF programs can be attached.
 There are two prominent ones that we considered for our suggested setup.
 The first one allows one to access the Traffic Control (TC) subsystem, while the 
 second one allows one to access the eXpress Data Path (XDP) subsystem.
@@ -70,10 +70,10 @@ very complex control structures.
 \subsection{Important eBPF Concepts}
 One of the most important concepts in eBPF, which we do use quite extensively, is 
 the ``eBPF-map''.
-Such a map boils down to a section in memory that is reserved for the eBPF-program
+Such a map boils down to a section in memory that is reserved for the eBPF program
 and which can be used as a key-value store for arbitrary data.
 This part of memory can then also be accessed from userspace and thus provides the main 
-way of communication between the eBPF-program and our application.
+way of communication between the eBPF program and our application.
 
 
 \vspace{0.5cm}

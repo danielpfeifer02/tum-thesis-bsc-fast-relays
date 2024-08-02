@@ -154,25 +154,25 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
 \begin{enumerate}
     \item[1.]   Obviously, similar to the other eBPF programs, any packet that is not part of our traffic 
             should be passed on normally without any further processing.
-    \item[\textbf{2.}] In case the packet is QUIC (for the correct client connection), the packet number 
-            needs to be changed to a program internal counter to avoid issues of reusing packet numbers. 
-            This is the only place where we can guarantee sequential packet numbers since neither 
-            the userspace nor the server knows what the highest packet number sent at any moment in time is. 
+    \item[\textbf{2.}] In case the packet is QUIC (for the correct client connection), the packet-number 
+            needs to be changed to a program internal counter to avoid issues of reusing packet-numbers. 
+            This is the only place where we can guarantee sequential packet-numbers since neither 
+            the userspace nor the server knows what the highest packet-number sent at any moment in time is. 
             As there is no way of synchronizing lookups (e.g.~using eBPF maps) of information between userspace 
             and an eBPF program, changing it right before sending it out is the best way of keeping them coherent. 
     \item[\textbf{3.}] In case the packet (additionally to being QUIC for a client connection) contains 
-                        stream frames, we need to do a similar translation of the stream id.
-                        The reasons and methods for this are the same as for the packet number translation.
-                        Figure~\ref{fig:stream-id-translation} shows a flow diagram of the stream id translation
+                        stream frames, we need to do a similar translation of the stream-id.
+                        The reasons and methods for this are the same as for the packet-number translation.
+                        Figure~\ref{fig:stream-id-translation} shows a flow diagram of the stream-id translation
                         process.
-                        Important steps include checking if the stream id translation already exists as well
+                        Important steps include checking if the stream-id translation already exists as well
                         as figuring out where a stream was created.
                         The former is necessary in case a payload is split into multiple packets, and the latter is 
                         necessary since the relay essentially has a fan in of two (relay originated packets and 
                         server originated packets).
                         This fan in might cause a situation where both the relay and the server open a stream which 
                         initially has the same id (since the server and relay states are not synchronized).
-                        In such a case the two streams must not be mapped to the same outgoing stream id.  
+                        In such a case the two streams must not be mapped to the same outgoing stream-id.  
                         This is also why a retransmission coming from the relay might need to be treated as 
                         if it came from the server. For that the eBPF program will be notified by the userspace 
                         regarding which packets are such retransmissions.
@@ -191,15 +191,15 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/03_fast_relays/stream-id-translation.drawio.pdf}
-    \caption[Stream id translation schematic]{Flow diagram of stream id translation process.}\label{fig:stream-id-translation}
+    \caption[Stream-id translation schematic]{Flow diagram of stream-id translation process.}\label{fig:stream-id-translation}
 \end{figure}
-% Since the QUIC protocol works with packet numbers for a given connection, it is necessary for 
+% Since the QUIC protocol works with packet-numbers for a given connection, it is necessary for 
 % the egress program to make sure the forwarded packets together with the userspace packets
 % provide a consistent state. 
-% For this, the egress program maintains its own packet number counter for each connection.
+% For this, the egress program maintains its own packet-number counter for each connection.
 % That way, only one counter has to be maintained, and race conditions can be avoided.
-The aforementioned packet number translation means that the packets sent by the userspace are 
-likely to have a different packet number than the one chosen by the QUIC library.
+The aforementioned packet-number translation means that the packets sent by the userspace are 
+likely to have a different packet-number than the one chosen by the QUIC library.
 This might lead to inconsistencies again when receiving acknowledgments but can be avoided by 
 remembering the translation in a map as well as only storing packet objects in the 
 Go library that have the correct state.
@@ -211,10 +211,10 @@ Once the packet is then processed by the userspace routine handling the
 registration, any incoming ACKs for this packet can be processed correctly.
 The next section will go into more detail on how the packet registration works.
 Later, we will also look at the implications of this on retransmissions.
-Even though the stream id translation works very similarly to the packet number translation, it 
+Even though the stream-id translation works very similarly to the packet-number translation, it 
 does not have the need for any additional work after the packet has been sent out since our 
 approach uses unidirectional streams only, and thus the relay does not care about changes in 
-the used stream id. % TODO: maybe reorder the sentences a little bit
+the used stream-id. % TODO: maybe reorder the sentences a little bit
 
 \subsection{Packet Registration}
 In order to make the congestion control algorithm that is running in userspace
@@ -255,6 +255,6 @@ It is not necessary to create the stream before that because our approach is onl
 unidirectional streams so the relay does not get any data back from the client.
 The only case where it matters that the relay state ``knows'' about the stream is when a packet
 gets lost, and the \verb|OnLost| function of the QUIC library is called.
-This is also the latest point in time when the relay can create the stream with the needed stream id.
+This is also the latest point in time when the relay can create the stream with the needed stream-id.
 Figure~\ref{fig:packet-retransmission} visualizes the setup for retransmitting a packet that 
 got lost on its way to the client. 
