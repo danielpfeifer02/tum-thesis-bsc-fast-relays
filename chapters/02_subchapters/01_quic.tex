@@ -73,7 +73,7 @@ This includes the possibility of neglecting the difficulties that the heavy encr
 it by just turning off the related functionality.
 Another reason we opted for QUIC is that it allows for easy packet dropping.
 In order to do that we just need to send each frame in a lightweight unidirectional stream and in 
-case of a drop of said frame, we can just cloes the stream.
+case of a drop of said frame, we can just close the stream.
 This would not be possible with TCP, due to its reliability-based nature.
 
 % This includes the possibility of mitigating missing technologies, mainly for offloading QUIC % TODO: better wording?
