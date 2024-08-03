@@ -18,7 +18,7 @@ Another type of change that we needed to introduce into the quic-go library is c
 connection state management.
 We essentially added support for communication with the eBPF program by using an 
 approach similar to C-style function pointers.
-\\
+
 On multiple locations, we added conditional function calls like the one depicted in 
 \autoref{changes:function-pointer}.
 The function that is called here will be defined by the developer of the relay and 

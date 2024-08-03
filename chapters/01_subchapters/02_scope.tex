@@ -16,16 +16,14 @@ The task of a relay is to pass on the traffic it recieves from its predecessor
 to one or more successors.
 To achieve that a packet goes all the way up the relay's application layer.
 We aim to avoid such an expensive traversal up the network stack.
-\\
 
-\noindent
 The main improvement this thesis aims to achieve is shortening a packet's critical path from a media server to a client.
 This will be done by avoiding the immediate need for a packet traversal up the network stack to the application layer.
 Instead, any communication with the application layer will happen in a delayed fashion (after the packet is sent) by utilizing 
 eBPF-Maps for storing any necessary (meta-)~information.
 The main reason this communication between userspace and eBPF program is required is that relays in MoQ are an application layer concept.
 That means the QUIC connections from relay to server and from relay to client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
-\\
+
 This approach is highly dependent on the used standards and protocols.
 This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and the ``Media over QUIC'' (MoQ) 
 transport protocol~\parencite{draft-moqtransport}.
@@ -37,7 +35,7 @@ We will mainly introduce simple function pointer style additions that allow the 
 both with and without the eBPF setup.
 The developer of the relay will then also have more freedom to set up the eBPF part of the relay as they see fit
 since the Go code that will interact with eBPF parts will also have to be provided by said developer.
-\\
+
 Additionally, we will run a performance analysis on our implementation of the relay to confirm the potential this 
 approach has.
 These performance tests will look at the raw delay speedup as well as the impact on CPU utilization this 
@@ -46,10 +44,10 @@ All the tests will be done in a lab-like environment to isolate the performance 
 from any outside noise.
 Most payloads used will only contain dummy data since our approach does not interfere with payload contents 
 and there is no need for creating and using actual media stream data.
-\\
+
 Despite our approach only considering QUIC and MoQ, we will argue that the general idea of our setup will be independent of
 any of these protocols and can be changed to fit one's needs.
-\\
+
 With this, we will provide answers to the research questions regarding packet-redirection, communication between userspace and eBPF
 as well as setup-generalization.
 Regarding the question on how to handle the encryption of the packets, we will not focus on this since we did not find a suitable

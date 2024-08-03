@@ -8,7 +8,7 @@ between the application- and the eBPF program.
 To keep the improvement we gained by not passing packets to userspace during the 
 critical path, this communication will happen in a delayed fashion, that is 
 decoupled from the actual sending of media data.
-\\
+
 The main resource we use for this communication will again be eBPF maps that
 will contain information on the time a packet was sent together with protocol-specific 
 data like packet-numbers or stream-identifiers (for both packet-number 
@@ -26,7 +26,7 @@ Also, an internal counter will give each client a unique identifier. % TODO: men
 With that, the only thing that happens in terms of communication between the application 
 and the relay in case of a new subscription is that the application will update the ``number 
 of clients'' counter that is accessed by the eBPF program and used for packet duplication purposes.
-\\
+
 Regarding stream state management, there is also little need for communication since the 
 server is expected to use QUIC's unidirectional streams for sending the media data. 
 That means the relay does not really need to know about the stream details except in case it 
@@ -47,7 +47,7 @@ store, e.g.~the last \verb|n| second(s) worth of data in a cache.
 Then the relay could, once a new connection is established, parallel to incrementing the kernel counter 
 representing the number of clients also send out cached data already so that the client receives it
 as early as possible.
-\\
+
 One aspect that we still left open is the point in time when the relay should stop 
 sending cached data since the forwarded data is up-to-date.
 This also includes the question of how the client can handle potentially duplicate media data if the 

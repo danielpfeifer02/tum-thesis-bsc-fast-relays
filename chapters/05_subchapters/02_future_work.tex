@@ -14,7 +14,7 @@ encryption altogether but to be of any use in a real-world
 scenario, the encryption of incoming and the decryption of
 outgoing packets would need to be pushed down below the lowest 
 used BPF hook point in the stack.
-\\
+
 Future work could focus on developing a hardware offload 
 setup similar to those already available for TCP/IP checksum 
 offloading~\parencite{tcp-ip-offload-engine}.
@@ -27,7 +27,7 @@ another approach suggests~\parencite{ebpf-offload-smartnics}.
 The cited work does consider eBPF/XDP offloading, so further 
 research would be required to see if this could be adapted to eBPF/TC 
 programs as well.
-\\
+
 Despite the current lack of options, previous work in this direction has already been 
 done since at least 2019~\parencite{quic-nic-offload}, which makes us hopeful that
 integrating smartNIC support into our prototype can be achieved in the near future.
@@ -43,7 +43,7 @@ The latter point could always be realized by using part of the payload
 which forces a deeper packet inspection within the BPF program but 
 avoids the need to fit the priority into the header of an existing 
 protocol.
-\\
+
 Expanding our approach to other protocols could be interesting for 
 many areas outside of media streaming, examples being gaming, 
 telesurgery or financial services where a delay-decrease of 
@@ -57,7 +57,7 @@ Despite them not being essential for our proof of concept,
 both in functionality and performance, they are still important
 for a final product that is intended to be used in a real-world
 scenario.
-\\
+
 Future work could focus on finalizing the prototype by researching 
 and implementing best practices for the areas of congestion handling
 and retransmission management, among others.

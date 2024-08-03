@@ -22,7 +22,7 @@ and a direct ``passing-through'' of the packets without much additional computat
 More complex setups might have the relay consider tasks like (de-)multiplexing, 
 encoding changes, error correction or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
-\\
+
 Another thing figure~\ref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
 that the eBPF program path is somewhat similar for each packet whereas, in contrast, the userspace path can have 
 buffers, queues, or equivalent structures thatcan lead to a higher difference in processing time between packets. 
@@ -84,7 +84,7 @@ responsible for any packet forwarding.
 This causes less need for synchronization within userspace.
 Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less since all the 
 packet handling happens in kernel space.
-\\
+
 Another observation we made was that the eBPF setup uses less \verb|bpf| syscalls than we would have assumed for 
 the amount of traffic that happened in the test.
 Despite this being less than expected we still think that the number of \verb|bpf| syscalls needed can be 

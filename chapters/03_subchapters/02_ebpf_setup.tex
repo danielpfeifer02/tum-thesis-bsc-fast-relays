@@ -1,5 +1,9 @@
 \section{eBPF Setup}\label{sec:ebpf_setup}
 
+This section will discuss which eBPF programs are needed to realize the wanted 
+relay functionality within the Linux kernel, as well as their individual 
+responsibilities.
+
 \subsection{Different eBPF Programs}
 
 In order to allow the relay to forward packets independently of the userspace, we
@@ -60,7 +64,7 @@ This might potentially cause some minuscule delay when updating the counter, but
 video data to the client for a brief moment when updating the counter could be a solution. % TODO: needed?
 Figure~\ref{fig:packet-forwarding-duplication} shows the packet duplication and forwarding process 
 high level for an example setting with three clients that want to receive the video data.
-\\
+
 In this ingress program, we need to consider a few things to ensure the correctness
 of our approach.
 These are:
