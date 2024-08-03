@@ -1,16 +1,57 @@
 \chapter{\abstractname}
-In this thesis we propose a new relay setup for multimedia streaming that allows
-for avoidance of userspace processing by utilizing BPF programs in the Linux kernel.
-In a sample implementation we demonstrate the feasibility of this approach by
-designing a relay that is capable of forwarding packets between a server-side 
-and a client-side QUIC connection while still being able to do adaptive bitrate
-streaming based on client congestion.
-\\
-We show that this approach saves processing time and reduces latency compared to
-userspace processing with the relay still adhering to specifications of the QUIC
-standard and the ``Media over QUIC'' (MoQ) draft.
-One limitation that is not addressed in depth in this thesis is the need for a
-de- and encryption hardware offload onto a SmartNIC to allow the BPF program to access
-the packet payload without any restrictions.
-Since the QUIC standard is still fairly new we are confident that a solution for a
-potential hardware offload will be found in future research.
+
+Multimedia streaming constitutes a significant portion of internet traffic, 
+aiming to provide a seamless user experience with low latency and high quality, 
+even amidst network congestion. 
+Analyzing the packet path from media servers to clients reveals opportunities 
+for latency reduction, particularly within relays where packets traverse the 
+network stack twice—from the physical layer up to the application layer 
+and back down.
+
+This thesis explores leveraging low-level kernel features to bypass most of the network 
+stack traversal by directly forwarding packets from ingress to egress using eBPF\@. 
+This approach introduces the challenge of userspace unawareness of forwarded packets. 
+To address this, we propose a delayed notification setup that informs userspace post-forwarding. 
+We utilize eBPF maps to provide a low-latency communication channel between userspace 
+and the eBPF program.
+
+Our proposed method necessitates additional mechanisms for tasks such as congestion 
+control and retransmissions. 
+These aspects are discussed in detail, along with a prototype demonstrating the 
+basic functionality and showcasing latency improvements of our approach compared 
+to traditional userspace processing.
+
+% Multimedia streaming makes up a significant portion of internet traffic.
+% One main goal of multimedia streaming is to provide a seamless experience 
+% for the user.
+% The aim is low latency and high quality while still considering external factors
+% like network congestion.
+% When looking at the path a packet takes from a media server to a client,
+% it becomes apparent that there are some parts where latency can be reduced.
+% One such part is within a relay where packets pass through the network stack
+% twice, once up to the application layer and once back down.
+% We discuss how one can use low-level kernel features to avoid network stack
+% traversal by directly forwarding packets from ingress to egress.
+% We do so using eBPF which will allow us to do all the necessary processing.
+
+
+% Such an approach introduces the problem that the userspace will be unaware 
+% of the packets being forwarded.
+% We propose a setup that allows notifying the userspace of forwarded packets.
+% Our notfication setup will work in a delayed manner, meaning that the userspace
+% will only find out about the forwarded packets after they have been processed 
+% and forwarded already.
+% This provides a reduction in latency while still allowing for a similar level of 
+% control as before.
+% Our setup, however, will require additional mechanisms for things like congestion 
+% control or retransmissions.
+% All those will be touched upon in this thesis.
+
+% We show that this approach saves processing time and reduces latency compared to
+% userspace processing with the relay still adhering to specifications of the QUIC
+% standard and the ``Media over QUIC'' (MoQ) draft.
+% One limitation that is not addressed in depth in this thesis is the need for a
+% de- and encryption hardware offload onto a SmartNIC to allow the BPF program to access
+% the packet payload without any restrictions.
+% Since the QUIC standard is still fairly new we are confident that a solution for a
+% potential hardware offload will be found in future research.
