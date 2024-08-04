@@ -28,7 +28,7 @@ at the time, made up 60\% of the web browser market~\parencite{google-quic-usage
 A little over two years later, Facebook, now Meta, was using QUIC for more than 75\% of 
 their internet traffic which led to improvements regarding
 request errors, tail latency, and header size~\parencite{facebook-quic-usage}.
-As of May 2024, QUIC already made up 8.0\% of all internet traffic % TODO: update number
+As of August 2024, QUIC already made up 8.1\% of all internet traffic % TODO: update number
 with support from pretty much every major browser
 ~\parencite{internet-quic-usage, article-quic-usage}.
 On another note, Cloudflare-Radar has reportet, that at point of writing this thesis, 
@@ -60,7 +60,7 @@ approach to implementing the standards of RFC-9000, RFC-9221 as well as some oth
 important for our usecase. 
 However, since we need some special behavior of the userspace part of QUIC, we will introduce some 
 modifications into quic-go.  
-Those modifications will be explained further in section\nobreakspace\ref{sec:quic_adaptions}.
+Those modifications will be explained further in~\autoref{sec:quic_adaptions}.
 
 \subsection{QUIC's Importance to Fast-Relays}
 The QUIC protocol will be a fundamental part of the fast-relay setup in this thesis, yet the ideas used 
@@ -73,7 +73,7 @@ This includes the possibility of neglecting the difficulties that the heavy encr
 it by just turning off the related functionality.
 Another reason we opted for QUIC is that it allows for easy packet dropping.
 In order to do that we just need to send each frame in a lightweight unidirectional stream and in 
-case of a drop of said frame, we can just close the stream.
+case of a drop of said frame, we can just close the corresponding stream.
 This would not be possible with TCP, due to its reliability-based nature.
 
 % This includes the possibility of mitigating missing technologies, mainly for offloading QUIC % TODO: better wording?

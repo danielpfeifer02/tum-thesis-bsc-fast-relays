@@ -19,7 +19,7 @@ and stream-id the old and the new, i.e.~tranlsated, values will be stored).
 % TODO 
 
 \subsection{Subscription and State Management}
-As already mentioned in section\nobreakspace\ref{sec:ebpf_setup}, an eBPF program handling incoming
+As already mentioned in~\autoref{sec:ebpf_setup}, an eBPF program handling incoming
 traffic from the client will save client connection information like MAC address, IP 
 address, etc.~in a map for later access.
 Also, an internal counter will give each client a unique identifier. % TODO: mention somewhere that this identifier has to be sequential and therefore does not support "unsubscribing" yet

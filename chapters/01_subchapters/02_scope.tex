@@ -5,7 +5,7 @@ A relay is a special type of server that has individual
 connections to the previous and the next hop in the network path.
 In our case the previous and next hop will already be the media-server and 
 the client, respectively.
-This is visualized in figure~\ref{fig:relay-setup}.
+This is visualized in~\autoref{fig:relay-setup}.
 \vspace{0.5cm}
 \begin{figure}[H]
     \centering
@@ -29,7 +29,7 @@ This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and th
 transport protocol~\parencite{draft-moqtransport}.
 For the application layer, the quic-go library~\parencite{quic-go-repo} will provide the implementation and 
 any additional (non-eBPF) program will also be written in Go.
-Since the setup is dependent on retrieving data from eBPF-Maps, the QUIC library providing the implementation 
+Since the setup is dependent on retrieving data from eBPF-Maps, the QUIC library providing the RFC implementation 
 will need some adaptations.
 We will mainly introduce simple function pointer style additions that allow the adapted library to be run 
 both with and without the eBPF setup.
@@ -50,7 +50,7 @@ any of these protocols and can be changed to fit one's needs.
 
 With this, we will provide answers to the research questions regarding packet-redirection, communication between userspace and eBPF
 as well as setup-generalization.
-Regarding the question on how to handle the encryption of the packets, we will not focus on this since we did not find a suitable
+Regarding the question on how to handle the encryption of the packets, we will not focus on this, since we did not find a suitable
 hardware offload that would have allowed for en- and decryption after and before the used eBPF hook points, respectively.
 Instead, we will emulate this behavior by turning off the encryption in the QUIC library itself, which will provide a similar result.
 

@@ -79,13 +79,13 @@ as well as cache-friendly mechanisms.
     \caption[MoQ relay architecture]{MoQ relay architecture.}\label{fig:moq-relay-architecture}
 \end{figure}
 
-Figure~\ref{fig:moq-relay-architecture} gives a visualization of the rough architecture
+\autoref{fig:moq-relay-architecture} gives a visualization of the rough architecture
 of a MoQ relay.
 It hints at key components like the relay level cache and the congestion handling
 mechanism.
 What one can also infer is the place of MoQ in the OSI-model namely at the application
 layer, which itself builds on top of lower-level protocols like QUIC, UDP, IP, and Ethernet.
-In figure~\ref{fig:relay-caching} one can see a comparison between a traditional non-caching
+In~\autoref{fig:relay-caching} one can see a comparison between a traditional non-caching
 relay and a caching MoQ-relay.
 The latter lowers the traffic between server and relay in case the same data is requested
 by multiple clients.
@@ -105,11 +105,11 @@ be integrated fairly easily within eBPF\@.
 This is because packet dropping is ultimately one of the main use cases of plain eBPF 
 programs and, as such, easy to implement.
 In a later section we will go into detail on how the eBPF setup actually uses mechanisms like 
-priority fields for this and how those meet the standard specifications.
+priority fields to achieve this.
 
 \subsection{moqtransport}
 To use the MoQ protocol in our setup, we will make use of a library that implements 
-the MoQ transport protocol (moqtransport or MoQT) in Go~\parencite{priority-moqtransport-repo}
+the MoQ transport protocol (moqtransport or MoQT) in Go~\parencite{priority-moqtransport-repo}.
 The goal of MoQT is to define a media transport protocol that is operating on top
 of QUIC and WebTransport, which is providing the concrete designs that the charter of 
 the MoQ working group is aiming for.

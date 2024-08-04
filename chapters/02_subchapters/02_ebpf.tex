@@ -14,8 +14,8 @@ and more~\parencite{ebpf-intro-tigera}.
 \subsection{eBPF Hook Points}
 The Linux kernel offers several hook points to which eBPF programs can be attached.
 There are two prominent ones that we considered for our suggested setup.
-The first one allows one to access the Traffic Control (TC) subsystem, while the 
-second one allows one to access the eXpress Data Path (XDP) subsystem.
+The first one allows access to the Traffic Control (TC) subsystem, while the 
+second one allows access to the eXpress Data Path (XDP) subsystem.
 
 XDP would generally provide a better performance since it is located 
 lower on the network stack, namely directly in the NIC driver, than the 
@@ -44,8 +44,7 @@ XDP hook points in the network stack.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/hook-point-locations.drawio.pdf}
-    \caption[Hook points within network stack]{Traffic Control (TC) and eXpress Data Path (XDP) hook points
-    in the Linux kernel.
+    \caption[Hook points within network stack]{TC and XDP hook points in the Linux kernel.
     The red loop indicates the ``short-cut'' that is utilized by the fast-relay.
     }\label{fig:ebpf-hooks}
 \end{figure}
@@ -59,12 +58,12 @@ Since eBPF programs are executed in the kernel, it is quite obvious that extensi
 security checks need to be in place to ensure that the kernel does not experience 
 problems like infinite loops, accesses to invalid memory locations, or other security 
 related issues.
-This explains the existence of the so-called ``BPF-verifier'' which inspects 
+This explains the existence of the so-called ``eBPF verifier'' which inspects 
 every BPF-program for its safety by simulating possible program paths, 
 looking at the graph representation of the program and more~\parencite{ebpf-verifier}.
 This imposes some restrictions on the complexity of the programs that can be 
 used within the kernel.
-In our case, this did not impose too many issues since we do not rely on 
+In our case, this did not impose too many issues since we do not need to rely on 
 very complex control structures.
 
 \subsection{Important eBPF Concepts}
@@ -101,7 +100,7 @@ size, key-type, value-type, and the way the map is stored. % TODO: surely there 
 An example of two eBPF-map definitions can be seen in~\autoref{lst:ebpf-map}.
 It shows two different types of maps, a hash map, and a ring buffer, that are used in
 our fast-relay setup.
-Those and some other relevant map types are listed in table~\autoref{tab:ebpf-map-types}.
+Those and some other relevant map types are listed in~\autoref{tab:ebpf-map-types}.
 
 
 \vspace{0.5cm}

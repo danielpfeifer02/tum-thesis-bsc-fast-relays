@@ -7,7 +7,7 @@ responsibilities.
 \subsection{Different eBPF Programs}
 
 In order to allow the relay to forward packets independently of the userspace, we
-need to equip the relay with three BPF programs, as seen in figure~\ref{fig:ebpf-programs}.
+need to equip the relay with three BPF programs, as seen in~\autoref{fig:ebpf-programs}.
 Those three programs are:
 
 \begin{itemize}
@@ -62,7 +62,7 @@ The counter indicating the number of clients will be updated by the userspace on
 is fully established and the client is ready to receive the actual video data.
 This might potentially cause some minuscule delay when updating the counter, but sending cached 
 video data to the client for a brief moment when updating the counter could be a solution. % TODO: needed?
-Figure~\ref{fig:packet-forwarding-duplication} shows the packet duplication and forwarding process 
+\autoref{fig:packet-forwarding-duplication} shows the packet duplication and forwarding process 
 high level for an example setting with three clients that want to receive the video data.
 
 In this ingress program, we need to consider a few things to ensure the correctness
@@ -106,7 +106,7 @@ The last argument allows for the specification of additional flags.
 Aside from \verb|bpf_clone_redirect|, there are also other helper functions regarding packet
 redirection with slightly different behavior, so it is crucial to choose the appropriate one
 to get the desired outcome.
-Table~\ref{tab:skb-redirection} shows them together with a brief description of their behavior.
+\autoref{tab:skb-redirection} shows them together with a brief description of their behavior.
 
 \begin{table}[H]
     \centering
@@ -138,7 +138,7 @@ Table~\ref{tab:skb-redirection} shows them together with a brief description of 
 % TODO: cite this: https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
 % TODO: cite this: http://arthurchiao.art/blog/differentiate-bpf-redirects/ ???
 \noindent
-Based on the descriptions of the redirection helper functions mentioned in table~\ref{tab:skb-redirection}
+Based on the descriptions of the redirection helper functions mentioned in~\autoref{tab:skb-redirection}
 it becomes clear that \verb|bpf_clone_redirect| is the one suitable for our use case. 
 This is because we need the cloning aspect since we essentially want to duplicate the incoming packets multiple times.
 Also, the redirection to another namespace or another net device, as provided by \verb|bpf_redirect_peer| and
@@ -167,7 +167,7 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
     \item[\textbf{3.}] In case the packet (additionally to being QUIC for a client connection) contains 
                         stream frames, we need to do a similar translation of the stream-id.
                         The reasons and methods for this are the same as for the packet-number translation.
-                        Figure~\ref{fig:stream-id-translation} shows a flow diagram of the stream-id translation
+                        \autoref{fig:stream-id-translation} shows a flow diagram of the stream-id translation
                         process.
                         Important steps include checking if the stream-id translation already exists as well
                         as figuring out where a stream was created.
@@ -228,7 +228,7 @@ polls new entries in the map and processes them.
 Entries are then added to the packet history to allow the receipt of ACKs.
 Besides that, the congestion control algorithm will be informed about the
 forwarded packet in order to be able to react to potential congestion events.
-Figure~\ref{fig:forward-registration} visualizes the setup for this process.
+\autoref{fig:forward-registration} visualizes the setup for this process.
 \vspace{0.5cm}
 \begin{figure}[H]
     \centering
@@ -260,5 +260,5 @@ unidirectional streams so the relay does not get any data back from the client.
 The only case where it matters that the relay state ``knows'' about the stream is when a packet
 gets lost, and the \verb|OnLost| function of the QUIC library is called.
 This is also the latest point in time when the relay can create the stream with the needed stream-id.
-Figure~\ref{fig:packet-retransmission} visualizes the setup for retransmitting a packet that 
+\autoref{fig:packet-retransmission} visualizes the setup for retransmitting a packet that 
 got lost on its way to the client. 

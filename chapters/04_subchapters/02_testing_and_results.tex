@@ -12,7 +12,7 @@ as well as the Linux ``process status'' (\verb|ps|) command which can be used to
 show the CPU usage of a process. % TODO: mention the "ax" parameter?
 
 \subsection{Delay Reduction of eBPF Forwarding}
-When considering the impact of eBPF-Forwarding on the delays of packets, figure~\ref{fig:delay-improvement}
+When considering the impact of eBPF-Forwarding on the delays of packets,~\autoref{fig:delay-improvement}
 visualizes the timestamp and delay data that was the result of a rudimentary test of a single-connection 
 scenario that was run both with and without direct eBPF forwarding.
 We can see that the delay of a single packet is decreased by around 100\,µs
@@ -23,7 +23,7 @@ More complex setups might have the relay consider tasks like (de-)multiplexing,
 encoding changes, error correction or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
 
-Another thing figure~\ref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
+Another thing~\autoref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
 that the eBPF program path is somewhat similar for each packet whereas, in contrast, the userspace path can have 
 buffers, queues, or equivalent structures thatcan lead to a higher difference in processing time between packets. 
 This effect however might be less observable in a real world scenario due to the general network jitter which 
@@ -37,7 +37,7 @@ might outweigh the reduction in jitter that our setup caused.
 \subsection{CPU Utilization Comparison}
 Besides showing that our approach reduces packet delay we also measured that the CPU usage is 
 not negatively impacted by our streaming system.
-Figures~\ref{fig:cpu-utilization-server},~\ref{fig:cpu-utilization-relay} and~\ref{fig:cpu-utilization-client}
+\autoref{fig:cpu-utilization-server},~\ref{fig:cpu-utilization-relay} and~\ref{fig:cpu-utilization-client}
 show the CPU usage of the server, relay and client namespace, respectively, both with and without eBPF forwarding.
 It is observable that none of the utilizations significantly differs between the two setups. 
 
@@ -62,8 +62,8 @@ It is observable that none of the utilizations significantly differs between the
 % TODO: remove?
 % We also looked more closely which parts of our system take up the most CPU time and compared them
 % to the most CPU-intensive parts of the initial userspace forwarding.
-% Table~\ref{tab:cpu-usage-top} shows the top 10 functions that take up the most CPU time in our newly
-% developed setup while table~\ref{tab:non-ebpf-cpu-usage-top} shows the same for the old userspace 
+% \autoref{tab:cpu-usage-top} shows the top 10 functions that take up the most CPU time in our newly
+% developed setup while~\autoref{tab:non-ebpf-cpu-usage-top} shows the same for the old userspace 
 % forwarding setup without any eBPF interference. % TODO: make sure reference labels are correct
 % We can clearly see that our setup is executing a lot of system calls which is to be expected
 % due to the ongoing communication between the userspace and the kernel (i.e.~eBPF maps).
@@ -73,7 +73,7 @@ It is observable that none of the utilizations significantly differs between the
 % % \input{chapters/04_subchapters/cpu_usage_tables/table_top_cum.tex} % TODO: this is kinda useless since it only shows the "wrapping" functions. Maybe remove?
 % \input{chapters/04_subchapters/cpu_usage_tables/non_ebpf_table_top.tex} % TODO: actually measure
 
-Appendix~\ref{chap:appendix-fast-relay} and~\ref{chap:appendix-plain-relay} show the full syscall 
+Appendix~\ref{chap:appendix-fast-relay} and~\ref{chap:appendix-plain-relay} show the full syscall % TODO: appendix is no chapter?
 usage of a 30 second video streaming example considering a setup with and without eBPF forwarding,
 respectively.
 We traces this using ``strace'' while considering the main process as well as all child processes

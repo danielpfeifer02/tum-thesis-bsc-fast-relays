@@ -125,7 +125,7 @@ Our assumptions define that the server is the one marking the packets with the c
 our case is realized by sending them over a specific stream.
 Every stream is bound to a specific priority value, and our code changes will make sure that the connection-id
 that is used for any packet sent on this stream will contain the correct priority value.
-Figure~\ref{fig:priority-stream} visualizes the setup as well as our rudimentary approach of saving the 
+\autoref{fig:priority-stream} visualizes the setup as well as our rudimentary approach of saving the 
 priority value as the first byte of the connection-id.
 
 \vspace{0.5cm}
@@ -162,7 +162,7 @@ When a retransmission happens, the relay also needs to tell the underlying eBPF 
 retransmission and that, even if a stream was actually created by the relay, the egress program should treat it like 
 it was created by the server.
 That last part is necessary for the stream-id translation part of the egress program, which is explained further
-in section\nobreakspace\ref{sec:client-egress}, to work correctly.
+in~\autoref{sec:client-egress}, to work correctly.
 This functionality of informing the eBPF program about the retransmission, however, is again realized by a 
 function-pointer style addition and thus designed by the relay developer.
 
