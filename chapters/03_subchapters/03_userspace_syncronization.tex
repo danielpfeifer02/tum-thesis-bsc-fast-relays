@@ -21,28 +21,37 @@ and stream-id the old and the new, i.e.~tranlsated, values will be stored).
 \subsection{Subscription and State Management}
 As already mentioned in~\autoref{sec:ebpf_setup}, an eBPF program handling incoming
 traffic from the client will save client connection information like MAC address, IP 
-address, etc.~in a map for later access.
+address, et cetera, in a map for later access.
 Also, an internal counter will give each client a unique identifier. % TODO: mention somewhere that this identifier has to be sequential and therefore does not support "unsubscribing" yet
 With that, the only thing that happens in terms of communication between the application 
 and the relay in case of a new subscription is that the application will update the ``number 
 of clients'' counter that is accessed by the eBPF program and used for packet duplication purposes.
 
-Regarding stream state management, there is also little need for communication since the 
+Regarding stream state management, there is also little additional communication since the 
 server is expected to use QUIC's unidirectional streams for sending the media data. 
 That means the relay does not really need to know about the stream details except in case it 
 has to trigger a retransmission.
-If that is the case, the stream-id contained in the packet (meta-)data that was read from the eBPF map 
-will be used to manually create a stream with the correct id.
-It is important to manually set the correct id since the relay might not use the same id for the 
-next unidirectional stream it opens.
-Also, the client expects the retransmission to be sent on the same stream-id as the original packet
-since a retransmission happens within the same stream-context.
+% TODO: already mentioned
+% If that is the case, the stream-id contained in the packet (meta-)data, that was read from the eBPF map, 
+% will be used to manually create a stream with the correct id.
+% It is important to manually set the correct id since the relay might not use the same id for the 
+% next unidirectional stream it opens.
+% Also, the client expects the retransmission to be sent on the same stream-id as the original packet
+% since a retransmission happens within the same stream-context.
+
+Since a client can also unsubscribe from a certain media stream, the relay needs to support
+this as well.
+This is done by simply decrementing the ``number of clients'' counter and making sure the 
+client ids stay in a usable state (i.e.~the relay is not duplicating packets for unsubscribed 
+clients).
+Our prototype implementation does not consider unsubscripions yet, as these do not matter to 
+any proof of concept or performance test we conducted.
 
 \subsection{Relay Caching}
-Regarding the caching of data within a relay, which is required by the MoQ standard, we can easily
-handle this since we are passing on an unaltered copy of any incoming packet from the server to the 
+Caching of data within a relay, which is required by the MoQ standard, is something we essentially get
+for free since we are passing on an unaltered copy of any incoming packet from the server to the 
 application at the same time we forward all the other packet copies to egress.
-Now the application is able to receive any data from the server as if this was a normal connection and 
+This means the application is able to receive any data from the server as if this was a normal connection and 
 store, e.g.~the last \verb|n| second(s) worth of data in a cache.
 Then the relay could, once a new connection is established, parallel to incrementing the kernel counter 
 representing the number of clients also send out cached data already so that the client receives it

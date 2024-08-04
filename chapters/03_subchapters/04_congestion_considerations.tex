@@ -18,7 +18,7 @@ In~\autoref{fig:forward-registration} this is visualized exemplary as ``Bytes pe
 but the idea is that both the function determining how limits and thresholds are calculated from 
 the information on incoming packets as well as the actual handling within the egress program 
 will be application-specific and defined by the relay engineer.
-We experimented with approaches that use the QUIC internal measurements like the RTT, 
+We experimented with approaches that use QUIC internal measurements like the RTT, 
 introduce new measurements like exponential-weighted moving averages, or even use an 
 out-of-band connection where the relay expects direct feedback from the client.
 All these possibilities showed us that there is a lot of room for experimentation and optimization
@@ -50,7 +50,7 @@ Also, this approach might cause problems if a lot of high-priority packets come 
 e.g.~in case of very ``bursty'' traffic.
 Another way that could be used to handle this uncertain situation is to allow for temporary 
 overflows of the byte limit.
-This would make the limit more of a soft limit that can be exceeded for a period of short time.
+This would make the limit more of a soft limit that can be exceeded for a short period of time.
 However, this is another heuristic highly dependent on the specific use case and
 traffic patterns, so we did not implement it in our prototype.
 Overall we can say that implementation-wise, it is not hard to drop packets, but the actual

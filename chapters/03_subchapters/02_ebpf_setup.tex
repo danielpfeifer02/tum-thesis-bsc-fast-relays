@@ -7,7 +7,7 @@ responsibilities.
 \subsection{Different eBPF Programs}
 
 In order to allow the relay to forward packets independently of the userspace, we
-need to equip the relay with three BPF programs, as seen in~\autoref{fig:ebpf-programs}.
+need to equip the relay with three eBPF programs, as seen in~\autoref{fig:ebpf-programs}.
 Those three programs are:
 
 \begin{itemize}
@@ -19,7 +19,7 @@ Their responsibilities then are:
 
 \begin{itemize}
     \item handling the initial registration of new clients and storing their information, such as
-    MAC addresses in a BPF map
+    MAC addresses in an eBPF map
     \item intercepting the packets from the video server, duplicating and redirecting them to 
     the egress program (as well as sending one unaltered packet to userspace for state
     management purposes)
@@ -34,8 +34,8 @@ packet forwarding and thus makes leaving out any immediate userspace processing 
 \vspace{0.5cm}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{figures/03_fast_relays/ebpf-setup.drawio.pdf}
-    \caption[Types of eBPF programs at relay]{The relay has to be equipped with three BPF programs.}\label{fig:ebpf-programs}
+    \includegraphics[width=0.4\textwidth]{figures/03_fast_relays/ebpf-setup.drawio.pdf}
+    \caption[Types of eBPF programs at relay]{The relay has to be equipped with three eBPF programs.}\label{fig:ebpf-programs}
 \end{figure}
 
 \noindent
@@ -49,21 +49,21 @@ This means the correct port is to be defined prior such that the eBPF program ca
 a single or (multiple) relay instance(s) with the correct port.
 In our case, then, since we use QUIC, the program will check for QUIC long header packets that 
 setup an initial connection and save the transmitted state information such as connection-id, 
-stream-related states, etc.~in an eBPF map together with information that is not directly known
+stream-related states, et cetera, in an eBPF map together with information that is not directly known
 by the userspace, such as the client's MAC address.
-Saving data like the MAC address directly once the connection is set up allows to omit any further 
+Saving data like the MAC address directly once the connection is set up allows us to omit any further 
 Address Resolution Protocol (ARP) steps later on. 
 \subsubsection{Server Ingress}
 Another ingress-related program, this time for packets coming from the video server, is needed
 to handle packet duplication and forwarding.
 This program will receive the actual video packets from the server and then, based on an internal 
-counter of how many clients actually want to receive the video, duplicate the packet accordingly.
+counter of how many clients actually want to receive the video, duplicate the packets accordingly.
 The counter indicating the number of clients will be updated by the userspace once a new connection 
 is fully established and the client is ready to receive the actual video data.
 This might potentially cause some minuscule delay when updating the counter, but sending cached 
 video data to the client for a brief moment when updating the counter could be a solution. % TODO: needed?
 \autoref{fig:packet-forwarding-duplication} shows the packet duplication and forwarding process 
-high level for an example setting with three clients that want to receive the video data.
+on a high level for an example with three clients that want to receive the video data.
 
 In this ingress program, we need to consider a few things to ensure the correctness
 of our approach.
@@ -77,8 +77,8 @@ These are:
                 short-headers, there is no need to consider long-header packets.
     \end{enumerate}
 
-    \item   The program should pass an unaltered copy up to userspace to allow the QUIC library to
-            gain knowledge of the packet and handle any state changes accordingly.
+    \item   The program should pass an unaltered copy of each packet up to userspace to allow the 
+            QUIC library to gain knowledge of the packet and handle any state changes accordingly.
     \begin{enumerate}
         \item   Generally speaking, this is not strictly necessary as one could just have a separate 
                 setup of registering packets that came from the server, but as this is not needed,
@@ -117,8 +117,9 @@ to get the desired outcome.
             \verb|bpf_clone_redirect| & Clones and redirects a packet to the interface associated with the provided index.\\
         \midrule
             \verb|bpf_redirect| & Redirects a packet to the interface associated with the provided index. The packet is not cloned 
-                                    (no underlying call of \verb|skb_clone()|) so it is slightly more efficient (25\% pps increase according 
-                                    to commit message). The packet is also not redirected immediately but after the function finishes.\\ % TODO: find commit message
+                                    (no underlying call of \verb|skb_clone()|) so it is slightly more efficient.
+                                    % (25\% pps increase according to commit message). % TODO: find commit message
+                                    The packet is also not redirected immediately but after the function finishes.\\ 
         \midrule
             \verb|bpf_redirect_peer| & Similar to \verb|bpf_redirect|, but instead of redirecting the packet to the interface provided 
                                         as a parameter, it is redirected to its peer device. This works only between different netns to 
@@ -177,7 +178,7 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
                         This fan in might cause a situation where both the relay and the server open a stream which 
                         initially has the same id (since the server and relay states are not synchronized).
                         In such a case the two streams must not be mapped to the same outgoing stream-id.  
-                        This is also why a retransmission coming from the relay might need to be treated as 
+                        This is also why a retransmission coming from the relay needs to be treated as 
                         if it came from the server. For that the eBPF program will be notified by the userspace 
                         regarding which packets are such retransmissions.
     \item[4.] Again, if the packet is QUIC and for the right connection, the program needs 
@@ -208,7 +209,7 @@ This might lead to inconsistencies again when receiving acknowledgments but can 
 remembering the translation in a map as well as only storing packet objects in the 
 Go library that have the correct state.
 This technique of ``storing'' a packet that the userspace does not know
-about since it comes from the media server will be referred to as ``packet registration''.
+about, since it comes from the media server, will be referred to as ``packet registration''.
 This initially gives a brief window where a packet was sent out but is not saved in the history
 of the QUIC library.
 Once the packet is then processed by the userspace routine handling the 
@@ -221,9 +222,9 @@ approach uses unidirectional streams only, and thus the relay does not care abou
 the used stream-id. % TODO: maybe reorder the sentences a little bit
 
 \subsection{Packet Registration}
-In order to make the congestion control algorithm that is running in userspace
+In order to make the congestion control algorithm, that is running in userspace,
 usable, we need to inform the QUIC library about the forwarded packets.
-This again happens via BPF maps and a separate go routine that continuously
+This again happens via eBPF maps and a separate go routine that continuously
 polls new entries in the map and processes them.
 Entries are then added to the packet history to allow the receipt of ACKs.
 Besides that, the congestion control algorithm will be informed about the

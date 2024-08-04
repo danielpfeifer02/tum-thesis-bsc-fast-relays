@@ -22,22 +22,24 @@ to improve the current infrastructure.
 Another interesting approach that follows a similar idea of speeding up packet processing
 by avoiding the Linux network stack is~\parencite{kernel-bypass-msc-thesis}.
 The difference in this work is that DPDK is used to bypass the network stack to 
-then process packets in userspace instead of using BPF programs like this thesis does.
+then process packets in userspace instead of directly using eBPF programs for processing 
+like we do.
 This, for example, offers more flexibility as the userspace program is not as limited (e.g.\ 
 by the eBPF verifier) as the eBPF program but might also lead to slightly more system calls,
-especially in the setup of a system, when user- and kernel-space need to communicate.
+especially in the setup of a system, when user- and kernel-space need to communicate, thus 
+increasing latency.
 % TODO: clear enough / everything covered and correct?
 
 \subsection{Priority drop}
 The idea of dropping packets based on their priority to adapt a connection
 in a congestion event has also been around for a while.
-~\parencite{media-streaming-prio-drop} explores this in more detail.
-Mainly improvements like a more tailorable congestion handling than the sole usage
-of discrete video quality levels as well as an improvement to, potentially 
-randomized, frame dropping are discussed.
+This is explored further in~\parencite{media-streaming-prio-drop}.
+There the authors discuss a more tailorable congestion handling 
+compared to video quality discretization as well as an improvement 
+to, potentially randomized, frame dropping.
 This thesis, similar to~\parencite{media-streaming-prio-drop}, will not focus
-on how the priority for packets is determined but rather on how those marked
-packets are handled.
+on how the priority for a specific packet is determined but rather on how
+packets are handled in general.
 For this, it is assumed that a higher level protocol has correctly determined 
 the packet priorities and can handle the drop of packets with lower priority
 in case of limited bandwidth.

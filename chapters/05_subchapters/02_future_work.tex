@@ -24,7 +24,7 @@ However, at the time of writing, we could not come up with any viable solution
 that works with our current setup. 
 We believe one could possibly even put the eBPF program itself on the smartNIC as 
 another approach suggests~\parencite{ebpf-offload-smartnics}.
-The cited work does consider eBPF/XDP offloading, so further 
+The cited work does only consider eBPF/XDP offloading, so further 
 research would be required to see if this could be adapted to eBPF/TC 
 programs as well.
 
@@ -33,13 +33,14 @@ done since at least 2019~\parencite{quic-nic-offload}, which makes us hopeful th
 integrating smartNIC support into our prototype can be achieved in the near future.
 
 \subsection{Compatibility Expansion}\label{sec:compatibility_expansion}
-This thesis used the QUIC protocol together with media over QUIC (MoQ)
-to demonstrate how fast-relays, which circumvent userspace by utilizing eBPF programs, can be designed.
+This thesis used the QUIC protocol together with MoQ to demonstrate how fast-relays, 
+which circumvent userspace by utilizing eBPF programs, can be designed.
 However, generally speaking, the design of fast-relays is not limited to
 any of these protocols and could be expanded, given modifications to 
-necessary fields are possible (i.e.~not prevented by encryption), and
-there is a way to accommodate the priority of a packet in the packet itself.
-The latter point could always be realized by using part of the payload
+necessary fields are possible (i.e.~not prevented by encryption),
+the protocol provides a possibility to drop packets,
+and there is a way to accommodate the priority of a packet in the packet itself.
+The final point could always be realized by using part of the payload
 which forces a deeper packet inspection within the BPF program but 
 avoids the need to fit the priority into the header of an existing 
 protocol.

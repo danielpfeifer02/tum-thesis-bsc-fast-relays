@@ -19,8 +19,9 @@ connection state management.
 We essentially added support for communication with the eBPF program by using an 
 approach similar to C-style function pointers.
 
-On multiple locations, we added conditional function calls like the one depicted in 
-\autoref{changes:function-pointer}.
+We added conditional function calls like the one depicted in 
+\autoref{changes:function-pointer}, in multiple locations 
+within the quic-go library.
 The function that is called here will be defined by the developer of the relay and 
 therefore allow for customizability without the need for changing the library itself.
 
@@ -28,8 +29,8 @@ therefore allow for customizability without the need for changing the library it
 \noindent\begin{minipage}{\textwidth}
 \begin{lstlisting}[style=GoStyle, label=changes:function-pointer, caption=An example of a function-pointer addition to the quic-go library.]
     /* Function pointer call within actual quic-go code */
-    if packet_setting.ConnectionUpdateBPFHandler != nil /* && potentially other conditions */ {
-	    packet_setting.ConnectionUpdateBPFHandler(connId.Bytes(), uint8(connId.Len()), p.connection)
+    if packet_setting.ConnectionIdUpdateBPFHandler != nil /* && potentially other conditions */ {
+	    packet_setting.ConnectionIdUpdateBPFHandler(connId.Bytes(), uint8(connId.Len()), p.connection)
 	}
 \end{lstlisting}
 \end{minipage}
@@ -38,12 +39,12 @@ therefore allow for customizability without the need for changing the library it
 \noindent\begin{minipage}{\textwidth}
 \begin{lstlisting}[style=GoStyle, label=changes:signature-function-pointer, caption=Only the signature will be defined within the library itself.]
     /* Function pointer signature definition within additional config file */
-	ConnectionUpdateBPFHandler      func(id []byte, l uint8, conn QuicConnection) = nil
+	ConnectionIdUpdateBPFHandler      func(id []byte, l uint8, conn QuicConnection) = nil
 \end{lstlisting}
 \end{minipage}
 
-The definition of the function that the developer of the relay wishes to be executed at specifically
-defined points will be defined locally in the relay code and provided to the configuration of the quic-go library.
+The function that the developer of the relay wishes to execute at specific points will be defined 
+locally in the relay code and provided to the configuration of the quic-go library.
 An example of how this could look like is shown in \autoref{changes:definition-function-pointer}.
 
 \vspace{0.5cm}
@@ -57,7 +58,7 @@ An example of how this could look like is shown in \autoref{changes:definition-f
     /* Providing the function to the quic-go library */
     func main() {
         /* ... */
-        packet_setting.ConnectionUpdateBPFHandler = localUpdateConnectionId
+        packet_setting.ConnectionIdUpdateBPFHandler = localUpdateConnectionId
         /* ... */
     }
 \end{lstlisting}
@@ -99,7 +100,7 @@ The necessary state changes mainly required internal state adjustments that woul
 the library because of missing access/visibility.
 The optional turn-off for the packet en- and decryption based on the value of the \verb|CRYPTO_TURNED_OFF| flag
 also required some direct changes to the library, but these will not be mentioned further since they are temporary
-and not a focus of this chapter.
+and not a focus of this section.
 
 \subsubsection*{Simplifications of Packet Structure}
 We added some changes to the quic-go library to make a prototype implementation easier.
@@ -108,13 +109,13 @@ This was mainly to avoid the need to figure out the correct sizes within the eBP
 resulted in approaches that would have to be very carefully turned into eBPF-compatible code due to verifier
 restrictions.
 Besides fixing the length of some fields, we also limit the number of frames per packet to one.
-Normally a QUIC packet can contain multiple frames, especially stream-frames, but this would have required 
+Normally a QUIC packet can contain multiple frames, especially stream-frames, but this would require 
 a packet traversal within the eBPF program that, again, would have been harder to implement considering all
 verification constrictions.
 Besides this additional complexity, for our usecase the ``singe-stream-frame-per-packet'' approach is not changing
 a lot since the payload of one media packet will be split into multiple packets due to its size.
 This means a single stream frame is likely already using up a whole packet, and multiple frames per packet would 
-not be happening.
+not be happening often.
 
 \subsubsection*{Stream Priorities}
 Our approach relies on the fact that every packet has a priority value assigned to it.
@@ -143,7 +144,7 @@ exists one connection-id for each priority within the connection.
 Otherwise, we might be unable to mark a packet with the correct priority.
 This led us to introduce some additional logic to the code that is executing the retirement of connection-ids.
 There, we will make sure that before a connection-id is retired, either one with the same priority value
-already exists or is created.
+already exists or is newly created.
 This solves the problem of not being able to mark a packet with the correct priority.
 
 \subsubsection*{Retransmission}
@@ -154,7 +155,7 @@ about the stream a packet was sent on, it is not possible to reuse the plain \ve
 of the quic-go library.
 This is because the plain \verb|OnLost| function would lookup the stream corresponding to the provided stream-id and 
 retransmit the packet on there, but the stream for the given id might not exist within the relay stream-pool.
-Instead, our new function needs to look up the stream-id of the lost packet and open a new stream with
+Instead, our new function needs to look up the stream-id of the lost packet and potentially open a new stream with
 the same stream-id, ensuring that the client correctly receives the retransmission.
 Besides the stream-id, the created stream-object should also have the same remaining stream-state
 as the original stream (e.g.~offset-information).  
@@ -163,7 +164,7 @@ retransmission and that, even if a stream was actually created by the relay, the
 it was created by the server.
 That last part is necessary for the stream-id translation part of the egress program, which is explained further
 in~\autoref{sec:client-egress}, to work correctly.
-This functionality of informing the eBPF program about the retransmission, however, is again realized by a 
+This functionality of informing the eBPF program about retransmissions, however, is again realized by a 
 function-pointer style addition and thus designed by the relay developer.
 
 \subsubsection*{Visible Endpoint for Packet Registration}

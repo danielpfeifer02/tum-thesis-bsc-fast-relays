@@ -36,7 +36,7 @@ real-time connection network (RTCN) and a client.
 Since retransmissions are expensive in terms of latency, a setup should strive to minimize 
 the distance a packet has to travel through an unreliable network.
 This could be achived by having multiple, strategically placed, eddge-servers, which internally use 
-a, compared to the internet, more reliable connection, for longer (e.g.~intercontinental) connections.
+a, compared to the internet, more reliable connection, for longer (e.g.~intercontinental) transmissions.
 This way packet loss occuring during the client-to-edge-server connection would not have a big 
 impact on the overall latency of the connection.
 A visualization of such an appraoch can be seen in~\autoref{fig:real-time-streaming-connections}.
@@ -99,11 +99,11 @@ For VoD on the other hand the media already exists in its final form.
 
 \subsubsection{Implications on Streaming Setup}
 ABS forces a few changes to the way servers and relays are set up.
-First, as figure~\autoref{fig:adaptive-bitrate-streaming} shows, there needs to 
+First, as~\autoref{fig:adaptive-bitrate-streaming} shows, there needs to 
 be an ``encoding'' component that turns the single, high-quality stream that is 
 received from the streaming source into multiple streams with different resolutions.
 Besides that, the relay needs to keep track of the clients' connection quality, e.g.~using 
-measurements like RTT, packet loss, etc., and decide which stream to forward to the client.
+measurements like RTT, packet loss, et cetera, and decide which stream to forward to the client.
 Since the connection quality can change dynamically the relay also needs to continuously
 monitor each connection and potentially change the used stream.
 Besides encoding and monitoring aspects the system also has increased storage requirements
