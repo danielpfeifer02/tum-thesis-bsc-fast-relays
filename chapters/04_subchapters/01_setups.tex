@@ -66,7 +66,22 @@ is sent out.
 In a real-world scenario this would obviously also be the case, if the distances covered 
 are large enough.
 
-However, where a local setup turns out better for testing is its deterministic nature.
+% \vspace{0.5cm}
+% % \begin{lstlisting}
+% \begin{myverbatim}
+%     root@root:~# tc qdisc show dev veth1-br
+%     qdisc netem 8001: root refcnt 17 limit 1000 delay 5ms
+% \end{myverbatim}
+% % \end{lstlisting}
+% \vspace{0.5cm}
+
+In our setup we introduce a queueing discipline (qdisc) to an interface
+of the bridge that connects the relay and the client.
+This qdisc introduces a delay of 5ms to each packet.
+Using such qdiscs allows to simulate a network environment that is more realistic, 
+e.g.~by introducing delays, like we did, or defining thresholds for packet loss.
+In our setup, however, we only added a delay. % TODO: mention loss, delay 25% etc.?
+% However, where a local setup turns out better for testing is its deterministic nature.
 The fact that the delay of a bridge can be set to a fixed value allows us to better 
 analyse and understand the impact of the different setups for example on packet jitter.
 Also we can be sure that delays, and potential improvements thereof, are not caused by external
@@ -77,7 +92,7 @@ we introduced to the relay.
 \subsection{Physical Server Setup for Real-World Testing}\label{subsec:physical_server_setup}
 % TODO: mention that the physical server posed problems because of an old kernel?
 Our setup for testing is solely based on local namespace environments.
-This suffices since we only look at delay redurction and CPU utilization, 
+This suffices since we only look at delay reduction and CPU utilization, 
 both of which only have a local effect that happens at the relay.
 We left it open for future work to implement a real-world setup that 
 potentially even uses multiple relays and observes their combined improvement

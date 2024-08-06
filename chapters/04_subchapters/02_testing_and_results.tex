@@ -3,8 +3,10 @@ When testing the performance of our prototype we will focus on showing that the 
 is capable of reducing the delay of packets.
 Delay in our case is measured again using eBPF programs that save the timestamps of a packet 
 leaving and entering the server and client namespace respectively.
-Due to the highly deterministic nature of the local environment we know that the difference 
+Due to the controlled nature of the local environment we know that the difference 
 between the two timestamps will be mainly due to processing at the relay.
+Additionally, since we are on a single physical machine, we do not need to worry about
+synchronization between different clocks, which further simplifies our setup.
 Besides delay analysis we will also show that our approach does not require more CPU resources
 than the plain userspace forwarding.
 For that we will look at profiling data from programs like ``pprof'' % TODO: an extra obe for eBPF programs?
@@ -24,7 +26,7 @@ More complex setups might have the relay consider tasks like (de-)multiplexing,
 encoding changes, error correction or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
 
-Another thing~\autoref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
+Another result~\autoref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
 that the eBPF program path is somewhat similar for each packet whereas, in contrast, the userspace path can have 
 buffers, queues, or equivalent structures that can lead to a higher difference in processing time between packets. 
 This effect however might be less observable in a real world scenario due to the general network jitter which 
@@ -77,14 +79,20 @@ It is observable that none of the utilizations significantly differs between the
 \hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} show 
 the syscall usage of a 30 second video streaming example considering a setup with and without eBPF 
 forwarding, respectively.
-We traces this using ``strace'' while considering the main process as well as all child processes
+We trace this using ``strace'' while considering the main process as well as all child processes
 it creates and interacts with.
-When comparing the two tables one can see that our approach actually uses significantly less system-calls, 
+When comparing the two tables one can see that our approach uses significantly less system-calls, 
 which is likely caused by the large amount of \verb|futex| calls we can save since the relay userspace is not 
 responsible for any packet forwarding.
 This causes less need for synchronization within userspace.
 Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less since all the 
 packet handling happens in kernel space.
+
+The reduction of system calls can be seen at the bottom of~\hyperref[chap:appendix-fast-relay]{Appendix A} 
+and~\hyperref[chap:appendix-plain-relay]{B} where total syscall counts are shown.
+The setup using eBPF forwarding uses 225674 during our example transmission while the traditional setup 
+uses 296132 syscalls.
+This means that our setup uses roughly 24\% less syscalls than the traditional setup.
 
 Another observation we made was that the eBPF setup uses less \verb|bpf| syscalls than we would have assumed for 
 the amount of traffic that happened in the test.
