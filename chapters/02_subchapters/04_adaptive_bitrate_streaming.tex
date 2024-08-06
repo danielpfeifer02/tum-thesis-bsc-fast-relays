@@ -35,8 +35,10 @@ An example of such an implication is the design of the connection between the
 real-time connection network (RTCN) and a client.
 Since retransmissions are expensive in terms of latency, a setup should strive to minimize 
 the distance a packet has to travel through an unreliable network.
-This could be achived by having multiple, strategically placed, eddge-servers, which internally use 
-a, compared to the internet, more reliable connection, for longer (e.g.~intercontinental) transmissions.
+This could be achived by having multiple, strategically placed, edge-servers.
+Those would internally use a connection, which is more reliable compared to the internet.
+Such a reliable connection would then be used for a large part of long distance transmissions
+(e.g.~intercontinental ones).
 This way packet loss occuring during the client-to-edge-server connection would not have a big 
 impact on the overall latency of the connection.
 A visualization of such an appraoch can be seen in~\autoref{fig:real-time-streaming-connections}.
@@ -83,9 +85,9 @@ one with a bad connection.
 For this, the internal setup needs to be able to provide multiple streams with
 different resolutions and bitrates.
 An example setup can be seen in~\autoref{fig:adaptive-bitrate-streaming} where
-an encoder creates streams with different resolutions and an edge server, that 
-manages the connections to the clients, can switch between those streams based on
-the connection state of a specific client.
+an encoder creates streams with different resolutions.
+This allows an edge server, that manages the connections to the clients, 
+to switch between those streams based on the connection state of a specific client.
 Twitch and YouTube-Live are examples where, although more complex, similar setups
 are used to provide a better user experience.
 The premise of such a setup is that in case of a bad connection, it is still 
