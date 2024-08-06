@@ -5,8 +5,10 @@ Delay in our case is measured again using eBPF programs that save the timestamps
 leaving and entering the server and client namespace respectively.
 Due to the controlled nature of the local environment we know that the difference 
 between the two timestamps will be mainly due to processing at the relay.
-Additionally, since we are on a single physical machine, we do not need to worry about
-synchronization between different clocks, which further simplifies our setup.
+Additionally, since we are on a single physical machine, it is clear that the timestamp-differences
+will be accurate because no clock synchronization is involved.
+In a real-world setup, different, poorly synchronized, clocks could lead to inaccuracies.
+
 Besides delay analysis we will also show that our approach does not require more CPU resources
 than the plain userspace forwarding.
 For that we will look at profiling data from programs like ``pprof'' % TODO: an extra obe for eBPF programs?
@@ -25,24 +27,46 @@ and a direct ``passing-through'' of the packets without much additional computat
 More complex setups might have the relay consider tasks like (de-)multiplexing, 
 encoding changes, error correction or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
+Important to mention is that de- and encryption should not have an influence on the delay 
+reduction since both setups use the same encryption and decryption methods.
+Any change that might be observable in an extended prototype, which uses hardware offloading,
+is likely caused by a change in processing time that the offloading itself introduces.
+This means that in case one uses a fully offloading prototype for testing, the same offloading
+should be used for the traditional setup it is compared to.
 
 Another result~\autoref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
 that the eBPF program path is somewhat similar for each packet whereas, in contrast, the userspace path can have 
 buffers, queues, or equivalent structures that can lead to a higher difference in processing time between packets. 
 This effect however might be less observable in a real world scenario due to the general network jitter which 
 might outweigh the reduction in jitter that our setup caused.
-\begin{figure}[htbp]
+The measurements depicted in~\autoref{fig:delay-improvement} were taken sending mock data over 
+the network, with each packet being once processed in userspace and once directly forwarded in the kernel
+(i.e.~each packet is duplicated).
+Since all packets are considered independent of each other, it suffices to use the data of one test run given 
+that enough packets were sent for a statistically significant result.
+
+\vspace{0.5cm}
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/04_testing_and_results/delays_small_packets_simple_userspace.pdf}
-    \caption[Delay analysis of eBPF approach]{Userspace avoidance causes a reduction in delay and jitter.}\label{fig:delay-improvement}
+    \caption[Delay analysis of eBPF approach]{The blue and orange parts of the plot show the delay of a 
+    kernel- and userspace-forwarded packet, respectively. Delay is measured as time passed between
+    leaving the server eBPF program and entering the client eBPF program.
+    The green part shows the raw difference between the delays of the same packet, which was sent via both 
+    kernel- and userspace-forwarding.}\label{fig:delay-improvement}
 \end{figure}
+\vspace{0.5cm}
 
 \subsection{CPU Utilization Comparison}
 Besides showing that our approach reduces packet delay we also measured that the CPU usage is 
 not negatively impacted by our streaming system.
 \autoref{fig:cpu-utilization-server},~\ref{fig:cpu-utilization-relay} and~\ref{fig:cpu-utilization-client}
 show the CPU usage of the server, relay and client namespace, respectively, both with and without eBPF forwarding.
-It is observable that none of the utilizations significantly differs between the two setups. 
+It is observable that none of the utilizations significantly differs between the two setups.
+We created these CPU measurements by accumulating the CPU usages of all processes that are related 
+to the respective parts of the setup.
+The tag \verb|user| identifies the traditional setup where packets go all the way up to userspace while 
+\verb|kernel| identifies the setup where packets are forwarded directly from within the kernel.
 
 \begin{figure}[H]
     \begin{minipage}{0.48\textwidth}
