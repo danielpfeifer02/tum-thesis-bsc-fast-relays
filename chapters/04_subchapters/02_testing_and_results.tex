@@ -61,7 +61,7 @@ that enough packets were sent for a statistically significant result.
 Besides showing that our approach reduces packet delay we also measured that the CPU usage is 
 not negatively impacted by our streaming system.
 \autoref{fig:cpu-utilization-server},~\ref{fig:cpu-utilization-relay} and~\ref{fig:cpu-utilization-client}
-show the CPU usage of the server, relay and client namespace, respectively, both with and without eBPF forwarding.
+show the CPU usage of the server, relay and client processes, respectively, both with and without eBPF forwarding.
 It is observable that none of the utilizations significantly differs between the two setups.
 We created these CPU measurements by accumulating the CPU usages of all processes that are related 
 to the respective parts of the setup.
@@ -72,17 +72,17 @@ The tag \verb|user| identifies the traditional setup where packets go all the wa
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{figures/04_testing_and_results/cpu_usage_server_ns.pdf}
-        \caption[Server CPU usage comparison]{Server namespace CPU usage comparison.}\label{fig:cpu-utilization-server}
+        \caption[Server CPU usage comparison]{Accumulated server CPU usage comparison.}\label{fig:cpu-utilization-server}
     \end{minipage}\hfill
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{figures/04_testing_and_results/cpu_usage_relay_ns.pdf}
-        \caption[Relay CPU usage comparison]{Relay namespace CPU usage comparison.}\label{fig:cpu-utilization-relay}
+        \caption[Relay CPU usage comparison]{Accumulated relay CPU usage comparison.}\label{fig:cpu-utilization-relay}
     \end{minipage}\hfill
     \begin{minipage}{\textwidth}
         \centering
         \includegraphics[width=0.48\textwidth]{figures/04_testing_and_results/cpu_usage_client_ns.pdf}
-        \caption[Client CPU usage comparison]{Client namespace CPU usage comparison.}\label{fig:cpu-utilization-client}
+        \caption[Client CPU usage comparison]{Accumulated client CPU usage comparison.}\label{fig:cpu-utilization-client}
     \end{minipage}
 \end{figure}
 
@@ -112,11 +112,17 @@ This causes less need for synchronization within userspace.
 Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less since all the 
 packet handling happens in kernel space.
 
-The reduction of system calls can be seen at the bottom of~\hyperref[chap:appendix-fast-relay]{Appendix A} 
-and~\hyperref[chap:appendix-plain-relay]{B} where total syscall counts are shown.
+More specifically, the impact of our setup on system calls can be seen at the bottom 
+of~\hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} 
+where total syscall counts are shown.
 The setup using eBPF forwarding uses 225674 during our example transmission while the traditional setup 
 uses 296132 syscalls.
 This means that our setup uses roughly 24\% less syscalls than the traditional setup.
+Regarding \verb|futex| calls, our setup uses a little more than 34\% less than the 
+traditional setup, with 21666 calls instead of 32940.
+Even bigger percentage differences caused by our setup can be seen for \verb|epoll_pwait| calls with 
+an improvement of around 67\% (11289 instead of 34149) and \verb|nanosleep| calls with a reduction of 
+approximately 42\% (14293 instead of 24716).
 
 Another observation we made was that the eBPF setup uses less \verb|bpf| syscalls than we would have assumed for 
 the amount of traffic that happened in the test.

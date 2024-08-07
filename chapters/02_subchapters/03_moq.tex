@@ -85,16 +85,33 @@ It hints at key components like the relay level cache and the congestion handlin
 mechanism.
 What one can also infer is the place of MoQ in the OSI-model namely at the application
 layer, which itself builds on top of lower-level protocols like QUIC, UDP, IP, and Ethernet.
-In~\autoref{fig:relay-caching} one can see a comparison between a traditional non-caching
-relay and a caching MoQ-relay.
-The latter lowers the traffic between server and relay in case the same data is requested
-by multiple clients.
+
+Considering the caching mechanism, the relay can cache media data to reduce internal traffic 
+and improve user experience by lowering the latency of a request.
+\autoref{fig:relay-non-caching} and~\autoref{fig:relay-caching} show example traffic for the 
+two different approaches.
+Comparing the traditional non-caching relay and a caching MoQ-relay we can see the latter lowers 
+the traffic between server and relay in case the same data is requested by multiple clients.
+Cached data can also be sent out faster since the relay does not require any communicatoin with 
+the server to retrieve the data.
 
 \vspace{0.5cm}
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{figures/02_background/relay-caching.drawio.pdf}
-    \caption[Cache related relay traffic]{Multiple clients requesting data for caching and non-caching relay.}\label{fig:relay-caching}
+
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{figures/02_background/relay-non-caching.drawio.pdf}
+        \caption[Request to non-caching relay]{Multiple clients requesting data using a non-caching relay.}\label{fig:relay-non-caching}
+    \end{minipage}\hfill
+
+    \vspace{0.5cm}
+    
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width=0.6\linewidth]{figures/02_background/relay-caching.drawio.pdf}
+        \caption[Request to caching relay]{Multiple clients requesting data using a caching relay.}\label{fig:relay-caching}
+    \end{minipage}
+    
 \end{figure}
 
 This caching mechanism fits quite naturally into our proposed eBPF setup since we will need to 
