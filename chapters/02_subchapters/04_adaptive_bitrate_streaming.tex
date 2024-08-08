@@ -104,9 +104,13 @@ ABS forces a few changes to the way servers and relays are set up.
 First, as~\autoref{fig:adaptive-bitrate-streaming} shows, there needs to 
 be an ``encoding'' component that turns the single, high-quality stream that is 
 received from the streaming source into multiple streams with different resolutions.
-Besides that, the relay needs to keep track of the clients' connection quality, e.g.~using 
+In some cases, the relay also needs to keep track of the clients' connection quality, e.g.~using 
 measurements like RTT, packet loss, et cetera, and decide which stream to forward to the client.
-Since the connection quality can change dynamically the relay also needs to continuously
-monitor each connection and potentially change the used stream.
+In other cases, this can also be done by the client itself.
+Since the connection quality can change dynamically, the one responsible for
+the the measurements needs to continuously monitor the connection and potentially trigger a change in 
+the used stream.
+The MoQ standard does not yet specify if the decision of adapting the bitrate lies with the
+publisher or the subscriber.
 Besides encoding and monitoring aspects the system also has increased storage requirements
 since stream data will essentially be duplicated.

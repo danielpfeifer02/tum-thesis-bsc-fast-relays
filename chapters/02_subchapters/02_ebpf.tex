@@ -63,8 +63,11 @@ every BPF-program for its safety by simulating possible program paths,
 looking at the graph representation of the program and more~\parencite{ebpf-verifier}.
 This imposes some restrictions on the complexity of the programs that can be 
 used within the kernel.
-In our case, this did not impose too many issues since we do not need to rely on 
-very complex control structures.
+For our early prototype implementation this did not cause any issues, since we do not need 
+to rely on very complex control structures.
+However, if one wants to extend the prototype to support a more complicated packet structure
+(e.g.~composition of multiple frames per packet), the verifier might become a limiting factor.
+
 
 \subsection{Important eBPF Concepts}
 One of the most important concepts in eBPF, which we do use quite extensively, is 

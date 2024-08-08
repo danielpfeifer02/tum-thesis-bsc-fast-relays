@@ -38,8 +38,10 @@ For the development of the relay and the eBPF programs, we have come up with the
     separate functions, which should be specifically designed to handle the underlying eBPF setup with its eBPF-Map usage. 
     
     \item \textbf{MoQ-Transport Adaptation}~\parencite{priority-moqtransport-repo}:
-    This repository is a fork of the ``MoQ-Transport''~\parencite{draft-moqtransport} protocol repository and provides
-    some needed adaptations to our examples. One such adaptation is that the server needs to support a 
+    This repository is a fork of a repository implementing the ``MoQ-Transport'' 
+    protocol~\parencite{draft-moqtransport}.
+    It provides some needed adaptations. 
+    One such adaptation is that the server needs to support a 
     categorization of payloads into different priorities in order for the eBPF program to be able to 
     deliberately drop packets in case of congestion.
     Getting these priorities could be as simple as differentiating only between I- and P-frames in a video 

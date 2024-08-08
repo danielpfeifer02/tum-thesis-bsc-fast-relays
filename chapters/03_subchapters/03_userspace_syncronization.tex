@@ -44,8 +44,8 @@ this as well.
 This is done by simply decrementing the ``number of clients'' counter and making sure the 
 client ids stay in a usable state (i.e.~the relay is not duplicating packets for unsubscribed 
 clients).
-Our prototype implementation does not consider unsubscripions yet, as these do not matter to 
-any proof of concept or performance test we conducted.
+Our prototype implementation does not consider this yet, because our proof of concept and 
+performance tests do not require it.
 
 \subsection{Relay Caching}
 Caching of data within a relay, which is required by the MoQ standard, is something we essentially get

@@ -71,23 +71,26 @@ These are:
 \begin{enumerate}
     \item   The program can \textbf{only} forward packets that contain video data and must not 
             forward any other packets that contain e.g.~control data.
-    \begin{enumerate}
-        \item   This is fairly easy to achieve by doing some header inspection of the QUIC header,
+
+    % \begin{enumerate}
+            This is fairly easy to achieve by doing some header inspection of the QUIC header,
                 which contains the packet type. Also, since the payload is generally sent using 
                 short-headers, there is no need to consider long-header packets.
-    \end{enumerate}
+    % \end{enumerate}
 
     \item   The program should pass an unaltered copy of each packet up to userspace to allow the 
             QUIC library to gain knowledge of the packet and handle any state changes accordingly.
-    \begin{enumerate}
-        \item   Generally speaking, this is not strictly necessary as one could just have a separate 
+
+    % \begin{enumerate}
+            Generally speaking, this is not strictly necessary as one could just have a separate 
                 setup of registering packets that came from the server, but as this is not needed,
                 it is considerably easier to just pass the packet up to userspace and let the 
                 library handle it normally. This does not impose any additional overhead as the
                 forwarding of any duplicate packets happens independently, of course.
-        \item   Any packet that has been identified as not part of our dataflow should, of course, 
+
+            Any packet that has been identified as not part of our dataflow should, of course, 
                 be passed up to userspace without being forwarded to egress.
-    \end{enumerate}
+    % \end{enumerate}
 \end{enumerate}
 
 \begin{figure}[htbp]
@@ -155,17 +158,19 @@ been redirected by the ingress program as well as packets that have been generat
 This means that the program essentially merges two streams of packets into one stream that needs to 
 be in a consistent state.
 This interleaving of packets grows the requirements of the program to the following list.
-Bold numbers indicate that a requirement is caused by the interleaving of packets.
+% Bold numbers indicate that a requirement is caused by the interleaving of packets.
+The second and third requirements are directly caused by the interleaving of packets, while the other points are
+general requirements for the egress program.
 \begin{enumerate}
     \item[1.]   Obviously, similar to the other eBPF programs, any packet that is not part of our traffic 
             should be passed on normally without any further processing.
-    \item[\textbf{2.}] In case the packet is QUIC (for the correct client connection), the packet-number 
+    \item[2.] In case the packet is QUIC (for the correct client connection), the packet-number 
             needs to be changed to a program internal counter to avoid issues of reusing packet-numbers. 
             This is the only place where we can guarantee sequential packet-numbers since neither 
             the userspace nor the server knows what the highest packet-number sent at any moment in time is. 
             As there is no way of synchronizing lookups (e.g.~using eBPF maps) of information between userspace 
             and an eBPF program, changing it right before sending it out is the best way of keeping them coherent. 
-    \item[\textbf{3.}] In case the packet (additionally to being QUIC for a client connection) contains 
+    \item[3.] In case the packet (additionally to being QUIC for a client connection) contains 
                         stream frames, we need to do a similar translation of the stream-id.
                         The reasons and methods for this are the same as for the packet-number translation.
                         \autoref{fig:stream-id-translation} shows a flow diagram of the stream-id translation
@@ -205,7 +210,7 @@ Bold numbers indicate that a requirement is caused by the interleaving of packet
 % That way, only one counter has to be maintained, and race conditions can be avoided.
 The aforementioned packet-number translation means that the packets sent by the userspace are 
 likely to have a different packet-number than the one chosen by the QUIC library.
-This might lead to inconsistencies again when receiving acknowledgments but can be avoided by 
+This might lead to inconsistencies again when receiving ACKs but can be avoided by 
 remembering the translation in a map as well as only storing packet objects in the 
 Go library that have the correct state.
 This technique of ``storing'' a packet that the userspace does not know

@@ -32,31 +32,37 @@ As of August 2024, QUIC already made up 8.1\% of all internet traffic % TODO: up
 with support from pretty much every major browser
 ~\parencite{internet-quic-usage, article-quic-usage}.
 On another note, Cloudflare-Radar has reportet, that at point of writing this thesis, 
-30\% of HTTP traffic is HTTP/3 i.e. QUIC~\parencite{cloudflare-radar}.
-With big players like Google, Meta, Microsoft, or YouTube putting emphasis on
+30\% of HTTP traffic is HTTP/3, which uses QUIC~\parencite{cloudflare-radar}.
+With big players like Google, Meta, or Microsoft putting emphasis on
 using QUIC to improve their services, this number will likely increase even further.
 
 \subsection{Connections and Streams}
 Since QUIC is a connection-based protocol, some initial overhead to establish a connection is needed.
 However, the design incorporates features that aim for an efficient way of establishing 
-connections, e.g.\ by using 0-RTT (zero round-trip-time) handshakes.
+connections, e.g.\ by using 0-RTT (zero round-trip-time) handshakes. 
 Latency improvements like the 0-RTT handshake, however, come at the cost of security since that opens 
 the door for replay attacks.
+QUIC's 1-RTT handshake does not have this issue, while still being faster
+than e.g.\ the handshake of TCP/TLS, since it handles all setup tasks using only
+a single round trip.
 Another part where QUIC tries to optimize connection management is the use of streams.
 Streams are designed to be lightweight and can be opened without the need for a handshake.
-This goes as far as one single packet being able to open a new stream, transferring stream data
-as well as the closing the stream again.
+This goes as far as one single packet being able to open a new stream, transferring stream data,
+as well as closing the stream again.
 This allows for new techniques to improve data transmission and will also be part of the fast-relay 
 setup in this thesis.
-Aside from streams, apparent since QUIC is based on UDP, it is also possible to send data via
-unreliable datagrams~\parencite{rfc-9221}.
-This further improves the versatility of the protocol and allows for new ways of optimizing data transmission.
+Aside from streams it is also possible to send data via unreliable 
+datagrams~\parencite{rfc-9221}.
+This is possible since QUIC is based on UDP\@.
+It further improves the versatility of the protocol and allows 
+for new ways of optimizing data transmission.
 
 \subsection{quic-go}
 There are many implementations of the QUIC protocol available, providing libraries for a lot of 
 today's most popular programming languages.
 The implementation we settled on for this thesis is the quic-go library which provides a pure Go 
-approach to implementing the standards of RFC-9000, RFC-9221 as well as some others which are not 
+approach to implementing the standards of RFC-9000~\parencite{rfc-9000}, 
+RFC-9221~\parencite{rfc-9221} as well as some others which are not 
 important for our usecase. 
 However, since we need some special behavior of the userspace part of QUIC, we will introduce some 
 modifications into quic-go.  
@@ -64,7 +70,7 @@ Those modifications will be explained further in~\autoref{sec:quic_adaptions}.
 
 \subsection{QUIC's Importance to Fast-Relays}
 The QUIC protocol will be a fundamental part of the fast-relay setup in this thesis, yet the ideas used 
-to make relays faster is not limited to QUIC and can be extended to other protocols as well.
+to make relays faster is not limited to QUIC\@.
 QUIC is chosen as an example protocol due to its increasing popularity, which offers big potential 
 in early adoption and deployment of fast-relays.
 Also, the easy incorporation of changes into libraries providing RFC implementations makes it a good 
