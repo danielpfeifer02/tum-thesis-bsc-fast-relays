@@ -1,20 +1,19 @@
 \section{Testing and Results}\label{sec:testing_and_results}
-When testing the performance of our prototype we will focus on showing that the eBPF forwarding
+When testing the performance of our prototype, we will focus on showing that the eBPF forwarding
 is capable of reducing the delay of packets.
 Delay in our case is measured again using eBPF programs that save the timestamps of a packet 
 leaving and entering the server and client namespace respectively.
-Due to the controlled nature of the local environment we know that the difference 
+Due to the controlled nature of the local environment, we know that the difference 
 between the two timestamps will be mainly due to processing at the relay.
 Additionally, since we are on a single physical machine, it is clear that the timestamp-differences
 will be accurate because no clock synchronization is involved.
-In a real-world setup, different, poorly synchronized, clocks could lead to inaccuracies.
+In a real-world setup, different, poorly synchronized clocks could lead to inaccuracies.
 
-Besides delay analysis we will also show that our approach does not require more CPU resources
-than the plain userspace forwarding.
-For that we will look at profiling data from programs like ``pprof'' % TODO: an extra obe for eBPF programs?
+Besides delay analysis, we will also show that our approach does not require more CPU resources than the plain userspace forwarding.
+For that, we will look at profiling data from programs like ``pprof'' % TODO: an extra obe for eBPF programs?
 as well as the Linux ``process status'' (\verb|ps|) command which can be used to 
 show the CPU usage of a process. % TODO: mention the "ax" parameter?
-Additionally we will look at the system calls that are used by both approaches.
+Additionally, we will look at the system calls that are used by both approaches.
 
 \subsection{Delay Reduction of eBPF Forwarding}
 When considering the impact of eBPF-Forwarding on the delays of packets,~\autoref{fig:delay-improvement}
@@ -22,10 +21,10 @@ visualizes the timestamp and delay data that was the result of a rudimentary tes
 scenario that was run both with and without direct eBPF forwarding.
 We can see that the delay of a single packet is decreased by around 100\,µs
 when compared to the userspace forwarding. 
-The userspace relay setup for this measurement only consideres the simplest case of a single client connection 
+The userspace relay setup for this measurement only considers the simplest case of a single client connection 
 and a direct ``passing-through'' of the packets without much additional computation.
 More complex setups might have the relay consider tasks like (de-)multiplexing, 
-encoding changes, error correction or similar. 
+encoding changes, error correction, or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
 Important to mention is that de- and encryption should not have an influence on the delay 
 reduction since both setups use the same encryption and decryption methods.
@@ -37,10 +36,10 @@ should be used for the traditional setup it is compared to.
 Another result~\autoref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
 that the eBPF program path is somewhat similar for each packet whereas, in contrast, the userspace path can have 
 buffers, queues, or equivalent structures that can lead to a higher difference in processing time between packets. 
-This effect however might be less observable in a real world scenario due to the general network jitter which 
+This effect however might be less observable in a real-world scenario due to the general network jitter which 
 might outweigh the reduction in jitter that our setup caused.
-The measurements depicted in~\autoref{fig:delay-improvement} were taken sending mock data over 
-the network, with each packet being once processed in userspace and once directly forwarded in the kernel
+The measurements depicted in~\autoref{fig:delay-improvement} were taken by sending mock data over 
+the network, with each packet being processed once in userspace and once directly forwarded in the kernel
 (i.e.~each packet is duplicated).
 Since all packets are considered independent of each other, it suffices to use the data of one test run given 
 that enough packets were sent for a statistically significant result.
@@ -58,12 +57,12 @@ that enough packets were sent for a statistically significant result.
 \vspace{0.5cm}
 
 \subsection{CPU Utilization Comparison}
-Besides showing that our approach reduces packet delay we also measured that the CPU usage is 
+Besides showing that our approach reduces packet delay, we also measured that the CPU usage is 
 not negatively impacted by our streaming system.
 \autoref{fig:cpu-utilization-server},~\ref{fig:cpu-utilization-relay} and~\ref{fig:cpu-utilization-client}
-show the CPU usage of the server, relay and client processes, respectively, both with and without eBPF forwarding.
+show the CPU usage of the server, relay, and client processes, respectively, both with and without eBPF forwarding.
 It is observable that none of the utilizations significantly differs between the two setups.
-We created these CPU measurements by accumulating the CPU usages of all processes that are related 
+We created these CPU measurements by accumulating the CPU usage of all processes that are related 
 to the respective parts of the setup.
 The tag \verb|user| identifies the traditional setup where packets go all the way up to userspace while 
 \verb|kernel| identifies the setup where packets are forwarded directly from within the kernel.
@@ -101,11 +100,11 @@ The tag \verb|user| identifies the traditional setup where packets go all the wa
 % \input{chapters/04_subchapters/cpu_usage_tables/non_ebpf_table_top.tex} % TODO: actually measure
 
 \hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} show 
-the syscall usage of a 30 second video streaming example considering a setup with and without eBPF 
+the syscall usage of a 30-second video streaming example considering a setup with and without eBPF 
 forwarding, respectively.
 We trace this using ``strace'' while considering the main process as well as all child processes
 it creates and interacts with.
-When comparing the two tables one can see that our approach uses significantly less system-calls, 
+When comparing the two tables, one can see that our approach uses significantly less system-calls, 
 which is likely caused by the large amount of \verb|futex| calls we can save since the relay userspace is not 
 responsible for any packet forwarding.
 This causes less need for synchronization within userspace.
@@ -126,6 +125,6 @@ approximately 42\% (14293 instead of 24716).
 
 Another observation we made was that the eBPF setup uses less \verb|bpf| syscalls than we would have assumed for 
 the amount of traffic that happened in the test.
-Despite this being less than expected we still think that the number of \verb|bpf| syscalls needed can be 
-further reduced by optimizing map reads in such a way that one read contains information on multiple packets.
+Despite this being less than expected, we still think that the number of \verb|bpf| syscalls needed can be 
+further reduced by optimizing map reads so that one read contains information on multiple packets.
 We did, however, not investigate further into this direction.

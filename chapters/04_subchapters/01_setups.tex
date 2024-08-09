@@ -58,12 +58,12 @@ A schematic overview of the setup is shown in \autoref{fig:namespace-setup}.
 \vspace{0.5cm}
 
 \subsection{Local Environment for Testing and Development}\label{subsec:namespace_environment}
-The local environment we use for testing and developing allows us to setup the network in a way 
+The local environment we use for testing and developing allows us to set up the network in a way 
 that fits the current needs of the prototype.
-One example for such needs would be that we need a slight delay between sending a packet and 
+One example of such needs would be that we need a slight delay between sending a packet and 
 receiving its ACK since the registering of a sent packet takes place after a packet 
 is sent out. 
-In a real-world scenario this would obviously also be the case, if the distances covered 
+In a real-world scenario, this would obviously also be the case if the distances covered 
 are large enough.
 
 % \vspace{0.5cm}
@@ -75,7 +75,7 @@ are large enough.
 % % \end{lstlisting}
 % \vspace{0.5cm}
 
-In our setup we introduce a queueing discipline (qdisc) to an interface
+In our setup, we introduce a queueing discipline (qdisc) to an interface
 of the bridge that connects the relay and the client.
 This qdisc introduces a delay of 5ms to each packet.
 Using such qdiscs allows to simulate a network environment that is more realistic, 
@@ -83,8 +83,8 @@ e.g.~by introducing delays, like we did, or defining thresholds for packet loss.
 In our setup, however, we only added a delay. % TODO: mention loss, delay 25% etc.?
 % However, where a local setup turns out better for testing is its deterministic nature.
 The fact that the delay of a bridge can be set to a fixed value allows us to better 
-analyse and understand the impact of the different setups for example on packet jitter.
-Also, we can be sure that delays, and potential improvements thereof, are not caused by external
+analyze and understand the impact of the different setups for example on packet jitter.
+Also, we can be sure that delays and potential improvements are not caused by external
 network state but rather by the immediate forwarding our approach introduces.
 That way we can be sure that changes in any observed delay are mainly due to setup changes 
 we introduced to the relay.
@@ -93,10 +93,10 @@ we introduced to the relay.
 % TODO: mention that the physical server posed problems because of an old kernel?
 Our setup for testing is solely based on local namespace environments.
 This suffices since we only look at delay reduction and CPU utilization, 
-both of which only have a local effect that happens at the relay.
+both of which are only local metrics regarding the relay.
 We left it open for future work to implement a real-world setup that 
 potentially even uses multiple relays and observes their combined improvement
 in a more sophisticated network setup.
 This goes hand in hand with a working congestion-control extension to the eBPF and 
-QUIC setup, that reacts to a real-world network environment with ubiquitous changes 
+QUIC setup, which reacts to a real-world network environment with ubiquitous changes 
 in congestion.
