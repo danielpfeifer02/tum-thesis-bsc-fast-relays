@@ -29,7 +29,7 @@ of clients'' counter that is accessed by the eBPF program and used for packet du
 
 Regarding stream state management, there is also little additional communication since the 
 server is expected to use QUIC's unidirectional streams for sending the media data. 
-That means the relay does not really need to know about the stream details except in case it 
+That means the relay does not need to know about the stream details except if it 
 has to trigger a retransmission.
 % TODO: already mentioned
 % If that is the case, the stream-id contained in the packet (meta-)data, that was read from the eBPF map, 

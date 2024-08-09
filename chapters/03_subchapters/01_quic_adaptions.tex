@@ -4,7 +4,7 @@ to the quic-go library.
 One initial change necessary was to turn off packet en- and decryption, 
 that is happening within quic-go.
 Given that we operate on the QUIC-header data within the eBPF program, we need access 
-to fields that are encrypted using QUIC header-protection.
+to fields that are encrypted using QUIC header protection.
 For obvious reasons sending unencrypted packets is not something that would be wanted in 
 a production environment, but for our exemplary setup, it is unproblematic. 
 An alternative would be to ``push down'' en- and decryption onto a smartNIC using a 
@@ -105,7 +105,7 @@ and not a focus of this section.
 \subsubsection*{Simplifications of Packet Structure}
 We added some changes to the quic-go library to make a prototype implementation easier.
 The first one is that we fixed the sizes of some variable length fields like the connection-id or the stream-id.
-This was mainly to avoid the need to figure out the correct sizes within the eBPF program as this would have 
+This was mainly to avoid the need to figure out the correct sizes within the eBPF program, as this would have 
 resulted in approaches that would have to be very carefully turned into eBPF-compatible code due to verifier
 restrictions.
 Besides fixing the length of some fields, we also limit the number of frames per packet to one.
@@ -113,14 +113,14 @@ Normally a QUIC packet can contain multiple frames, especially stream-frames, bu
 a packet traversal within the eBPF program that, again, would have been harder to implement considering all
 verification constraints.
 Besides this additional complexity, for our use case, sending a single stream frame per packet is not changing 
-a lot, since the payload of one media packet will be split into multiple packets due to its size.
+a lot since the payload of one media packet will be split into multiple packets due to its size.
 This means a single stream frame is likely already using up a whole packet, and multiple frames per packet would 
 not be happening often.
 
 \subsubsection*{Stream Priorities}
 Our approach relies on the fact that every packet has a priority value assigned to it.
 In our case this priority value is stored within the connection-id.
-Based on this, the first change, which is not only for simplification of our prototype implementation but is actually needed for 
+Based on this, the first change, which is not only simplifying our prototype implementation but is actually needed for 
 our approach to work, is the addition of opening a stream with a specific priority.
 Our assumptions define that the server is the one marking the packets with the correct priority, which in 
 our case is realized by sending them over a specific stream.
@@ -143,7 +143,7 @@ Due to the periodic change/retirement of connection-ids, we need to make sure th
 exists one connection-id for each priority within the connection.
 Otherwise, we might be unable to mark a packet with the correct priority.
 This led us to introduce some additional logic to the code that is executing the retirement of connection-ids.
-There, we will make sure that before a connection-id is retired, either one with the same priority value
+There, we will ensure that before a connection-id is retired, either one with the same priority value
 already exists or is newly created.
 This solves the problem of not being able to mark a packet with the correct priority.
 
@@ -153,7 +153,7 @@ have been forwarded by the eBPF program.
 Since the relay state is not necessarily aligned with the server state, and the relay does not know
 about the stream a packet was sent on, it is not possible to reuse the plain \verb|OnLost| function
 of the quic-go library.
-This is because the plain \verb|OnLost| function would lookup the stream corresponding to the provided stream-id and 
+This is because the plain \verb|OnLost| function would look up the stream corresponding to the provided stream-id and 
 retransmit the packet on there, but the stream for the given id might not exist within the relay stream-pool.
 Instead, our new function needs to look up the stream-id of the lost packet and potentially open a new stream with
 the same stream-id, ensuring that the client correctly receives the retransmission.
@@ -170,9 +170,9 @@ function-pointer style addition and thus designed by the relay developer.
 \subsubsection*{Visible Endpoint for Packet Registration}
 The last direct change that we added was the introduction of an additional function \verb|RegisterBPFPacket| 
 on a quic-go connection object that allows the relay to register a packet.
-Since the packet registration requires access to internal state of the connection, this also needed to be 
+Since the packet registration requires access to the internal state of the connection, this also needed to be 
 done as an actual change to the library.
 Now the relay can just read the necessary information of a packet that needs to be registered
-from the eBPF-maps and then pass it on to this function which will handle the registration.
+from the eBPF maps and then pass it on to this function which will handle the registration.
 This also provides a good separation between the Go code that handles eBPF communication and the actual
 QUIC connection handling.

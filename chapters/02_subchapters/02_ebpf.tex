@@ -69,7 +69,7 @@ However, if one wants to extend the prototype to support a more complicated pack
 
 \subsection{Important eBPF Concepts}
 One of the most important concepts in eBPF, which we use quite extensively, is 
-the ``eBPF-map''.
+the ``eBPF map''.
 Such a map boils down to a section in memory that is reserved for the eBPF program
 and which can be used as a key-value store for arbitrary data.
 This part of memory can then also be accessed from userspace and thus provides the main 
@@ -96,9 +96,9 @@ way of communication between the eBPF program and our application.
 \end{minipage}
 \vspace{0.5cm}
 
-When we define an eBPF-map, we can choose between different types and configure
+When we define an eBPF map, we can choose between different types and configure
 size, key type, value type, and how the map is stored. % TODO: surely there is more one can define
-An example of two eBPF-map definitions can be seen in~\autoref{lst:ebpf-map}.
+An example of two eBPF map definitions can be seen in~\autoref{lst:ebpf-map}.
 It shows two different types of maps, a hash map, and a ring buffer, that are used in
 our fast-relay setup.
 Those and other relevant map types are listed in~\autoref{tab:ebpf-map-types}.
