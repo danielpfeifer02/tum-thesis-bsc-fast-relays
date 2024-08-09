@@ -1,7 +1,7 @@
 \section{Scope}\label{sec:scope}
 
 This thesis will work in a server-relay-client environment.
-A relay is a special type of server that has individual 
+A relay is a special type of server with individual 
 connections to the previous and the next hop in the network path.
 In our case the previous and next hop will already be the media-server and 
 the client, respectively.
@@ -21,8 +21,8 @@ The main improvement this thesis aims to achieve is shortening a packet's critic
 This will be done by avoiding the immediate need for a packet traversal up the network stack to the application layer.
 Instead, any communication with the application layer will happen in a delayed fashion (after the packet is sent) by utilizing 
 eBPF-Maps for storing any necessary (meta-)~information.
-The main reason this communication between userspace and eBPF program is required is that relays in MoQ are an application layer concept.
-That means the QUIC connections from relay to server and from relay to client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
+This communication between userspace and the eBPF program is required because relays in MoQ are an application layer concept.
+That means the QUIC connections from the relay to the server and from the relay to the client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
 
 This approach is highly dependent on the used standards and protocols.
 This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and the ``Media over QUIC'' (MoQ) 
@@ -36,10 +36,8 @@ both with and without the eBPF setup.
 The developer of the relay will then also have more freedom to set up the eBPF part of the relay as they see fit
 since the Go code that will interact with eBPF parts will also have to be provided by said developer.
 
-Additionally, we will run a performance analysis on our implementation of the relay to confirm the potential this 
-approach has.
-These performance tests will look at the raw delay speedup as well as the impact on CPU utilization this 
-setup has.
+Additionally, we will run a performance analysis on our relay implementation to confirm this approach's potential.
+These performance tests will look at the raw delay speedup and the impact on CPU utilization this setup has.
 All the tests will be done in a lab-like environment to isolate the performance changes as best as possible
 from any outside noise.
 Most payloads used will only contain dummy data since our approach does not interfere with payload contents 
@@ -50,8 +48,7 @@ any of these protocols and can be changed to fit one's needs.
 
 With this, we will provide answers to the research questions regarding packet-redirection, communication between userspace and eBPF
 as well as setup-generalization.
-Regarding the question on how to handle the encryption of the packets, we will not focus on this, since we did not find a suitable
-hardware offload that would have allowed for en- and decryption after and before the used eBPF hook points, respectively.
+Regarding the question of how to handle the encryption of the packets, we will not focus on this, since we did not find a suitable hardware offload that would have allowed for en- and decryption after and before the used eBPF hook points, respectively.
 Instead, we will emulate this behavior by turning off the encryption in the QUIC library itself, which will provide a similar result.
 
 % TODO: better spot for this part?
