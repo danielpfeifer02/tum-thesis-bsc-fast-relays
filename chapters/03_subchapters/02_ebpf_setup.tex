@@ -38,7 +38,6 @@ packet forwarding and thus makes leaving out any immediate userspace processing 
     \caption[Types of eBPF programs at relay]{The relay has to be equipped with three eBPF programs.}\label{fig:ebpf-programs}
 \end{figure}
 
-\noindent
 Following is a more detailed description of the responsibilities of each of the three programs.
 \subsubsection{Client Ingress} 
 This ingress eBPF program initially does some simple packet inspection on every incoming packet 
@@ -100,7 +99,6 @@ These are:
     from ingress.}\label{fig:packet-forwarding-duplication}
 \end{figure}
 
-\noindent
 Duplicating and forwarding incoming packets that were identified as containing payload can be done 
 using \verb|bpf_clone_redirect(skb, egress_ifindex, 0)| which is a helper function
 that allows one to clone the packet buffer provided as the first argument and add it to the 
@@ -108,7 +106,7 @@ queue of the interface with the index that is provided as the second argument.
 The last argument allows for the specification of additional flags.
 Aside from \verb|bpf_clone_redirect|, there are also other helper functions regarding packet
 redirection with slightly different behavior, so it is crucial to choose the appropriate one
-to get the desired outcome.
+to get the desired outcome~\parencite{bpf-helpers-man-page,eBPF-redirects-types}.
 \autoref{tab:skb-redirection} shows them together with a brief description of their behavior.
 
 \begin{table}[H]
@@ -138,10 +136,7 @@ to get the desired outcome.
     There are more than that, but those are the ones we identified as possibly useful 
     initially.}\label{tab:skb-redirection}
 \end{table}
-% TODO: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-% TODO: cite this: https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
-% TODO: cite this: http://arthurchiao.art/blog/differentiate-bpf-redirects/ ???
-\noindent
+
 Based on the descriptions of the redirection helper functions mentioned in~\autoref{tab:skb-redirection}
 it becomes clear that \verb|bpf_clone_redirect| is the one suitable for our use case. 
 This is because we need the cloning aspect since we essentially want to duplicate the incoming packets multiple times.
@@ -259,7 +254,6 @@ This can be imagined as a ``just-in-time'' stream creation before the retransmis
     \caption[Packet retransmission schematic]{Internal setup for retransmitting packets forwarded from server connection.}\label{fig:packet-retransmission}
 \end{figure}
 
-\noindent
 It is not necessary to create the stream before that because our approach is only working with 
 unidirectional streams so the relay does not get any data back from the client.
 The only case where it matters that the relay state ``knows'' about the stream is when a packet
