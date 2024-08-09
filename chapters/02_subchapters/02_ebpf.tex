@@ -1,32 +1,30 @@
 \section{eBPF}\label{sec:ebpf_bg}
 In 1992 a technology called ``Berkeley Packet Filter'' (BPF) was introduced into 
 the Unix kernel.
-By using BPF, it is possible to attach a small BPF-program to some pre-defined hook points in 
+By using BPF, it is possible to attach a small BPF program to some pre-defined hook points in 
 the network stack of the kernel and filter packets there in a stateless manner.
 This provided more efficiency since the packets did not need to be copied into 
 userspace anymore but could be processed directly in the kernel.
 A need for better tracing capabilities of the Linux kernel then led to the development 
 of an extended version of BPF called ``eBPF'' which was introduced in 2014 and 
 heavily influenced by a tracing tool called ``dtrace'', which allows for 
-real-time inspection of running processes, memory- and cpu-usages, network-ressources 
+real-time inspection of running processes, memory- and CPU-usages, network-resources 
 and more~\parencite{ebpf-intro-tigera}.
 
 \subsection{eBPF Hook Points}
 The Linux kernel offers several hook points to which eBPF programs can be attached.
 There are two prominent ones that we considered for our suggested setup.
-The first one allows access to the Traffic Control (TC) subsystem, while the 
-second one allows access to the eXpress Data Path (XDP) subsystem.
+The first allows access to the Traffic Control (TC) subsystem, while the 
+second allows access to the eXpress Data Path (XDP) subsystem.
 
 XDP would generally provide a better performance since it is located 
 lower on the network stack, namely directly in the NIC driver, than the 
-TC-hook point, which is located in the link-layer.
-TC, on the other hand, offers a more versatile way of packet processing since 
-the used \verb|sk_buff| buffer object that contains the packet data provides access to 
-metadata that is unavailable when using XDP and its \verb|xdp_buff| buffer object.
+TC-hook point, which is located in the link layer.
+On the other hand, TC offers a more versatile way of packet processing since 
+the used \verb|sk_buff| buffer object containing the packet data provides access to metadata, which is unavailable when using XDP and its \verb|xdp_buff| buffer object.
 % https://liuhangbin.netlify.app/post/ebpf-and-xdp/ % TODO: is this citable?
 What ultimately led us to choose TC over XDP was, however, the fact that 
-XDP only allows ingress packet processing, while TC allows processing both
-at ingress and egress.
+XDP only allows ingress packet processing, while TC allows processing packets at ingress and egress.
 That means that with XDP, we would not have been able to redirect packets to be handled 
 at egress, which is crucial for the fast-relay setup we aim for. % TODO: cannot redirect from XDP to TC?
 
@@ -45,7 +43,7 @@ XDP hook points in the network stack.
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/hook-point-locations.drawio.pdf}
     \caption[Hook points within network stack]{TC and XDP hook points in the Linux kernel.
-    The red loop indicates the ``short-cut'' that is utilized by the fast-relay.
+    The red loop indicates the ``short-cut'' that the fast-relay utilizes.
     }\label{fig:ebpf-hooks}
 \end{figure}
 
@@ -59,18 +57,18 @@ security checks need to be in place to ensure that the kernel does not experienc
 problems like infinite loops, accesses to invalid memory locations, or other security 
 related issues.
 This explains the existence of the so-called ``eBPF verifier'' which inspects 
-every BPF-program for its safety by simulating possible program paths, 
+every eBPF program for its safety by simulating possible program paths, 
 looking at the graph representation of the program and more~\parencite{ebpf-verifier}.
 This imposes some restrictions on the complexity of the programs that can be 
 used within the kernel.
-For our early prototype implementation this did not cause any issues, since we do not need 
+For our early prototype implementation, this does not cause any issues, since we do not need 
 to rely on very complex control structures.
 However, if one wants to extend the prototype to support a more complicated packet structure
 (e.g.~composition of multiple frames per packet), the verifier might become a limiting factor.
 
 
 \subsection{Important eBPF Concepts}
-One of the most important concepts in eBPF, which we do use quite extensively, is 
+One of the most important concepts in eBPF, which we use quite extensively, is 
 the ``eBPF-map''.
 Such a map boils down to a section in memory that is reserved for the eBPF program
 and which can be used as a key-value store for arbitrary data.
@@ -99,11 +97,11 @@ way of communication between the eBPF program and our application.
 \vspace{0.5cm}
 
 When we define an eBPF-map, we can choose between different types and configure
-size, key-type, value-type, and the way the map is stored. % TODO: surely there is more one can define
+size, key type, value type, and how the map is stored. % TODO: surely there is more one can define
 An example of two eBPF-map definitions can be seen in~\autoref{lst:ebpf-map}.
 It shows two different types of maps, a hash map, and a ring buffer, that are used in
 our fast-relay setup.
-Those and some other relevant map types are listed in~\autoref{tab:ebpf-map-types}.
+Those and other relevant map types are listed in~\autoref{tab:ebpf-map-types}.
 
 
 \vspace{0.5cm}

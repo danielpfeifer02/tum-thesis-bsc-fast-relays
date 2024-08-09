@@ -112,7 +112,7 @@ Besides fixing the length of some fields, we also limit the number of frames per
 Normally a QUIC packet can contain multiple frames, especially stream-frames, but this would require 
 a packet traversal within the eBPF program that, again, would have been harder to implement considering all
 verification constraints.
-Besides this additional complexity, for our usecase, sending a single stream frame per packet is not changing 
+Besides this additional complexity, for our use case, sending a single stream frame per packet is not changing 
 a lot, since the payload of one media packet will be split into multiple packets due to its size.
 This means a single stream frame is likely already using up a whole packet, and multiple frames per packet would 
 not be happening often.

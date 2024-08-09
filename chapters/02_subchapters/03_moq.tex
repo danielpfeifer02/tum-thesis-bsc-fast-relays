@@ -44,7 +44,7 @@ https://blog.webex.com/hybrid-work/how-latency-harms-collaboration/
 % \subsection{What is Media over QUIC (MoQ)?} % TODO: maybe not needed
 On the application layer, we will use the Media over QUIC (MoQ) protocol which 
 is, as of summer 2024, still in the process of standardization by the IETF~\parencite{moq-charter}.
-MoQ targets live-streaming applications like Twitch or YouTube-Live and real-time collaboration 
+MoQ targets live-streaming applications like Twitch or YouTube Live and real-time collaboration 
 applications like Zoom, Microsoft Teams, or Google Meet.
 It is built on top of the QUIC protocol with the possibility of using WebTransport
 for browser support.
@@ -55,21 +55,20 @@ performant approaches from protocols like RTP (for real-time features) and HLS/D
 \subsection{Solving Scaling versus Latency}
 For a long time now, there have been two main system requirements with regard to media-data-
 transmission-protocols and -setups.
-One is low latency, while the other one is high scalability~\parencite{what-is-moq}.
-Systems of the former kind include real-time collaboration tools like aforementioned Zoom, Teams, or Meet.
-The latter ones are often huge platforms like Twitch, YouTube, or Netflix, which need to 
-reach millions of users at the same time.
+One is low latency, while the other is high scalability~\parencite{what-is-moq}.
+Systems of the former include real-time collaboration tools like Zoom, Teams, or Meet.
+The latter are often huge platforms like Twitch, YouTube, or Netflix, which need to 
+reach millions of users simultaneously.
 The one thing both have in common is that it turns out to be difficult to incorporate both 
 low latency and high scalability into the system at the same time~\parencite{what-is-moq}.
-The MoQ protocol tries to solve this by providing a setup that is both low-latency and
-highly scalable.
+The MoQ protocol tries to solve this by providing a low-latency and
+highly scalable setup.
 To achieve this, it supports performance-enhancing approaches like relay caching or support 
 for adaptive rate mechanisms. % TODO: other things that are used to achieve this?
 
 \subsection{Design of a MoQ Relay}
-The charter for the IETF working group~\parencite{moq-charter} describes what MoQ, and therefore also a relay 
-that wants to meet the MoQ requirements, needs to support.
-These requirements for the publication- and distribution-setup mention the support of 
+The charter for the IETF working group~\parencite{moq-charter} describes what MoQ, and therefore also a relay that wants to meet the MoQ requirements, needs to support.
+These requirements for the publication- and distribution setup mention the support of 
 multiple formats, dynamic rate adaption mechanisms (e.g.~used for congestion handling)
 as well as cache-friendly mechanisms.
 
@@ -83,16 +82,16 @@ as well as cache-friendly mechanisms.
 of a MoQ relay.
 It hints at key components like the relay level cache and the congestion handling
 mechanism.
-What one can also infer is the place of MoQ in the OSI-model namely at the application
+What one can also infer is the place of MoQ in the OSI model, namely at the application
 layer, which itself builds on top of lower-level protocols like QUIC, UDP, IP, and Ethernet.
 
 Considering the caching mechanism, the relay can cache media data to reduce internal traffic 
 and improve user experience by lowering the latency of a request.
 \autoref{fig:relay-non-caching} and~\autoref{fig:relay-caching} show example traffic for the 
 two different approaches.
-Comparing the traditional non-caching relay and a caching MoQ-relay we can see the latter lowers 
+Comparing the traditional non-caching relay and a caching MoQ-relay, we can see the latter lowers 
 the traffic between server and relay in case the same data is requested by multiple clients.
-Cached data can also be sent out faster since the relay does not require any communicatoin with 
+Cached data can also be sent out faster since the relay does not require any communication with 
 the server to retrieve the data.
 
 \vspace{0.5cm}
@@ -121,7 +120,7 @@ In addition to that, the congestion-handling functionality of the MoQ relay can 
 be integrated fairly easily within eBPF\@.
 This is because packet dropping is ultimately one of the main use cases of plain eBPF 
 programs and, as such, easy to implement.
-In a later section we will go into detail on how the eBPF setup actually uses mechanisms like 
+In a later section, we will go into detail on how the eBPF setup actually uses mechanisms like 
 priority fields to achieve this.
 
 \subsection{moqtransport}
