@@ -208,7 +208,7 @@ This might lead to inconsistencies again when receiving ACKs but can be avoided 
 remembering the translation in a map as well as only storing packet objects in the 
 Go library that have the correct state.
 This technique of ``storing'' a packet that the userspace does not know
-about, since it comes from the media server, will be referred to as ``packet registration''.
+about, since it comes from the media server, will be referred to as \textit{packet registration}.
 This initially gives a brief window where a packet was sent out but is not saved in the history
 of the QUIC library.
 Once the packet is then processed by the userspace routine handling the 

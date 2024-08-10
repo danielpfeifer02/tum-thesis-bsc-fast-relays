@@ -10,8 +10,8 @@ will be accurate because no clock synchronization is involved.
 In a real-world setup, different, poorly synchronized clocks could lead to inaccuracies.
 
 Besides delay analysis, we will also show that our approach does not require more CPU resources than the plain userspace forwarding.
-For that, we will look at profiling data from programs like ``pprof'' % TODO: an extra obe for eBPF programs?
-as well as the Linux ``process status'' (\verb|ps|) command which can be used to 
+For that, we will look at profiling data from programs like \textit{pprof} % TODO: an extra obe for eBPF programs?
+as well as the Linux \textit{process status} (\verb|ps|) command which can be used to 
 show the CPU usage of a process. % TODO: mention the "ax" parameter?
 Additionally, we will look at the system calls that are used by both approaches.
 
@@ -102,7 +102,7 @@ The tag \verb|user| identifies the traditional setup where packets go all the wa
 \hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} show 
 the syscall usage of a 30-second video streaming example considering a setup with and without eBPF 
 forwarding, respectively.
-We trace this using ``strace'' while considering the main process as well as all child processes
+We trace this using\textit{strace} while considering the main process as well as all child processes
 it creates and interacts with.
 When comparing the two tables, one can see that our approach uses significantly fewer system calls.
 This is partially due to a reduced need for userspace synchronization, decreasing the number of \verb|futex| syscalls.

@@ -1,21 +1,21 @@
 \section{eBPF}\label{sec:ebpf_bg}
-In 1992 a technology called ``Berkeley Packet Filter'' (BPF) was introduced into 
+In 1992 a technology called \textit{Berkeley Packet Filter} (BPF) was introduced into 
 the Unix kernel.
 By using BPF, it is possible to attach a small BPF program to some pre-defined hook points in 
 the network stack of the kernel and filter packets there in a stateless manner.
 This provided more efficiency since the packets did not need to be copied into 
 userspace anymore but could be processed directly in the kernel.
 A need for better tracing capabilities of the Linux kernel then led to the development 
-of an extended version of BPF called ``eBPF'' which was introduced in 2014 and 
-heavily influenced by a tracing tool called ``dtrace'', which allows for 
+of an extended version of BPF called \textit{eBPF} which was introduced in 2014 and 
+heavily influenced by a tracing tool called \textit{dtrace}, which allows for 
 real-time inspection of running processes, memory- and CPU-usages, network-resources 
 and more~\parencite{ebpf-intro-tigera}.
 
 \subsection{eBPF Hook Points}
 The Linux kernel offers several hook points to which eBPF programs can be attached.
 There are two prominent ones that we considered for our suggested setup.
-The first allows access to the Traffic Control (TC) subsystem, while the 
-second allows access to the eXpress Data Path (XDP) subsystem.
+The first allows access to the \textit{Traffic Control} (TC) subsystem, while the 
+second allows access to the \textit{eXpress Data Path} (XDP) subsystem.
 
 XDP would generally provide a better performance since it is located 
 lower on the network stack, namely directly in the NIC driver, than the 
@@ -43,7 +43,7 @@ XDP hook points in the network stack.
     \centering
     \includegraphics[width=0.3\textwidth]{figures/02_background/hook-point-locations.drawio.pdf}
     \caption[Hook points within network stack]{TC and XDP hook points in the Linux kernel.
-    The red loop indicates the ``short-cut'' that the fast-relay utilizes.
+    The red loop indicates the shortcut, which the fast-relay utilizes.
     }\label{fig:ebpf-hooks}
 \end{figure}
 
@@ -56,7 +56,7 @@ Since eBPF programs are executed in the kernel, it is quite obvious that extensi
 security checks need to be in place to ensure that the kernel does not experience 
 problems like infinite loops, accesses to invalid memory locations, or other security 
 related issues.
-This explains the existence of the so-called ``eBPF verifier'' which inspects 
+This explains the existence of the so-called \textit{eBPF verifier} which inspects 
 every eBPF program for its safety by simulating possible program paths, 
 looking at the graph representation of the program and more~\parencite{ebpf-verifier}.
 This imposes some restrictions on the complexity of the programs that can be 
@@ -69,7 +69,7 @@ However, if one wants to extend the prototype to support a more complicated pack
 
 \subsection{Important eBPF Concepts}
 One of the most important concepts in eBPF, which we use quite extensively, is 
-the ``eBPF map''.
+the \textit{eBPF map}.
 Such a map boils down to a section in memory that is reserved for the eBPF program
 and which can be used as a key-value store for arbitrary data.
 This part of memory can then also be accessed from userspace and thus provides the main 

@@ -25,7 +25,7 @@ This communication between userspace and the eBPF program is required because re
 That means the QUIC connections from the relay to the server and from the relay to the client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
 
 This approach is highly dependent on the used standards and protocols.
-This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and the ``Media over QUIC'' (MoQ) 
+This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and the MoQ
 transport protocol~\parencite{draft-moqtransport}.
 For the application layer, the quic-go library~\parencite{quic-go-repo} will provide the implementation and 
 any additional (non-eBPF) program will also be written in Go.

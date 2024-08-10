@@ -24,8 +24,8 @@ traffic from the client will save client connection information like MAC address
 address, et cetera, in a map for later access.
 Also, an internal counter will give each client a unique identifier. % TODO: mention somewhere that this identifier has to be sequential and therefore does not support "unsubscribing" yet
 With that, the only thing that happens in terms of communication between the application 
-and the relay in case of a new subscription is that the application will update the ``number 
-of clients'' counter that is accessed by the eBPF program and used for packet duplication purposes.
+and the relay in case of a new subscription is that the application will update the 
+\textit{number-of-clients} counter that is accessed by the eBPF program and used for packet duplication purposes.
 
 Regarding stream state management, there is also little additional communication since the 
 server is expected to use QUIC's unidirectional streams for sending the media data. 
@@ -41,7 +41,7 @@ has to trigger a retransmission.
 
 Since a client can also unsubscribe from a certain media stream, the relay needs to support
 this as well.
-This is done by simply decrementing the ``number of clients'' counter and making sure the 
+This is done by simply decrementing the \textit{number-of-clients} counter and making sure the 
 client ids stay in a usable state (i.e.~the relay is not duplicating packets for unsubscribed 
 clients).
 Our prototype implementation does not consider this yet, because our proof of concept and 
