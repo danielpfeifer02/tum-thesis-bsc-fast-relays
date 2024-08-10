@@ -1,9 +1,8 @@
 \section{QUIC Adaptions}\label{sec:quic_adaptions}
 As was already mentioned in the previous chapter, our setup requires some adaptations
 to the quic-go library.
-One initial change necessary was to turn off packet en- and decryption, 
-that is happening within quic-go.
-Given that we operate on the QUIC-header data within the eBPF program, we need access 
+One initial change necessary was to turn off packet en- and decryption within quic-go.
+Given that we operate on the QUIC header data within the eBPF program, we need access 
 to fields that are encrypted using QUIC header protection.
 For obvious reasons sending unencrypted packets is not something that would be wanted in 
 a production environment, but for our exemplary setup, it is unproblematic. 
@@ -20,7 +19,7 @@ We essentially added support for communication with the eBPF program by using an
 approach similar to C-style function pointers.
 
 We added conditional function calls like the one depicted in 
-\autoref{changes:function-pointer}, in multiple locations 
+\autoref{changes:function-pointer}, at multiple locations 
 within the quic-go library.
 The function that is called here will be defined by the developer of the relay and 
 therefore allow for customizability without the need for changing the library itself.
@@ -70,7 +69,7 @@ Since a connection-id can change, i.e.~be updated or retired, during the lifetim
 the eBPF program to no longer use outdated state-information.
 These function-pointer style additions provide a minimal way of adding such functionality without limiting flexibility 
 or adding too much application-specific code to the library itself, as would be the case if the library would access 
-the eBPF-Maps directly.
+the eBPF maps directly.
 
 % TODO: mention changes which are not function-pointer style
 \subsection{Direct Changes to the Library}
@@ -140,7 +139,7 @@ priority value as the first byte of the connection-id.
 This approach of having the priority value saved within the connection-id caused the need for another 
 change in the library.
 Due to the periodic change/retirement of connection-ids, we need to make sure that at any point in time, there 
-exists one connection-id for each priority within the connection.
+exists at least one connection-id for each priority within the connection.
 Otherwise, we might be unable to mark a packet with the correct priority.
 This led us to introduce some additional logic to the code that is executing the retirement of connection-ids.
 There, we will ensure that before a connection-id is retired, either one with the same priority value
@@ -157,7 +156,7 @@ This is because the plain \verb|OnLost| function would look up the stream corres
 retransmit the packet on there, but the stream for the given id might not exist within the relay stream-pool.
 Instead, our new function needs to look up the stream-id of the lost packet and potentially open a new stream with
 the same stream-id, ensuring that the client correctly receives the retransmission.
-Besides the stream-id, the created stream-object should also have the same remaining stream-state
+Besides the stream-id, the created stream-object should have the same remaining stream-state
 as the original stream (e.g.~offset-information).  
 When a retransmission happens, the relay also needs to tell the underlying eBPF program that a packet is part of a 
 retransmission and that, even if a stream was actually created by the relay, the egress program should treat it like 
@@ -173,6 +172,6 @@ on a quic-go connection object that allows the relay to register a packet.
 Since the packet registration requires access to the internal state of the connection, this also needed to be 
 done as an actual change to the library.
 Now the relay can just read the necessary information of a packet that needs to be registered
-from the eBPF maps and then pass it on to this function which will handle the registration.
+from the eBPF maps and then pass it on to this function, which will handle the registration.
 This also provides a good separation between the Go code that handles eBPF communication and the actual
 QUIC connection handling.

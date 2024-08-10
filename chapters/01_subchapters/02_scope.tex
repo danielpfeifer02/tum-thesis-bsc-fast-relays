@@ -3,7 +3,7 @@
 This thesis will work in a server-relay-client environment.
 A relay is a special type of server with individual 
 connections to the previous and the next hop in the network path.
-In our case the previous and next hop will already be the media-server and 
+In our case the previous and next hop will already be the media server and 
 the client, respectively.
 This is visualized in~\autoref{fig:relay-setup}.
 \vspace{0.5cm}
@@ -20,7 +20,7 @@ We aim to avoid such an expensive traversal up the network stack.
 The main improvement this thesis aims to achieve is shortening a packet's critical path from a media server to a client.
 This will be done by avoiding the immediate need for a packet traversal up the network stack to the application layer.
 Instead, any communication with the application layer will happen in a delayed fashion (after the packet is sent) by utilizing 
-eBPF-Maps for storing any necessary (meta-)~information.
+eBPF maps for storing any necessary (meta-)~information.
 This communication between userspace and the eBPF program is required because relays in MoQ are an application layer concept.
 That means the QUIC connections from the relay to the server and from the relay to the client will be different, and the packets that have been eBPF-forwarded to egress directly will need changes in their header data to match the state of the outgoing client connection.  
 
@@ -29,7 +29,7 @@ This thesis will operate on top of the QUIC protocol~\parencite{rfc-9000} and th
 transport protocol~\parencite{draft-moqtransport}.
 For the application layer, the quic-go library~\parencite{quic-go-repo} will provide the implementation and 
 any additional (non-eBPF) program will also be written in Go.
-Since the setup is dependent on retrieving data from eBPF-Maps, the QUIC library providing the RFC implementation 
+Since the setup is dependent on retrieving data from eBPF maps, the QUIC library providing the RFC implementation 
 will need some adaptations.
 We will mainly introduce simple function pointer style additions that allow the adapted library to be run 
 both with and without the eBPF setup.

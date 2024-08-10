@@ -53,21 +53,21 @@ performant approaches from protocols like RTP (for real-time features) and HLS/D
 (for scalability).
 
 \subsection{Solving Scaling versus Latency}
-For a long time now, there have been two main system requirements with regard to media-data-
-transmission-protocols and -setups.
+For a long time now, there have been two main system requirements with regard to 
+media-data-transmission-protocols and -setups.
 One is low latency, while the other is high scalability~\parencite{what-is-moq}.
 Systems of the former include real-time collaboration tools like Zoom, Teams, or Meet.
-The latter are often huge platforms like Twitch, YouTube, or Netflix, which need to 
+The latter are often needed by huge platforms like Twitch, YouTube, or Netflix, which aim to 
 reach millions of users simultaneously.
 The one thing both have in common is that it turns out to be difficult to incorporate both 
-low latency and high scalability into the system at the same time~\parencite{what-is-moq}.
+low latency and high scalability into a system at the same time~\parencite{what-is-moq}.
 The MoQ protocol tries to solve this by providing a low-latency and
 highly scalable setup.
 To achieve this, it supports performance-enhancing approaches like relay caching or support 
 for adaptive rate mechanisms. % TODO: other things that are used to achieve this?
 
 \subsection{Design of a MoQ Relay}
-The charter for the IETF working group~\parencite{moq-charter} describes what MoQ, and therefore also a relay that wants to meet the MoQ requirements, needs to support.
+The charter of the IETF working group~\parencite{moq-charter} describes what MoQ, and therefore also a relay that wants to meet the MoQ requirements, needs to support.
 These requirements for the publication- and distribution setup mention the support of 
 multiple formats, dynamic rate adaption mechanisms (e.g.~used for congestion handling)
 as well as cache-friendly mechanisms.

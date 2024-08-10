@@ -10,9 +10,10 @@ This thesis heavily relies on the fact that the relay can
 access certain fields (e.g.~packet-numbers) of the packet, 
 which are generally not accessible without prior decryption.
 In the current setup, this is made possible by turning off 
-encryption altogether but to be of any use in a real-world
-scenario, the encryption of incoming and the decryption of
-outgoing packets would need to be pushed down below the lowest 
+encryption altogether.
+However, to be of any use in a real-world
+scenario, the decryption of incoming and the encryption of
+outgoing packets would need to be handled below the lowest 
 used BPF hook point in the stack.
 
 Future work could focus on developing a hardware offload 
@@ -22,9 +23,9 @@ We looked for possible smartNICs and libraries that would allow us
 to offload en- and decryption.
 However, at the time of writing, we could not come up with any viable solution
 that works with our current setup. 
-We believe one could possibly even put the eBPF program itself on the smartNIC as 
+We believe one could possibly even put the eBPF program itself on a smartNIC as 
 another approach suggests~\parencite{ebpf-offload-smartnics}.
-The cited work only considers eBPF/XDP offloading, so further 
+The cited work, however, only considers eBPF/XDP offloading, so further 
 research would be required to see if this could be adapted to eBPF/TC 
 programs as well.
 
@@ -38,7 +39,7 @@ which circumvent userspace by utilizing eBPF programs, can be designed.
 However, generally speaking, the design of fast-relays is not limited to
 any of these protocols and could be expanded, given modifications to 
 necessary fields are possible (i.e.~not prevented by encryption),
-the protocol provides a possibility to drop packets (i.e.~no TCP, 
+the protocol provides a possibility to drop packets (i.e.~not like TCP, 
 but something similar to QUIC),
 and there is a way to accommodate the priority of a packet in the packet itself.
 The final point could always be realized by using part of the payload

@@ -1,8 +1,9 @@
 \section{Userspace Synchronization}\label{sec:userspace_synchronization}
 
 Since one of the main ideas we propose is to avoid passing a packet all the way
-through the network stack up to userspace at the relay, we create the problem
-that the application itself is not aware of packets that are being sent.
+through the network stack up to userspace at the relay, we create the 
+problem that the application itself is not aware of packets that 
+are being sent.
 To conquer this issue, we suggest a setup that establishes communication
 between the application- and the eBPF program.
 To keep the improvement we gained by not passing packets to userspace during the 
@@ -53,8 +54,8 @@ for free since we are passing on an unaltered copy of any incoming packet from t
 application at the same time we forward all the other packet copies to egress.
 This means the application is able to receive any data from the server as if this was a normal connection and 
 store, e.g.~the last \verb|n| second(s) worth of data in a cache.
-Then the relay could, once a new connection is established, parallel to incrementing the kernel counter 
-representing the number of clients also send out cached data already so that the client receives it
+Then, once a new connection is established, the relay could, in parallel to incrementing the kernel counter 
+representing the number of clients, also send out cached data so that the client receives it
 as early as possible.
 
 One aspect that we still left open is the point in time when the relay should stop 

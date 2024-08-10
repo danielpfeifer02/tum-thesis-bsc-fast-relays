@@ -2,7 +2,7 @@
 When testing the performance of our prototype, we will focus on showing that the eBPF forwarding
 is capable of reducing the delay of packets.
 Delay in our case is measured again using eBPF programs that save the timestamps of a packet 
-leaving and entering the server and client namespace respectively.
+leaving and entering the server and client namespace, respectively.
 Due to the controlled nature of the local environment, we know that the difference 
 between the two timestamps will be mainly due to processing at the relay.
 Additionally, since we are on a single physical machine, it is clear that the timestamp-differences
@@ -11,7 +11,7 @@ In a real-world setup, different, poorly synchronized clocks could lead to inacc
 
 Besides delay analysis, we will also show that our approach does not require more CPU resources than the plain userspace forwarding.
 For that, we will look at profiling data from programs like \textit{pprof} % TODO: an extra obe for eBPF programs?
-as well as the Linux \textit{process status} (\verb|ps|) command which can be used to 
+as well as the Linux \textit{process status} (\verb|ps|) command, which can be used to 
 show the CPU usage of a process. % TODO: mention the "ax" parameter?
 Additionally, we will look at the system calls that are used by both approaches.
 
@@ -26,8 +26,8 @@ and a direct ``passing-through'' of the packets without much additional computat
 More complex setups might have the relay consider tasks like (de-)multiplexing, 
 encoding changes, error correction, or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
-Important to mention is that de- and encryption should not have an influence on the delay 
-reduction since both setups use the same encryption and decryption methods.
+Important to mention is that en- and decryption should not have an influence on the delay 
+reduction since both setups use the same en- and decryption methods.
 Any change that might be observable in an extended prototype, which uses hardware offloading,
 is likely caused by a change in processing time that the offloading itself introduces.
 This means that in case one uses a fully offloading prototype for testing, the same offloading
@@ -36,13 +36,13 @@ should be used for the traditional setup it is compared to.
 Another result~\autoref{fig:delay-improvement} shows is that the delay has a smaller variance due to the fact 
 that the eBPF program path is somewhat similar for each packet whereas, in contrast, the userspace path can have 
 buffers, queues, or equivalent structures that can lead to a higher difference in processing time between packets. 
-This effect however might be less observable in a real-world scenario due to the general network jitter which 
+This effect however might be less observable in a real-world scenario due to the general network jitter, which 
 might outweigh the reduction in jitter that our setup caused.
 The measurements depicted in~\autoref{fig:delay-improvement} were taken by sending mock data over 
 the network, with each packet being processed once in userspace and once directly forwarded in the kernel
 (i.e.~each packet is duplicated).
-Since all packets are considered independent of each other, it suffices to use the data of one test run given 
-that enough packets were sent for a statistically significant result.
+Since all packets are considered independent of each other, it suffices to use the data of one test run, given 
+that enough packets were sent, for a statistically significant result.
 
 \vspace{0.5cm}
 \begin{figure}[H]
@@ -64,8 +64,6 @@ show the CPU usage of the server, relay, and client processes, respectively, bot
 It is observable that none of the utilizations significantly differs between the two setups.
 We created these CPU measurements by accumulating the CPU usage of all processes that are related 
 to the respective parts of the setup.
-The tag \verb|user| identifies the traditional setup where packets go all the way up to userspace while 
-\verb|kernel| identifies the setup where packets are forwarded directly from within the kernel.
 
 \begin{figure}[H]
     \begin{minipage}{0.48\textwidth}
@@ -99,20 +97,21 @@ The tag \verb|user| identifies the traditional setup where packets go all the wa
 % % \input{chapters/04_subchapters/cpu_usage_tables/table_top_cum.tex} % TODO: this is kinda useless since it only shows the "wrapping" functions. Maybe remove?
 % \input{chapters/04_subchapters/cpu_usage_tables/non_ebpf_table_top.tex} % TODO: actually measure
 
+\subsubsection{Syscall Usage}
 \hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} show 
 the syscall usage of a 30-second video streaming example considering a setup with and without eBPF 
 forwarding, respectively.
-We trace this using\textit{strace} while considering the main process as well as all child processes
+We trace this using~\textit{strace} while considering the main process as well as all child processes
 it creates and interacts with.
-When comparing the two tables, one can see that our approach uses significantly fewer system calls.
+When comparing the two tables, it is evident that our approach uses significantly fewer system calls.
 This is partially due to a reduced need for userspace synchronization, decreasing the number of \verb|futex| syscalls.
 Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less.
 
 The concrete impact of our setup on system calls can be seen at the bottom 
 of~\hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} 
 where total syscall counts are shown.
-The setup using eBPF forwarding uses 225674 during our example transmission, while the traditional setup 
-uses 296132 syscalls.
+The setup using eBPF forwarding uses 225674 syscalls during our example transmission, while the 
+traditional setup uses 296132.
 This means our setup uses roughly 24\% fewer syscalls than the traditional one.
 Regarding \verb|futex| calls, our setup uses a little more than 34\% 
 fewer than the traditional setup, with 21666 calls instead of 32940.
@@ -120,8 +119,8 @@ Even bigger percentage differences can be seen for \verb|nanosleep| calls with a
 approximately 42\% (14293 instead of 24716) and \verb|epoll_pwait| calls with 
 an improvement of around 67\% (11289 instead of 34149).
 
-Another observation we made was that the eBPF setup uses fewer \verb|bpf| syscalls than we would have assumed for 
-the amount of traffic that happened in the test.
+Another observation we made was that the eBPF setup uses fewer \verb|bpf| syscalls than we would have assumed,
+given the amount of traffic that occurred during the test.
 This might be caused by optimizations happening in the eBPF library used by our Go application.
 Such optimizations might include reducing the number of \verb|bpf| syscalls 
 by combining multiple map reads into one syscall.

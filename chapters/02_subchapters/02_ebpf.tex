@@ -1,5 +1,5 @@
 \section{eBPF}\label{sec:ebpf_bg}
-In 1992 a technology called \textit{Berkeley Packet Filter} (BPF) was introduced into 
+In 1992, a technology called \textit{Berkeley Packet Filter} (BPF) was introduced into 
 the Unix kernel.
 By using BPF, it is possible to attach a small BPF program to some pre-defined hook points in 
 the network stack of the kernel and filter packets there in a stateless manner.
@@ -56,7 +56,7 @@ Since eBPF programs are executed in the kernel, it is quite obvious that extensi
 security checks need to be in place to ensure that the kernel does not experience 
 problems like infinite loops, accesses to invalid memory locations, or other security 
 related issues.
-This explains the existence of the so-called \textit{eBPF verifier} which inspects 
+This explains the existence of the so-called \textit{eBPF verifier}, which inspects 
 every eBPF program for its safety by simulating possible program paths, 
 looking at the graph representation of the program and more~\parencite{ebpf-verifier}.
 This imposes some restrictions on the complexity of the programs that can be 
@@ -67,11 +67,11 @@ However, if one wants to extend the prototype to support a more complicated pack
 (e.g.~composition of multiple frames per packet), the verifier might become a limiting factor.
 
 
-\subsection{Important eBPF Concepts}
+\subsection{eBPF Maps}
 One of the most important concepts in eBPF, which we use quite extensively, is 
 the \textit{eBPF map}.
-Such a map boils down to a section in memory that is reserved for the eBPF program
-and which can be used as a key-value store for arbitrary data.
+Such a map boils down to a section in memory that is reserved for the eBPF program,
+which can be used as a key-value store for arbitrary data.
 This part of memory can then also be accessed from userspace and thus provides the main 
 way of communication between the eBPF program and our application.
 
@@ -99,7 +99,7 @@ way of communication between the eBPF program and our application.
 When we define an eBPF map, we can choose between different types and configure
 size, key type, value type, and how the map is stored. % TODO: surely there is more one can define
 An example of two eBPF map definitions can be seen in~\autoref{lst:ebpf-map}.
-It shows two different types of maps, a hash map, and a ring buffer, that are used in
+It shows two different types of map definitions, a hash map, and a ring buffer, that are part of
 our fast-relay setup.
 Those and other relevant map types are listed in~\autoref{tab:ebpf-map-types}.
 

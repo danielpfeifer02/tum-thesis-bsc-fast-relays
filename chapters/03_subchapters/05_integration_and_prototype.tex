@@ -10,7 +10,7 @@ bitrate streaming, have not yet been fully implemented but should not require ma
 additions since the infrastructure already considers them.
 The absence of these functionalities will not have a drastic impact on further 
 testing, however, since the retransmission and the adaptive bitrate streaming will not
-be needed in our lab-environment, and the caching is not expected to have a big impact
+be needed in our lab-environment, and the caching is not expected to have a big influence
 either.
 
 \subsection{Compatibility}
@@ -34,11 +34,12 @@ For the development of the relay and the eBPF programs, we have come up with the
     \item \textbf{Quic-Go Adaptation}~\parencite{quic-go-prio-packs-repo}:
     This repository is a fork of the QUIC library ``quic-go''~\parencite{quic-go-repo} and provides a 
     plain Go implementation of the QUIC protocol.
-    For our thesis, we needed to make some adaptations to the library to support some hook points for 
-    separate functions, which should be specifically designed to handle the underlying eBPF setup with its eBPF-Map usage. 
+    For our thesis, we needed to make some adaptations to the library, such as adding support 
+    for hook points for separate functions, which are specifically designed to handle the 
+    underlying eBPF setup and its eBPF map usage.
     
     \item \textbf{MoQ-Transport Adaptation}~\parencite{priority-moqtransport-repo}:
-    This repository is a fork of a repository implementing the \textit{MoQ-Transport} 
+    This repository is a fork of a repository implementing the MoQ-Transport
     protocol~\parencite{draft-moqtransport}.
     It provides some needed adaptations. 
     One such adaptation is that the server needs to support a 

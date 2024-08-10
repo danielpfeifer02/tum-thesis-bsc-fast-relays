@@ -14,11 +14,11 @@ program at egress to have its own congestion control functionality.
 Already hinted at in~\autoref{fig:forward-registration}, it is shown that once a packet is 
 registered, there will also be a map update that will be triggered by the congestion controller.
 This map update will tell the eBPF egress program how much data it is allowed to send out. 
-In~\autoref{fig:forward-registration} this is visualized exemplary as ``Bytes per Second Limit''
-but the idea is that both the function determining how limits and thresholds are calculated from 
+In~\autoref{fig:forward-registration}, this is exemplified as ``Bytes per Second Limit''.
+The idea is that both the function determining how limits and thresholds are calculated from 
 the information on incoming packets as well as the actual handling within the egress program 
 will be application-specific and defined by the relay engineer.
-We experimented with approaches that use QUIC internal measurements like the RTT, 
+We experimented with approaches that use QUIC internal measurements like RTT, 
 introduce new measurements like exponential-weighted moving averages, or even use an 
 out-of-band connection where the relay expects direct feedback from the client.
 All these possibilities showed us that there is a lot of room for experimentation and optimization
@@ -42,7 +42,8 @@ This means that a case like the following could happen:
     \item The next packet turns out to be a priority 5 packet which would overshoot the byte limit if sent.
 \end{itemize}
 In this example, one could use many different heuristics to handle the situation.
-One could always keep enough byte limit left so that a high-priority packet can always be sent.
+One could always keep enough of the byte limit available so that a high-priority packet 
+can be sent without delay.
 This, however, essentially just lowers the byte limit for all other packets while making it higher 
 for high-priority packets.
 Therefore, an individual byte limit per priority could also be used right away.

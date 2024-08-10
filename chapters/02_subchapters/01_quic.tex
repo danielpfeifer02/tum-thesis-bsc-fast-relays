@@ -14,7 +14,8 @@ All of these issues, paired with the want for a more flexible development cycle
 led to new creations.
 QUIC, which started off as the ``Quick UDP Internet Connections'' protocol and has 
 since been standardized by the IETF, with QUIC now being its own trademark, is a 
-transport layer protocol built on top of UDP that is designed to be reliable, 
+transport layer protocol built on top of UDP\@.
+It aims to be reliable, 
 cryptographically secure and more performant than TCP\@.
 QUIC, partly because it operates both in user- and kernel-space, has been designed to allow for a 
 more rapid deployment cycle than TCP\@.
@@ -27,8 +28,8 @@ request errors, tail latency, and header size~\parencite{facebook-quic-usage}.
 As of August 2024, QUIC already made up 8.1\% of all internet traffic % TODO: update number
 with support from pretty much every major browser
 ~\parencite{internet-quic-usage, article-quic-usage}.
-On another note, Cloudflare-Radar has reported, that at the time of writing this thesis, 
-30\% of HTTP traffic is HTTP/3, which uses QUIC~\parencite{cloudflare-radar}.
+On another note, Cloudflare-Radar has reported that at the time of writing this thesis, 
+30\% of HTTP traffic is HTTP/3, and therefore using QUIC~\parencite{cloudflare-radar}.
 With big players like Google, Meta, or Microsoft putting emphasis on
 using QUIC to improve their services, this number will likely increase even further.
 
@@ -58,7 +59,7 @@ There are many implementations of the QUIC protocol available, providing librari
 today's most popular programming languages.
 The implementation we settled on for this thesis is the quic-go library which provides a pure Go 
 approach to implementing the standards of RFC-9000~\parencite{rfc-9000}, 
-RFC-9221~\parencite{rfc-9221} as well as some others which are not 
+RFC-9221~\parencite{rfc-9221}, as well as some others, which are not 
 important for our use case. 
 However, since we need some special behavior of the userspace part of QUIC, we will introduce some 
 modifications into quic-go.  
