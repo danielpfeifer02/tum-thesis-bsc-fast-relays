@@ -104,27 +104,26 @@ the syscall usage of a 30-second video streaming example considering a setup wit
 forwarding, respectively.
 We trace this using ``strace'' while considering the main process as well as all child processes
 it creates and interacts with.
-When comparing the two tables, one can see that our approach uses significantly less system-calls, 
-which is likely caused by the large amount of \verb|futex| calls we can save since the relay userspace is not 
-responsible for any packet forwarding.
-This causes less need for synchronization within userspace.
-Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less since all the 
-packet handling happens in kernel space.
+When comparing the two tables, one can see that our approach uses significantly fewer system calls.
+This is partially due to a reduced need for userspace synchronization, decreasing the number of \verb|futex| syscalls.
+Other syscalls like \verb|epoll_pwait| or \verb|nanosleep| are also used significantly less.
 
-More specifically, the impact of our setup on system calls can be seen at the bottom 
+The concrete impact of our setup on system calls can be seen at the bottom 
 of~\hyperref[chap:appendix-fast-relay]{Appendix A} and~\hyperref[chap:appendix-plain-relay]{B} 
 where total syscall counts are shown.
-The setup using eBPF forwarding uses 225674 during our example transmission while the traditional setup 
+The setup using eBPF forwarding uses 225674 during our example transmission, while the traditional setup 
 uses 296132 syscalls.
-This means that our setup uses roughly 24\% less syscalls than the traditional setup.
-Regarding \verb|futex| calls, our setup uses a little more than 34\% less than the 
-traditional setup, with 21666 calls instead of 32940.
-Even bigger percentage differences caused by our setup can be seen for \verb|epoll_pwait| calls with 
-an improvement of around 67\% (11289 instead of 34149) and \verb|nanosleep| calls with a reduction of 
-approximately 42\% (14293 instead of 24716).
+This means our setup uses roughly 24\% fewer syscalls than the traditional one.
+Regarding \verb|futex| calls, our setup uses a little more than 34\% 
+fewer than the traditional setup, with 21666 calls instead of 32940.
+Even bigger percentage differences can be seen for \verb|nanosleep| calls with a reduction of 
+approximately 42\% (14293 instead of 24716) and \verb|epoll_pwait| calls with 
+an improvement of around 67\% (11289 instead of 34149).
 
-Another observation we made was that the eBPF setup uses less \verb|bpf| syscalls than we would have assumed for 
+Another observation we made was that the eBPF setup uses fewer \verb|bpf| syscalls than we would have assumed for 
 the amount of traffic that happened in the test.
-Despite this being less than expected, we still think that the number of \verb|bpf| syscalls needed can be 
-further reduced by optimizing map reads so that one read contains information on multiple packets.
-We did, however, not investigate further into this direction.
+This might be caused by optimizations happening in the eBPF library used by our Go application.
+Such optimizations might include reducing the number of \verb|bpf| syscalls 
+by combining multiple map reads into one syscall.
+We did, however, not investigate how this underlying library works and how our 
+eBPF communication could be optimized further.
