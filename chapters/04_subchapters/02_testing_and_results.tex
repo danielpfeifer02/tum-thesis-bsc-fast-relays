@@ -23,7 +23,7 @@ We can see that the delay of a single packet is decreased by around 100\,µs
 when compared to the userspace forwarding. 
 The userspace relay setup for this measurement only considers the simplest case of a single client connection 
 and a direct ``passing-through'' of the packets without much additional computation.
-More complex setups might have the relay consider tasks like (de-)multiplexing, 
+More complex setups might have the relay consider tasks like (de-) multiplexing, 
 encoding changes, error correction, or similar. 
 Given that such complexity can become arbitrarily large, this delay improvement can become even bigger.
 Important to mention is that en- and decryption should not have an influence on the delay 
@@ -125,4 +125,4 @@ This might be caused by optimizations happening in the eBPF library used by our 
 Such optimizations might include reducing the number of \verb|bpf| syscalls 
 by combining multiple map reads into one syscall.
 We did, however, not investigate how this underlying library works and how our 
-eBPF communication could be optimized further.
+eBPF communication might be optimized.

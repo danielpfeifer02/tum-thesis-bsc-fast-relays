@@ -69,7 +69,7 @@ for adaptive rate mechanisms. % TODO: other things that are used to achieve this
 \subsection{Design of a MoQ Relay}
 The charter of the IETF working group~\parencite{moq-charter} describes what MoQ, and therefore also a relay that wants to meet the MoQ requirements, needs to support.
 These requirements for the publication- and distribution setup mention the support of 
-multiple formats, dynamic rate adaption mechanisms (e.g.~used for congestion handling)
+multiple formats, dynamic rate adaption mechanisms (e.g.~used for congestion handling),
 as well as cache-friendly mechanisms.
 
 \begin{figure}[H]
@@ -114,7 +114,7 @@ the server to retrieve the data.
 \end{figure}
 
 This caching mechanism fits quite naturally into our proposed eBPF setup since we will need to 
-communicate packet data between kernel- and user-space anyway to keep the QUIC library in a 
+communicate packet data between kernel- and userspace anyway to keep the QUIC library in a 
 consistent state.
 In addition to that, the congestion-handling functionality of the MoQ relay can also
 be integrated fairly easily within eBPF\@.

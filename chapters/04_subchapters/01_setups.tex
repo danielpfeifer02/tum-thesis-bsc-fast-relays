@@ -61,7 +61,7 @@ A schematic overview of the setup is shown in \autoref{fig:namespace-setup}.
 The local environment we use for testing and developing allows us to set up the network in a way 
 that fits the current needs of the prototype.
 One example of such needs would be that we need a slight delay between sending a packet and 
-receiving its ACK since the registering of a sent packet takes place after a packet 
+receiving its ACK since the registration of a sent packet takes place after a packet 
 is sent out. 
 In a real-world scenario, this would obviously be the case if the distance covered 
 were large enough.
@@ -78,16 +78,20 @@ were large enough.
 In our setup, we introduce a queueing discipline (qdisc) to an interface
 of the bridge that connects the relay and the client.
 This qdisc introduces a delay of 5ms to each packet.
-Using such qdiscs allows to simulate a network environment that is more realistic, 
-e.g.~by introducing delays, like we did, or defining thresholds for packet loss.
+Using such qdiscs allows us to simulate a network environment that is more realistic, 
+e.g.~by introducing delays, like we did, or by defining thresholds for packet loss.
 In our setup, however, we only added a delay. % TODO: mention loss, delay 25% etc.?
 % However, where a local setup turns out better for testing is its deterministic nature.
 The fact that the delay of a bridge can be set to a fixed value allows us to better 
 analyze and understand the impact of different setups, for example on packet jitter.
-Also, we can be sure that delays and potential improvements are not caused by external
-network state but rather by the immediate forwarding our approach introduces.
-That way we can be sure that changes in delay are mainly due to setup changes 
-we introduced to the relay.
+% Also, we can be sure that delays and potential improvements are not caused by external
+% network state but rather by the immediate forwarding our approach introduces.
+% This gives us certainty that changes in delay are mainly due to setup changes 
+% we introduced to the relay.
+Additionally, we can be confident that any delays or improvements are not attributable 
+to external network conditions but rather to the immediate forwarding introduced by our approach. 
+It also ensures that variations in delay are primarily due to the modifications we made to 
+the relay setup.
 
 \subsection{Physical Server Setup for Real-World Testing}\label{subsec:physical_server_setup}
 % TODO: mention that the physical server posed problems because of an old kernel?
@@ -95,7 +99,7 @@ Our setup for testing is solely based on local namespace environments.
 This suffices since we only look at delay reduction and CPU utilization, 
 both of which are only local metrics regarding the relay.
 We left it open for future work to implement a real-world setup that 
-potentially even uses multiple relays and observes their combined improvement
+could potentially involve multiple relays and observe their combined improvement
 in a more sophisticated network setup.
 This goes hand in hand with a working congestion-control extension to the eBPF and 
 QUIC setup, which reacts to a real-world network environment with ubiquitous changes 

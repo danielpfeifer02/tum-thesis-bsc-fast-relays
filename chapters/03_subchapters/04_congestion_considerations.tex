@@ -20,7 +20,7 @@ the information on incoming packets as well as the actual handling within the eg
 will be application-specific and defined by the relay engineer.
 We experimented with approaches that use QUIC internal measurements like RTT, 
 introduce new measurements like exponential-weighted moving averages, or even use an 
-out-of-band connection where the relay expects direct feedback from the client.
+out-of-band connection, where the relay expects direct feedback from the client.
 All these possibilities showed us that there is a lot of room for experimentation and optimization
 in this area.
 This, however, will not be explored further in this thesis and is left for future work.
@@ -32,11 +32,11 @@ decide which packets should be forwarded and which ones should be dropped.
 One difficulty in this approach is that the dropping mechanism essentially works as an 
 online-algorithm, meaning that it does not have full knowledge of the traffic, especially not of 
 future packets.
-This means that a case like the following could happen:
+This means that a situation like the following could happen:
 \begin{itemize}
-    \item The traffic contains packets within the priority range of 1 to 5 (5 being the highest priority).
+    \item The traffic contains packets within the priority range 1 to 5 (5 being the highest priority).
     \item Given the current network congestion to the client, the relay decides to drop 
-            all packets below priority 3 and 50\% of the packets with priority 3.
+            all packets below priority 3 and 50\% of packets with priority 3.
     \item The remaining byte limit to be sent out is running low, and a packet with priority 3 
             comes in, which is sent, since the relay already dropped a lot of previous priority 3 packets.
     \item The next packet turns out to be a priority 5 packet which would overshoot the byte limit if sent.

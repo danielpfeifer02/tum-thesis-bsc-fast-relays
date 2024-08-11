@@ -10,7 +10,8 @@ The central question we will try to answer in this thesis will be:
 \end{center}
 \vspace{0.5cm}
 By using eBPF technology together with kernel hook points provided by the Linux kernel, we will try to find a setup that improves relay 
-performance using eBPF programs that handle basic relay capabilities, such as packet forwarding and congestion control.
+performance using eBPF programs.
+They will handle basic relay capabilities, such as packet forwarding and congestion control.
 Since the QUIC protocol is designed to handle a significant portion of its workload in userspace, we look into possibilities of delaying any 
 userspace processing until \textbf{after} the packet has been forwarded to the client.
 This way, the raw delay that the packet experiences from the initial media server to the client can be reduced. 
@@ -25,7 +26,7 @@ Therefore, more specific sub-questions we try to answer are:
     \item \textit{How can we remove userspace packet-processing from the critical path?}
     % \item \textit{How to handle the fact that packets are heavily encrypted?}
     \item \textit{How to handle packet en- and decryption?}
-    \item \textit{What communication between userspace and eBPF program is necessary to stay coherent?}
+    \item \textit{What communication between userspace and the eBPF program is necessary to stay coherent?}
     \item \textit{How can our approach be generalized to support other protocols?}
 \end{enumerate}
 \vspace{0.5cm}

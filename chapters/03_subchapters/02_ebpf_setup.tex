@@ -45,7 +45,7 @@ looking at whether the packet uses the correct protocols and addresses the right
 This is done by initially parsing the Ethernet, IP, and UDP headers, if present, and checking if 
 the port matches the one the relay application is listening on.
 This means the correct port is to be defined prior such that the eBPF program can associate 
-a single or (multiple) relay instance(s) with the correct port.
+a single (or multiple) relay instance(s) with the correct port.
 In our case, since we use QUIC, the program will check for QUIC long header packets that 
 set up an initial connection.
 It will then save the transmitted state information such as connection-id, 
@@ -57,7 +57,7 @@ Address Resolution Protocol (ARP) steps later on.
 Another ingress-related program, this time for packets coming from the video server, is needed
 to handle packet duplication and forwarding.
 This program will receive the actual video packets from the server and then, based on an internal 
-counter of how many clients actually want to receive the video, duplicate the packets accordingly.
+counter of how many clients actually want to receive the video, multiply the packets accordingly.
 The counter indicating the number of clients will be updated by the userspace once a new connection 
 is fully established and the client is ready to receive the actual video data.
 This might potentially cause some minuscule delay when updating the counter, but sending cached 
@@ -140,7 +140,7 @@ to get the desired outcome~\parencite{bpf-helpers-man-page,eBPF-redirects-types}
 
 Based on the descriptions of the redirection helper functions mentioned in~\autoref{tab:skb-redirection}
 it becomes clear that \verb|bpf_clone_redirect| is the one suitable for our use case. 
-This is because we need the cloning aspect since we essentially want to duplicate the incoming packets multiple times.
+This is because we need the cloning aspect, as we essentially want to duplicate the incoming packets multiple times.
 Also, the redirection to another namespace or another net device, as provided by \verb|bpf_redirect_peer| and
 \verb|bpf_redirect_neigh|, respectively, is not needed in our case since we operate in the same relay-namespace
 throughout the whole process.
@@ -174,7 +174,7 @@ general requirements for the egress program.
                         Important steps include checking if the stream-id translation already exists, as well
                         as figuring out where a stream was created.
                         The former is necessary in case a payload is split into multiple packets, and the latter is 
-                        necessary since the relay essentially has a fan in of two (relay originated packets and 
+                        necessary since the relay essentially has a fan in of two (relay-originated packets and 
                         server-originated packets).
                         This fan-in might cause a situation where both the relay and the server open a stream, which 
                         initially has the same id (since the server and relay states are not synchronized).
@@ -182,7 +182,7 @@ general requirements for the egress program.
                         This is also why a retransmission coming from the relay needs to be treated as 
                         if it came from the server. For that, the eBPF program will be notified by the userspace 
                         regarding which packets are such retransmissions.
-    \item[4.] Again, if the packet is QUIC and for the right connection, the program needs 
+    \item[4.] Again, if the packet is QUIC and considering the right connection, the program needs 
                         to read the packet's priority and decide via a map-lookup if the connection 
                         state allows sending packets with the given priority.
     \item[5.] If the packet is a redirected media stream data packet, the program must determine 

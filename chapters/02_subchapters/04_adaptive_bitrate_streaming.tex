@@ -10,7 +10,7 @@ in~\autoref{subsec:adaptive_bitrate_streaming} while the latter requires
 a more direct approach which will be discussed in the following subsection.
 
 \subsection{Real Time Communication}
-When looking at streaming setups that consider real-time constraints, such as conferencing 
+When looking at streaming setups that consider real-time constraints, such as conferencing, 
 where interhuman communication is involved, the objectives of the connection tend towards
 low latency.
 In order to provide natural-feeling human communication, the delay between the sender 
@@ -53,7 +53,7 @@ A visualization of such an approach can be seen in~\autoref{fig:real-time-stream
 \subsection{Adaptive Bitrate Streaming}\label{subsec:adaptive_bitrate_streaming}
 Multimedia streaming is a big part of the internet, and many optimizations have
 been developed to improve the quality of service for the end-users.
-This includes considering (in real-time) parts of the clients' connection state, 
+This includes considering (in real-time) parts of a client's connection state, 
 such as available bandwidth, and adapting the rate at which a server sends 
 data~\parencite{cloudflare-what-is-adaptive-bitrate-streaming,imagekit-adaptive-bitrate-streaming}.
 Such a process is called \textit{Adaptive Bitrate Streaming} (ABS) and is employed in many 
@@ -110,4 +110,4 @@ the used stream.
 The MoQ standard does not yet specify if the decision to adapt the bitrate lies with the
 publisher or the subscriber.
 Besides encoding and monitoring aspects, the system also has increased storage requirements
-since stream data will essentially be duplicated.
+since stream data will be multiplied.

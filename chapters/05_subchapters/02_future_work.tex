@@ -40,16 +40,16 @@ However, generally speaking, the design of fast-relays is not limited to
 any of these protocols and could be expanded, given modifications to 
 necessary fields are possible (i.e.~not prevented by encryption),
 the protocol provides a possibility to drop packets (i.e.~not like TCP, 
-but something similar to QUIC),
+but similar to QUIC),
 and there is a way to accommodate the priority of a packet in the packet itself.
 The final point could always be realized by using part of the payload
-which forces a deeper packet inspection within the BPF program but 
+which forces a deeper packet inspection within the eBPF program but 
 avoids the need to fit the priority into the header of an existing 
 protocol.
 
 Expanding our approach to other protocols could be interesting for 
-many areas outside of media streaming, examples being gaming, 
-telesurgery or financial services where a delay-decrease of 
+many areas outside of media streaming, such as gaming, 
+telesurgery, or financial services, where a delay-decrease of 
 microseconds would be particularly beneficial.
 
 \subsection{Prototype Completion}\label{sec:prototype_completion}
@@ -61,8 +61,8 @@ for a final product that is intended to be used in a real-world
 scenario.
 
 Future work could focus on finalizing the prototype by researching 
-and implementing best practices for the areas of congestion handling
-and retransmission management, among others.
+and implementing best practices for congestion handling, retransmission management, 
+and other related aspects.
 A fully functional prototype could then be tested in a real network
 environment to see how common network conditions, that were not considered
 within our namespace environment, affect the performance of the system.
