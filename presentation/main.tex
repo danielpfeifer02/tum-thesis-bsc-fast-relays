@@ -188,9 +188,43 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \end{frame}
 
 \begin{frame}{QUIC}
+    \begin{minipage}{0.45\textwidth}
+        \begin{itemize}
+            \item Started by Google as \textit{Quick UDP Internet Connections}
+            \vspace{2\mylength}
+            \item Standardized by IETF
+            \vspace{2\mylength}
+            \item Fast Development Cycle since Userspace Implementation
+            \vspace{2\mylength}
+            \item Gets rid of Issues like Head-of-Line Blocking
+        \end{itemize}
+    \end{minipage}\hfill
+    \begin{minipage}{0.53\textwidth}
+        \includegraphics[
+            scale=0.15
+        ]{figures/quic.png}
+        \Tiny{Source: https://sec-consult.com/blog/detail/better-dont-be-too-quick/} % TODO: correct citing?
+    \end{minipage}
 \end{frame}
 
 \begin{frame}{eBPF}
+    \begin{minipage}{0.55\textwidth}
+        \begin{itemize}
+            \item Kernel-Internal Virtual Machine
+            \vspace{2\mylength}
+            \item Used for Packet Filtering and Tracing
+            \vspace{2\mylength}
+            \item Multiple Hook-Points in the Kernel (e.g. XDP and TC)
+            \vspace{2\mylength}
+            \item Userspace Communication via Maps
+        \end{itemize}
+    \end{minipage}\hfill
+    \begin{minipage}{0.43\textwidth}
+        \centering
+        \includegraphics[
+            scale=0.6
+        ]{../figures/02_background/hook-point-locations.drawio.pdf}
+    \end{minipage}
 \end{frame}
 
 % ----------------------------------------------------------------------- Begin Section Fast-Relays
@@ -215,7 +249,7 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 
 % ----------------------------------------------------------------------- Begin Section Testing
 
-\section{Testing Results}
+\section{Testing and Results}
 
 \begin{frame}{}
   \tableofcontents[currentsection]
@@ -224,7 +258,78 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \begin{frame}{Test Setup}
 \end{frame}
 
-\begin{frame}{Test Results}
+\begin{frame}{Test Results Delay Reduction}
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[scale=0.4]{../figures/04_testing_and_results/delays_small_packets_simple_userspace.pdf}
+    \end{minipage}\hfill
+\end{frame}
+
+\begin{frame}{Test Results CPU Usage}
+    \begin{minipage}{0.4\textwidth}
+        \begin{itemize}
+            \item No Impact on CPU Usage
+            \vspace{2\mylength}
+            \item Fewer System Calls
+            \vspace{2\mylength}
+            \begin{itemize}
+                \item Mainly due to reduced Userspace Synchronization
+            \end{itemize}
+        \end{itemize}
+    \end{minipage}\hfill
+    \begin{minipage}{0.58\textwidth}
+        \includegraphics[scale=0.21]{../figures/04_testing_and_results/cpu_usage_server_ns.pdf}
+        \includegraphics[scale=0.21]{../figures/04_testing_and_results/cpu_usage_relay_ns.pdf}
+        \includegraphics[scale=0.21]{../figures/04_testing_and_results/cpu_usage_client_ns.pdf}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{System Calls}
+    \begin{minipage}{0.43\textwidth}
+        \begin{itemize}
+            \item Example Stream of 30 Seconds
+            \vspace{2\mylength}
+            \item Overall System Calls 
+            \vspace{2\mylength}
+            \begin{itemize}
+                \item Userspace forwarding: 296132 calls
+                \vspace{2\mylength}
+                \item eBPF forwarding: 225674 calls
+                \vspace{2\mylength}
+                \item Reduction of 24\%
+            \end{itemize}
+        \end{itemize}
+    \end{minipage}\hfill
+    \begin{minipage}{0.51\textwidth}
+        \begin{itemize}
+            \item \textit{futex}
+            \vspace{2\mylength}
+            \begin{itemize}
+                \item Reduction of 34\%
+                \vspace{2\mylength}
+                \item 21666 calls instead of 32940
+            \end{itemize}
+            \vspace{2\mylength}
+            % --------------------
+            \item \textit{nanosleep}
+            \vspace{2\mylength}
+            \begin{itemize}
+                \item Reduction of 42\%
+                \vspace{2\mylength}
+                \item 14293 calls instead of 24716
+            \end{itemize}
+            \vspace{2\mylength}
+            % --------------------
+            \item \textit{epoll\_wait}
+            \vspace{2\mylength}
+            \begin{itemize}
+                \item Reduction of 67\%
+                \vspace{2\mylength}
+                \item 11289 calls instead of 34149
+            \end{itemize}
+            \vspace{2\mylength}
+        \end{itemize}
+    \end{minipage}
 \end{frame}
 
 % ----------------------------------------------------------------------- Begin Section Conclusion and Future Work
