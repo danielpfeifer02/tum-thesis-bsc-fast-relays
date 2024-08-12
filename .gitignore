@@ -1,3 +1,6 @@
 /build/*
 !/build/main.pdf
 /logos/*.pdf
+
+/presentation/build/*
+!/presentation/build/main.pdf
