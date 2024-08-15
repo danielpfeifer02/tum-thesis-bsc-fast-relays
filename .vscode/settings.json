@@ -3,6 +3,8 @@
         "QUIC",
         "drawio",
         "ebpf",
+        "printk",
+        "prio",
         "userspace"
     ]
 }

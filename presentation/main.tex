@@ -117,7 +117,7 @@
     showstringspaces=false,
     numbers=left,
     numbersep=5pt,
-    morekeywords=[2]{ConnectionIdUpdateBPFHandler, localUpdateConnectionId, Bytes, Len}, % Add your method names here
+    morekeywords=[2]{ConnectionIdUpdateBPFHandler, localUpdateConnectionId, Bytes, Len, RetrieveNextPacketFromMap, RegisterBPFPacket}, % Add your method names here
     keywordstyle=[2]{\color{brown}\bfseries}, % Style for method names
     morekeywords=[3]{struct, interface, func, import, package, defer, go, select, case, chan, map, type, const, var, range, fallthrough, continue, break, default},
 }
@@ -285,6 +285,8 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
         \begin{itemize}
             \item Turn off en- and decryption
             \vspace{2\mylength}
+            \item Priorities for packets
+            \vspace{2\mylength}
             \item Public endpoint for packet registration
             \vspace{2\mylength}
             \item Function pointer additions for eBPF state handling
@@ -295,6 +297,38 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
                 \item Called within quic-go if defined
             \end{itemize}
         \end{itemize}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{Packet Priorities}
+    \begin{minipage}{0.43\textwidth}
+        \begin{itemize}
+            \item One priority per stream 
+            \vspace{2\mylength}
+            \item Saved in connection-id
+            \vspace{2\mylength}
+            \item Additional connection-id retirement constraint
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.55\textwidth}
+        \includegraphics[scale=0.4]{../figures/03_fast_relays/priority-streams.drawio.pdf}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}[fragile]{Public Endpoint for Packet Registration}
+    \begin{minipage}{\textwidth}
+        \begin{lstlisting}[style=GoStyle,
+            caption=Packet registration within relay code.]
+            go func(conn quic.Connection) {
+                /* ... */
+                for {
+                    /* ... */
+                    packet := common.RetrieveNextPacketFromMap()
+                    conn.RegisterBPFPacket(packet)
+                    /* ... */
+                }
+            }(conn)
+        \end{lstlisting}
     \end{minipage}
 \end{frame}
 
@@ -362,9 +396,60 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \end{frame}
 
 \begin{frame}{Userspace Synchonization}
+    \begin{minipage}{\textwidth}
+        \begin{itemize}
+            \item Number of clients
+            \vspace{2\mylength}
+            \item Connection state (e.g.~connection-id, id-translations, etc.)
+            \vspace{2\mylength}
+            \item Incoming packet information (e.g.~timestamp, etc.)
+            \vspace{2\mylength}
+            \item Priority drop threshold for a connection
+            \vspace{2\mylength}
+            \item Congestion control updates
+        \end{itemize}
+    \end{minipage}
 \end{frame}
 
-\begin{frame}{Congestion Considerations}
+\begin{frame}{Userspace Synchonization cont.}
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[scale=0.6]{../figures/03_fast_relays/forward-registration.drawio.pdf}
+    \end{minipage}
+\end{frame}
+
+\iffalse%
+% uint8_t client_prio_drop_limit = value->priority_drop_limit;
+% uint8_t packet_prio; 
+% SAVE_BPF_PROBE_READ_KERNEL(&packet_prio, sizeof(packet_prio), payload + 1 /* Short header flags */);
+
+% if (packet_prio < client_prio_drop_limit) {
+%     bpf_printk("Packet priority lower than client priority threshold!\n");
+%     return TC_ACT_SHOT;
+% }
+\fi
+
+% \begin{frame}{Congestion Considerations}
+%    TODO
+% \end{frame}
+
+\begin{frame}{Packet Retransmission}
+    \begin{minipage}{\textwidth}
+        \begin{itemize}
+            \item Retransmission happen at stream level
+            \vspace{2\mylength}
+            \item Relay might not have correct stream state
+            \vspace{2\mylength}
+            \item Client needs \textbf{all} parts of a frame for correct media display
+        \end{itemize}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{Packet Retransmission cont.}
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{figures/retransmission-presentation.drawio.pdf}
+    \end{minipage}
 \end{frame}
 
 % ----------------------------------------------------------------------- Begin Section Testing
@@ -376,6 +461,10 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \end{frame}
 
 \begin{frame}{Test Setup}
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[scale=0.7]{figures/ns-setup.pdf}
+    \end{minipage}
 \end{frame}
 
 \begin{frame}{Test Results Delay Reduction}
