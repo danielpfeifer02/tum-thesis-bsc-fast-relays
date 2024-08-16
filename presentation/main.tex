@@ -395,7 +395,7 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
     \end{minipage}
 \end{frame}
 
-\begin{frame}{Userspace Synchonization}
+\begin{frame}{Userspace Synchronization}
     \begin{minipage}{\textwidth}
         \begin{itemize}
             \item Number of clients
@@ -411,7 +411,7 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
     \end{minipage}
 \end{frame}
 
-\begin{frame}{Userspace Synchonization cont.}
+\begin{frame}{Userspace Synchronization cont.}
     \begin{minipage}{\textwidth}
         \centering
         \includegraphics[scale=0.6]{../figures/03_fast_relays/forward-registration.drawio.pdf}
@@ -550,9 +550,50 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \end{frame}
 
 \begin{frame}{Conclusion}
+    \begin{itemize}
+        \item Delay reduction via eBPF forwarding
+        \vspace{2\mylength}
+        \item More application specific relay code needed
+        \vspace{2\mylength}
+        \item No impact on CPU usage
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Future Work}
+    \begin{itemize}
+        \item Hardware offloading of en- and decryption
+        \vspace{2\mylength}
+        \item Expand to other protocols
+        \vspace{2\mylength}
+        \item Prototype completion
+        \vspace{2\mylength}
+        \begin{itemize}
+            \item Congestion control
+            \vspace{2\mylength}
+            \item Physical setup for testing
+        \end{itemize}
+    \end{itemize}
 \end{frame}
+
+\begin{frame}
+    \centering
+    \Huge{That's it!}
+    \\
+    \vspace{4\mylength}
+    \huge{Any Questions?}
+\end{frame}
+
+% ----------------------------------------------------------------------- Begin Section Additional Slides
+
+\section*{Additional Slides}
+
+\iffalse%
+
+    % What parts should be put here?
+
+    % - Packet Priorities
+    % - Function Pointer Additions
+
+\fi
 
 \end{document}
