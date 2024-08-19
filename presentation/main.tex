@@ -300,20 +300,7 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
     \end{minipage}
 \end{frame}
 
-\begin{frame}{Packet Priorities}
-    \begin{minipage}{0.43\textwidth}
-        \begin{itemize}
-            \item One priority per stream 
-            \vspace{2\mylength}
-            \item Saved in connection-id
-            \vspace{2\mylength}
-            \item Additional connection-id retirement constraint
-        \end{itemize}
-    \end{minipage}
-    \begin{minipage}{0.55\textwidth}
-        \includegraphics[scale=0.4]{../figures/03_fast_relays/priority-streams.drawio.pdf}
-    \end{minipage}
-\end{frame}
+% Packet Priorities
 
 \begin{frame}[fragile]{Public Endpoint for Packet Registration}
     \begin{minipage}{\textwidth}
@@ -332,42 +319,7 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
     \end{minipage}
 \end{frame}
 
-\begin{frame}[fragile]{Function Pointer Additions}
-    \begin{minipage}{\textwidth}
-        \begin{lstlisting}[style=GoStyle,
-            caption=Function-pointer addition to the quic-go library.]
-            /* Function pointer call within actual quic-go code */
-            if packet_setting.ConnectionIdUpdateBPFHandler != nil /* && potentially other conditions */ {
-                packet_setting.ConnectionIdUpdateBPFHandler(connId.Bytes(), uint8(connId.Len()), p.connection)
-            }
-        \end{lstlisting}
-    \end{minipage}
-
-    \begin{minipage}{\textwidth}
-        \begin{lstlisting}[style=GoStyle, caption=The signature will be defined within the library itself.]
-            /* Function pointer signature definition within additional config file */
-            ConnectionIdUpdateBPFHandler      func(id []byte, l uint8, conn QuicConnection) = nil
-        \end{lstlisting}
-    \end{minipage}
-\end{frame}
-
-\begin{frame}[fragile]{Function Pointer Additions}
-    \begin{minipage}{\textwidth}
-        \begin{lstlisting}[style=GoStyle, label=changes:definition-function-pointer, caption=An example of how the addition looks on the relay side.]
-            /* Definition of the function within the local relay code */
-            func localUpdateConnectionId(id []byte, l uint8, conn packet_setting.QuicConnection) {
-                /* handle the connection update by interacting with the eBPF program */
-            }   
-
-            /* Providing the function to the quic-go library */
-            func main() {
-                /* ... */
-                packet_setting.ConnectionIdUpdateBPFHandler = localUpdateConnectionId
-                /* ... */
-            }
-        \end{lstlisting}
-    \end{minipage}
-\end{frame}
+% Function Pointer Additions
 
 \begin{frame}{eBPF Setup}
     \begin{minipage}{0.43\textwidth}
@@ -595,5 +547,57 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
     % - Function Pointer Additions
 
 \fi
+
+\begin{frame}{Packet Priorities}
+    \begin{minipage}{0.43\textwidth}
+        \begin{itemize}
+            \item One priority per stream 
+            \vspace{2\mylength}
+            \item Saved in connection-id
+            \vspace{2\mylength}
+            \item Additional connection-id retirement constraint
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{0.55\textwidth}
+        \includegraphics[scale=0.4]{../figures/03_fast_relays/priority-streams.drawio.pdf}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}[fragile]{Function Pointer Additions}
+    \begin{minipage}{\textwidth}
+        \begin{lstlisting}[style=GoStyle,
+            caption=Function-pointer addition to the quic-go library.]
+            /* Function pointer call within actual quic-go code */
+            if packet_setting.ConnectionIdUpdateBPFHandler != nil /* && potentially other conditions */ {
+                packet_setting.ConnectionIdUpdateBPFHandler(connId.Bytes(), uint8(connId.Len()), p.connection)
+            }
+        \end{lstlisting}
+    \end{minipage}
+
+    \begin{minipage}{\textwidth}
+        \begin{lstlisting}[style=GoStyle, caption=The signature will be defined within the library itself.]
+            /* Function pointer signature definition within additional config file */
+            ConnectionIdUpdateBPFHandler      func(id []byte, l uint8, conn QuicConnection) = nil
+        \end{lstlisting}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}[fragile]{Function Pointer Additions}
+    \begin{minipage}{\textwidth}
+        \begin{lstlisting}[style=GoStyle, label=changes:definition-function-pointer, caption=An example of how the addition looks on the relay side.]
+            /* Definition of the function within the local relay code */
+            func localUpdateConnectionId(id []byte, l uint8, conn packet_setting.QuicConnection) {
+                /* handle the connection update by interacting with the eBPF program */
+            }   
+
+            /* Providing the function to the quic-go library */
+            func main() {
+                /* ... */
+                packet_setting.ConnectionIdUpdateBPFHandler = localUpdateConnectionId
+                /* ... */
+            }
+        \end{lstlisting}
+    \end{minipage}
+\end{frame}
 
 \end{document}
