@@ -414,8 +414,13 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 
 \begin{frame}{Test Setup}
     \begin{minipage}{\textwidth}
-        \centering
-        \includegraphics[scale=0.7]{figures/ns-setup.pdf}
+        \begin{itemize}
+            \item Single machine setup (delay reduction only due to different kernel processing) 
+            \vspace{2\mylength}
+            \item Separate namespaces for client, relay, and server
+            \vspace{2\mylength}
+            \item Artificial delay between client and relay for packet registration
+        \end{itemize}
     \end{minipage}
 \end{frame}
 
@@ -597,6 +602,13 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
                 /* ... */
             }
         \end{lstlisting}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{Test Setup}
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[scale=0.7]{figures/ns-setup.pdf}
     \end{minipage}
 \end{frame}
 
