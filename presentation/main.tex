@@ -194,11 +194,11 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \begin{frame}{Motivation}
     \begin{minipage}{0.3\textwidth}
         \begin{itemize}
-            \item Shorten Critical Path
+            \item Shorten critical path
             \vspace{\mylength}
-            \item Avoid Network Stack Traversal
+            \item Avoid network stack traversal
             \vspace{\mylength}
-            \item Reduce Forwarding Delay
+            \item Reduce forwarding delay
         \end{itemize}
     \end{minipage}\hfill
     \begin{minipage}{0.6\textwidth}
@@ -233,15 +233,15 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \end{frame}
 
 \begin{frame}{QUIC}
-    \begin{minipage}{0.45\textwidth}
+    \begin{minipage}{0.43\textwidth}
         \begin{itemize}
             \item Started by Google as \textit{Quick UDP Internet Connections}
             \vspace{2\mylength}
             \item Standardized by IETF
             \vspace{2\mylength}
-            \item Fast Development Cycle since Userspace Implementation
+            \item Fast development cycle due to userspace implementation
             \vspace{2\mylength}
-            \item Gets rid of Issues like Head-of-Line Blocking
+            \item Gets rid of issues like head-of-line blocking
         \end{itemize}
     \end{minipage}\hfill
     \begin{minipage}{0.53\textwidth}
@@ -253,15 +253,15 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \end{frame}
 
 \begin{frame}{eBPF}
-    \begin{minipage}{0.55\textwidth}
+    \begin{minipage}{0.52\textwidth}
         \begin{itemize}
-            \item Kernel-Internal Virtual Machine
+            \item Kernel-Internal virtual machine
             \vspace{2\mylength}
-            \item Used for Packet Filtering and Tracing
+            \item Used for packet filtering and tracing
             \vspace{2\mylength}
-            \item Multiple Hook-Points in the Kernel (e.g. XDP and TC)
+            \item Multiple hook-points in the kernel (e.g. XDP and TC)
             \vspace{2\mylength}
-            \item Userspace Communication via Maps
+            \item Userspace communication via maps
         \end{itemize}
     \end{minipage}\hfill
     \begin{minipage}{0.43\textwidth}
@@ -434,12 +434,12 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \begin{frame}{Test Results CPU Usage}
     \begin{minipage}{0.4\textwidth}
         \begin{itemize}
-            \item No Impact on CPU Usage
+            \item No impact on CPU usage
             \vspace{2\mylength}
-            \item Fewer System Calls
+            \item Fewer system calls
             \vspace{2\mylength}
             \begin{itemize}
-                \item Mainly due to reduced Userspace Synchronization
+                \item Mainly due to reduced userspace synchronization
             \end{itemize}
         \end{itemize}
     \end{minipage}\hfill
@@ -453,9 +453,9 @@ figures/04_testing_and_results/cpu_usage_client_ns.pdf
 \begin{frame}{System Calls}
     \begin{minipage}{0.43\textwidth}
         \begin{itemize}
-            \item Example Stream of 30 Seconds
+            \item Example stream of 30 seconds
             \vspace{2\mylength}
-            \item Overall System Calls 
+            \item Overall system calls 
             \vspace{2\mylength}
             \begin{itemize}
                 \item Userspace forwarding: 296132 calls
