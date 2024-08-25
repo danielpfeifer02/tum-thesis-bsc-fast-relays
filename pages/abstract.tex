@@ -1,25 +1,55 @@
 \chapter{\abstractname}
 
+% Multimedia streaming represents a substantial portion of internet traffic, 
+% requiring low latency and high quality even under network congestion. 
+% This thesis examines the packet path from media servers to clients, 
+% identifying opportunities to reduce latency, particularly in the network 
+% stack traversal at relays. 
+
+% We propose leveraging eBPF to bypass most of the network stack by directly 
+% forwarding packets from ingress to egress within the kernel, reducing latency. 
+% However, this introduces the challenge of maintaining userspace awareness of 
+% forwarded packets. 
+% To address this, we propose a delayed notification system that informs userspace 
+% after forwarding, utilizing eBPF maps for low-latency communication between 
+% userspace and the eBPF program. 
+% Additionally, we discuss necessary mechanisms for tasks like congestion control 
+% and retransmissions, presenting a prototype that demonstrates the basic functionality 
+% and latency improvements of our approach over traditional userspace processing.
+
 Multimedia streaming constitutes a significant portion of internet traffic,
 aiming to provide a seamless user experience with low latency and high quality, 
 even amidst network congestion. 
 Analyzing the packet path from media servers to clients reveals opportunities 
-for latency reduction, particularly within relays where packets traverse the 
-network stack twice—from the physical layer up to the application layer 
-and back down.
+for latency reduction, particularly regarding network stack traversal within relays.
+% % within relays where packets traverse the 
+% % network stack twice—from the physical layer up to the application layer 
+% % and back down.
 
-This thesis explores leveraging low-level kernel features to bypass most of the network 
-stack traversal by directly forwarding packets from ingress to egress using eBPF\@. 
-This approach introduces the challenge of userspace unawareness of forwarded packets. 
-To address this, we propose a delayed notification setup that informs userspace post-forwarding. 
+We propose leveraging eBPF to avoid most of the network stack traversal and directly 
+forward packets from ingress to egress within the kernel.
+% This thesis explores leveraging low-level kernel features to bypass most of the network 
+% stack traversal by directly forwarding packets from ingress to egress using eBPF\@. 
+However, this introduces the challenge of maintaining userspace awareness of 
+forwarded packets. 
+% This approach introduces the challenge of userspace unawareness of forwarded packets. 
+To address this, we propose a delayed notification setup that informs the userspace
+application post-forwarding. 
 We utilize eBPF maps to provide a low-latency communication channel between userspace 
 and the eBPF program.
 
-Our proposed method necessitates additional mechanisms for tasks such as congestion 
-control and retransmissions. 
-These aspects are discussed in detail, along with a prototype demonstrating the 
-basic functionality and showcasing latency improvements of our approach compared 
-to traditional userspace processing.
+Additionally, we discuss necessary mechanisms for tasks like congestion control and
+retransmissions.
+We will also present a prototype demonstrating the basic functionality and
+showcasing latency improvements of our approach compared to traditional userspace processing.
+% Our proposed method necessitates additional mechanisms for tasks such as congestion 
+% control and retransmissions. 
+% These aspects are discussed in detail, along with a prototype demonstrating the 
+% basic functionality and showcasing latency improvements of our approach compared 
+% to traditional userspace processing.
+
+
+
 
 % Multimedia streaming makes up a significant portion of internet traffic.
 % One main goal of multimedia streaming is to provide a seamless experience 
